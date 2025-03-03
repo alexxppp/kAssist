@@ -69,6 +69,9 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(projects.shared)
+            // Navigation
+            implementation(libs.voyager.tabNavigator)
+            implementation(libs.voyager.transitions)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
