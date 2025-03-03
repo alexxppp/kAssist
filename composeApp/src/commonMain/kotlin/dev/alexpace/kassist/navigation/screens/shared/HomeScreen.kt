@@ -1,4 +1,4 @@
-package dev.alexpace.kassist.navigation.screens
+package dev.alexpace.kassist.navigation.screens.shared
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,8 +10,10 @@ import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import dev.alexpace.kassist.navigation.screens.supporter.SupporterScreen
+import dev.alexpace.kassist.navigation.screens.victim.VictimScreen
 
-class HomeScreen: Screen {
+class HomeScreen : Screen {
     @Composable
     override fun Content() {
         // Declaring non-nullable navigator
@@ -24,7 +26,7 @@ class HomeScreen: Screen {
                 Text("Initial screen")
 
                 Button(
-                    onClick ={ navigator.push(VictimScreen()) }
+                    onClick = { navigator.push(VictimScreen()) }
                 ) {
                     Text("Go to victim screen")
                 }
