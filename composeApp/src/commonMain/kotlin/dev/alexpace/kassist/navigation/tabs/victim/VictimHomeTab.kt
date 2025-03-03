@@ -4,15 +4,15 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
-import dev.alexpace.kassist.navigation.tabs.shared.mapTabOptions
+import dev.alexpace.kassist.navigation.tabs.shared.homeTabOptions
 
-object MapTab : Tab {
+object VictimHomeTab : Tab {
     @Composable
     override fun Content() {
-        Text("Map")
+        Text("Home")
     }
 
     override val options: TabOptions
         @Composable
-        get() = mapTabOptions()
+        get() = homeTabOptions()
 }

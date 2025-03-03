@@ -6,7 +6,7 @@ import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import dev.alexpace.kassist.navigation.tabs.shared.profileTabOptions
 
-object ProfileTab : Tab {
+object VictimProfileTab : Tab {
     @Composable
     override fun Content() {
         Text("Profile")
