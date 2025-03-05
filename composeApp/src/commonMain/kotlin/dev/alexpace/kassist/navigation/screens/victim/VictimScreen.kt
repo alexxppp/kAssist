@@ -10,9 +10,8 @@ import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabDisposable
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import dev.alexpace.kassist.navigation.screens.shared.BottomBar
+import dev.alexpace.kassist.navigation.tabs.victim.VictimHelpTab
 import dev.alexpace.kassist.navigation.tabs.victim.VictimHomeTab
-import dev.alexpace.kassist.navigation.tabs.victim.VictimMapTab
-import dev.alexpace.kassist.navigation.tabs.victim.VictimProfileTab
 
 class VictimScreen : Screen {
     @Composable
@@ -23,7 +22,7 @@ class VictimScreen : Screen {
             tabDisposable = {
                 TabDisposable(
                     it,
-                    listOf(VictimHomeTab, VictimMapTab, VictimProfileTab)
+                    listOf(VictimHomeTab, VictimHelpTab)
                 )
             }
         ) {
@@ -42,5 +41,5 @@ class VictimScreen : Screen {
 @Composable
 private fun VictimBottomBar() {
     val tabNavigator = LocalTabNavigator.current
-    BottomBar(tabNavigator, listOf(VictimHomeTab, VictimMapTab, VictimProfileTab))
+    BottomBar(tabNavigator, listOf(VictimHomeTab, VictimHelpTab))
 }

@@ -10,9 +10,8 @@ import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabDisposable
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import dev.alexpace.kassist.navigation.screens.shared.BottomBar
+import dev.alexpace.kassist.navigation.tabs.supporter.SupporterHelpTab
 import dev.alexpace.kassist.navigation.tabs.supporter.SupporterHomeTab
-import dev.alexpace.kassist.navigation.tabs.supporter.SupporterMapTab
-import dev.alexpace.kassist.navigation.tabs.supporter.SupporterProfileTab
 
 class SupporterScreen : Screen {
     @Composable
@@ -23,7 +22,7 @@ class SupporterScreen : Screen {
             tabDisposable = {
                 TabDisposable(
                     it,
-                    listOf(SupporterHomeTab, SupporterMapTab, SupporterProfileTab)
+                    listOf(SupporterHomeTab, SupporterHelpTab)
                 )
             }
         ) {
@@ -43,5 +42,5 @@ class SupporterScreen : Screen {
 @Composable
 private fun SupporterBottomBar() {
     val tabNavigator = LocalTabNavigator.current
-    BottomBar(tabNavigator, listOf(SupporterHomeTab, SupporterMapTab, SupporterProfileTab))
+    BottomBar(tabNavigator, listOf(SupporterHomeTab, SupporterHelpTab))
 }

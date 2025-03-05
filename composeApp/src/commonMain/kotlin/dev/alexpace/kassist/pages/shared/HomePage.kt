@@ -1,4 +1,4 @@
-package dev.alexpace.kassist.pages
+package dev.alexpace.kassist.pages.shared
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
