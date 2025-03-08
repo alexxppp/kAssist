@@ -18,4 +18,9 @@ dependencies {
     implementation(libs.ktor.server.netty)
     testImplementation(libs.ktor.server.tests)
     testImplementation(libs.kotlin.test.junit)
+
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.moshi)
+    implementation(libs.moshi.kotlin)
 }
