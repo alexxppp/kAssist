@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.kotlinJvm)
     alias(libs.plugins.ktor)
+    // Serialization
+    kotlin("plugin.serialization") version "2.1.10"
     application
 }
 
@@ -23,4 +25,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.moshi)
     implementation(libs.moshi.kotlin)
+
+    // Serialization
+    implementation(libs.kotlinx.serialization.json)
 }
