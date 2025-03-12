@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit
 // Singleton
 object RetrofitClient {
 
-    private const val BASE_URL = "https://www.gdacs.org/gdacsapi/api/events/geteventlist/EVENTS4APP"
+    private const val BASE_URL = "https://www.gdacs.org/gdacsapi/api/events/geteventlist/"
     private val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 
     val retrofit: Retrofit by lazy {
