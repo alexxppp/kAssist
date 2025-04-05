@@ -1,6 +1,6 @@
 package dev.alexpace.kassist
 
-import dev.alexpace.kassist.api.configureRouting
+import dev.alexpace.kassist.api.controllers.configureRouting
 import dev.alexpace.kassist.nd.client.RetrofitClient
 import dev.alexpace.kassist.nd.service.NaturalDisastersService
 import io.ktor.server.application.*
