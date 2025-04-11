@@ -1,6 +1,6 @@
-package dev.alexpace.kassist.infrastructure.responses
+package dev.alexpace.kassist.api.domain.responses
 
-import dev.alexpace.kassist.domain.models.NaturalDisaster
+import dev.alexpace.kassist.api.domain.models.NaturalDisaster
 import kotlinx.serialization.Serializable
 
 @Serializable

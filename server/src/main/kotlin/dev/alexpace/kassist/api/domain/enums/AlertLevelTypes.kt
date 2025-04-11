@@ -1,4 +1,4 @@
-package dev.alexpace.kassist.domain.enums
+package dev.alexpace.kassist.api.domain.enums
 
 enum class AlertLevelTypes {
     Red,

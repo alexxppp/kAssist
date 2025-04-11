@@ -1,4 +1,4 @@
-package dev.alexpace.kassist.domain.models
+package dev.alexpace.kassist.api.domain.models
 
 import com.squareup.moshi.Json
 import kotlinx.serialization.Serializable

@@ -1,6 +1,6 @@
-package dev.alexpace.kassist.application.services
+package dev.alexpace.kassist.api.application.services
 
-import dev.alexpace.kassist.infrastructure.responses.NaturalDisasterResponse
+import dev.alexpace.kassist.api.domain.responses.NaturalDisasterResponse
 import retrofit2.http.GET
 
 /**

@@ -1,11 +1,11 @@
-package dev.alexpace.kassist.application.client
+package dev.alexpace.kassist.api.application.client
 
 import dev.alexpace.kassist.BASE_URL
-import dev.alexpace.kassist.domain.enums.AlertLevelTypes
-import dev.alexpace.kassist.domain.models.NaturalDisaster
+import dev.alexpace.kassist.api.domain.enums.AlertLevelTypes
+import dev.alexpace.kassist.api.domain.models.NaturalDisaster
 import dev.alexpace.kassist.http.utils.NetworkError
 import dev.alexpace.kassist.http.utils.Result
-import dev.alexpace.kassist.infrastructure.responses.NaturalDisasterResponse
+import dev.alexpace.kassist.api.domain.responses.NaturalDisasterResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get

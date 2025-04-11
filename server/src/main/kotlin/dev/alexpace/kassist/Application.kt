@@ -1,8 +1,12 @@
 package dev.alexpace.kassist
 
-import dev.alexpace.kassist.application.services.NaturalDisasterService
-import dev.alexpace.kassist.application.client.RetrofitClient
-import dev.alexpace.kassist.presentation.controllers.configureRouting
+import dev.alexpace.kassist.api.application.client.NaturalDisasterClient
+import dev.alexpace.kassist.api.application.services.NaturalDisasterService
+import dev.alexpace.kassist.api.application.client.RetrofitClient
+import dev.alexpace.kassist.api.domain.enums.AlertLevelTypes
+import dev.alexpace.kassist.api.presentation.controllers.configureRouting
+import dev.alexpace.kassist.http.createHttpClient
+import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
@@ -18,12 +22,15 @@ fun main() {
 fun Application.module() {
     configureRouting()
     testDIApiCall()
+    testNaturalDisasters()
 }
 
 fun testDIApiCall() {
     CoroutineScope(Dispatchers.IO).launch {
         try {
-            val service: NaturalDisasterService = RetrofitClient.retrofit.create(NaturalDisasterService::class.java)
+            val service: NaturalDisasterService = RetrofitClient.retrofit.create(
+                NaturalDisasterService::class.java
+            )
             println(service.getAllNaturalDisasters())
         } catch (e: Exception) {
             throw Exception("Error making API call: ${e.message}")
@@ -32,5 +39,13 @@ fun testDIApiCall() {
 }
 
 fun testNaturalDisasters() {
+    val client = NaturalDisasterClient(createHttpClient(OkHttp.create()))
 
+    CoroutineScope(Dispatchers.IO).launch {
+        try {
+            println(client.getNaturalDisasters(AlertLevelTypes.Orange))
+        } catch (e: Exception) {
+            throw Exception("Error making API call: ${e.message}")
+        }
+    }
 }

@@ -1,4 +1,4 @@
-package dev.alexpace.kassist.application.client
+package dev.alexpace.kassist.api.application.client
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory

@@ -1,4 +1,4 @@
-package dev.alexpace.kassist.presentation.controllers
+package dev.alexpace.kassist.api.presentation.controllers
 
 import io.ktor.server.application.Application
 import io.ktor.server.response.respondText
