@@ -16,7 +16,7 @@ class NaturalDisasterClient(
     private val httpClient: HttpClient
 ) {
 
-    suspend fun getNaturalDisasters(
+    suspend fun getNaturalDisastersByAlertLevel(
         alertLevel: AlertLevelTypes
     ): Result<List<NaturalDisaster>, NetworkError> {
 

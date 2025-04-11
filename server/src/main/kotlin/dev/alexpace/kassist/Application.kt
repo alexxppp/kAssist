@@ -14,13 +14,15 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+val naturalDisasterClient = NaturalDisasterClient(createHttpClient(OkHttp.create()))
+
 fun main() {
     embeddedServer(Netty, port = SERVER_PORT, host = "0.0.0.0", module = Application::module)
         .start(wait = true)
 }
 
 fun Application.module() {
-    configureRouting()
+    configureRouting(naturalDisasterClient)
     testDIApiCall()
     testNaturalDisasters()
 }
@@ -43,7 +45,7 @@ fun testNaturalDisasters() {
 
     CoroutineScope(Dispatchers.IO).launch {
         try {
-            println(client.getNaturalDisasters(AlertLevelTypes.Orange))
+            println(client.getNaturalDisastersByAlertLevel(AlertLevelTypes.Orange))
         } catch (e: Exception) {
             throw Exception("Error making API call: ${e.message}")
         }
