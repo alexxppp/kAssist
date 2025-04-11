@@ -2,6 +2,7 @@ package dev.alexpace.kassist.application.client
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import dev.alexpace.kassist.BASE_URL
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -11,7 +12,6 @@ import java.util.concurrent.TimeUnit
 // TODO: Change for Ktor client
 object RetrofitClient {
 
-    private const val BASE_URL = "https://www.gdacs.org/gdacsapi/api/events/geteventlist/"
     private val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 
     val retrofit: Retrofit by lazy {

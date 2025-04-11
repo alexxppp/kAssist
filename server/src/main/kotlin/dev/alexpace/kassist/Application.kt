@@ -30,3 +30,7 @@ fun testDIApiCall() {
         }
     }
 }
+
+fun testNaturalDisasters() {
+
+}
