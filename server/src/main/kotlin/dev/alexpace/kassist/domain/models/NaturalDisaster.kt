@@ -1,23 +1,13 @@
-package dev.alexpace.kassist.nd.models
+package dev.alexpace.kassist.domain.models
 
 import com.squareup.moshi.Json
+import kotlinx.serialization.Serializable
 
-// Top level response
-data class NaturalDisasterResponse(
-    val features: List<Feature>
-)
-
-// Content of the top level response
-data class Feature(
-    val geometry: Geometry,
-    val properties: DisasterProperties
-)
-
-data class Geometry(
-    val coordinates: List<Double>
-)
-
-data class DisasterProperties(
+/**
+ * Natural Disaster object
+ */
+@Serializable
+data class NaturalDisaster(
     @Json(name = "eventid")
     val id: Int,
 
@@ -38,4 +28,3 @@ data class DisasterProperties(
 
     val country: String
 )
-

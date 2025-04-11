@@ -1,4 +1,4 @@
-package dev.alexpace.kassist.nd.client
+package dev.alexpace.kassist.application.client
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -8,6 +8,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 
 // Singleton
+// TODO: Change for Ktor client
 object RetrofitClient {
 
     private const val BASE_URL = "https://www.gdacs.org/gdacsapi/api/events/geteventlist/"

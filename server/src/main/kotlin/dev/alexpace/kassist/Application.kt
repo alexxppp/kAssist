@@ -1,8 +1,8 @@
 package dev.alexpace.kassist
 
-import dev.alexpace.kassist.api.controllers.configureRouting
-import dev.alexpace.kassist.nd.client.RetrofitClient
-import dev.alexpace.kassist.nd.service.NaturalDisastersService
+import dev.alexpace.kassist.application.services.NaturalDisasterService
+import dev.alexpace.kassist.application.client.RetrofitClient
+import dev.alexpace.kassist.presentation.controllers.configureRouting
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
@@ -17,14 +17,14 @@ fun main() {
 
 fun Application.module() {
     configureRouting()
-    testApiCall()
+    testDIApiCall()
 }
 
-fun testApiCall() {
+fun testDIApiCall() {
     CoroutineScope(Dispatchers.IO).launch {
         try {
-            val service: NaturalDisastersService = RetrofitClient.retrofit.create(NaturalDisastersService::class.java)
-            println(service.getNaturalDisasters())
+            val service: NaturalDisasterService = RetrofitClient.retrofit.create(NaturalDisasterService::class.java)
+            println(service.getAllNaturalDisasters())
         } catch (e: Exception) {
             throw Exception("Error making API call: ${e.message}")
         }

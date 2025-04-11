@@ -23,4 +23,10 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.moshi)
     implementation(libs.moshi.kotlin)
+
+    // Serialization
+    implementation(libs.ktor.ktor.server.core) // Use the latest version
+    implementation(libs.ktor.ktor.server.netty)
+    implementation(libs.ktor.server.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
 }
