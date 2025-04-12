@@ -32,4 +32,7 @@ dependencies {
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.okhttp)
+
+    // SQLite
+    implementation(libs.sqlite.jdbc)
 }

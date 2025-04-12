@@ -1,4 +1,4 @@
-package dev.alexpace.kassist.ui.components
+package dev.alexpace.kassist.ui.components.shared
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
