@@ -10,6 +10,8 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlin.serialization)
+    // Firebase
+    id("com.google.gms.google-services")
 }
 
 kotlin {
@@ -61,6 +63,8 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             // Ktor
             implementation(libs.ktor.client.okhttp)
+            // Firebase
+            implementation(project.dependencies.platform(libs.android.firebase.bom))
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -78,6 +82,10 @@ kotlin {
             implementation(libs.voyager.transitions)
             // Ktor
             implementation(libs.bundles.ktor)
+            // FireStore
+            implementation(libs.gitlive.firebase.firestore)
+            // Coroutines for Desktop Firebase
+            implementation(libs.kotlinx.coroutines.core)
         }
         nativeMain.dependencies {
             implementation(libs.ktor.client.darwin)
@@ -87,6 +95,7 @@ kotlin {
             implementation(libs.kotlinx.coroutines.swing)
             // Ktor
             implementation(libs.ktor.client.okhttp)
+
         }
     }
 }

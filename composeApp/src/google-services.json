@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "975067207624",
+    "project_id": "kassist-bfa3a",
+    "storage_bucket": "kassist-bfa3a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:975067207624:android:4d4934c3de4a8f803592fd",
+        "android_client_info": {
+          "package_name": "dev.alexpace.kassist"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClgZBntULldWxqApFW4LItL3TVy3JxgD0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
