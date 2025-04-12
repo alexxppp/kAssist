@@ -22,7 +22,7 @@ fun main() {
 }
 
 fun Application.module() {
-    configureRouting(naturalDisasterClient)
+    configureRouting()
     testDIApiCall()
     testNaturalDisasters()
 }
