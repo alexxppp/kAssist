@@ -7,12 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:975067207624:android:4d4934c3de4a8f803592fd",
+        "mobilesdk_app_id": "1:975067207624:android:b60356a74702b3103592fd",
         "android_client_info": {
           "package_name": "dev.alexpace.kassist"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "975067207624-bk6qiicp49sspr88mvu3tb68dm54me7r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyClgZBntULldWxqApFW4LItL3TVy3JxgD0"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "975067207624-bk6qiicp49sspr88mvu3tb68dm54me7r.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "975067207624-vmf3m8eur2sn3dqfka583pfvi8e3p04b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "dev.alexpace.kassist.kAssist"
+              }
+            }
+          ]
         }
       }
     }

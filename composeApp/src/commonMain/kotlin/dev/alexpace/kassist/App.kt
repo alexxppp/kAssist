@@ -15,7 +15,6 @@ fun App() {
     val emergencyPlanRepository = remember { EmergencyPlanRepositoryImpl() }
 
     MaterialTheme {
-        Navigator(screen = HomeScreen())
+        Navigator(screen = HomeScreen(emergencyPlanRepository))
     }
-
 }
