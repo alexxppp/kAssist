@@ -1,6 +1,6 @@
 package dev.alexpace.kassist.data.repositoriesImpl
 
-import dev.alexpace.kassist.domain.models.EmergencyPlan
+import dev.alexpace.kassist.domain.models.shared.EmergencyPlan
 import dev.alexpace.kassist.domain.repositories.EmergencyPlanRepository
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.firestore.firestore
@@ -13,12 +13,12 @@ class EmergencyPlanRepositoryImpl : EmergencyPlanRepository {
 
     override fun getEmergencyPlans() = flow {
         emergencyPlansCollection.snapshots.collect { querySnapshot ->
-            val users = querySnapshot
+            val emergencyPlans = querySnapshot
                 .documents
                 .map { documentSnapshot ->
                     documentSnapshot.data<EmergencyPlan>()
                 }
-            emit(users)
+            emit(emergencyPlans)
         }
     }
 

@@ -1,4 +1,4 @@
-package dev.alexpace.kassist.domain.models
+package dev.alexpace.kassist.domain.models.shared
 
 import dev.alexpace.kassist.domain.models.enums.AlertLevelTypes
 import dev.alexpace.kassist.domain.models.enums.EmergencyTypes

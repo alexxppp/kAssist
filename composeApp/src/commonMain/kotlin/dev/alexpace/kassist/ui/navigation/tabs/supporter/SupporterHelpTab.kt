@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import dev.alexpace.kassist.ui.navigation.tabs.shared.helpTabOptions
-import dev.alexpace.kassist.ui.pages.supporter.SupporterHelpPage
+import dev.alexpace.kassist.ui.pages.supporter.help.SupporterHelpPage
 
 object SupporterHelpTab : Tab {
     @Composable

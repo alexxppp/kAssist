@@ -1,6 +1,6 @@
 package dev.alexpace.kassist.domain.repositories
 
-import dev.alexpace.kassist.domain.models.EmergencyPlan
+import dev.alexpace.kassist.domain.models.shared.EmergencyPlan
 import kotlinx.coroutines.flow.Flow
 
 interface EmergencyPlanRepository {

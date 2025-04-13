@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import cafe.adriel.voyager.navigator.Navigator
 import dev.alexpace.kassist.data.repositoriesImpl.EmergencyPlanRepositoryImpl
-import dev.alexpace.kassist.domain.models.EmergencyPlan
+import dev.alexpace.kassist.domain.models.shared.EmergencyPlan
 import dev.alexpace.kassist.domain.models.enums.AlertLevelTypes
 import dev.alexpace.kassist.domain.models.enums.EmergencyTypes
 import dev.alexpace.kassist.ui.navigation.screens.supporter.SupporterScreen
@@ -172,14 +172,21 @@ fun EmergencyPlanFormDialog(
     var name by remember { mutableStateOf(initialPlan?.name ?: "") }
     var description by remember { mutableStateOf(initialPlan?.description ?: "") }
     var alertLevel by remember { mutableStateOf(initialPlan?.alertLevel ?: AlertLevelTypes.Orange) }
-    var emergencyType by remember { mutableStateOf(initialPlan?.emergencyType ?: EmergencyTypes.Flood) }
+    var emergencyType by remember {
+        mutableStateOf(
+            initialPlan?.emergencyType ?: EmergencyTypes.Flood
+        )
+    }
 
     Dialog(onDismissRequest = onDismiss) {
         Card(modifier = Modifier.padding(16.dp)) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(if (initialPlan == null) "Add Emergency Plan" else "Edit Emergency Plan")
                 TextField(value = name, onValueChange = { name = it }, label = { Text("Name") })
-                TextField(value = description, onValueChange = { description = it }, label = { Text("Description") })
+                TextField(
+                    value = description,
+                    onValueChange = { description = it },
+                    label = { Text("Description") })
 
                 // Alert Level Dropdown
                 var expandedAlert by remember { mutableStateOf(false) }
@@ -187,8 +194,10 @@ fun EmergencyPlanFormDialog(
                 Button(onClick = { expandedAlert = true }) {
                     Text("Select Alert Level")
                 }
-                DropdownMenu(expanded = expandedAlert, onDismissRequest = { expandedAlert = false }) {
-                    AlertLevelTypes.values().forEach { level ->
+                DropdownMenu(
+                    expanded = expandedAlert,
+                    onDismissRequest = { expandedAlert = false }) {
+                    AlertLevelTypes.entries.forEach { level ->
                         DropdownMenuItem(onClick = {
                             alertLevel = level
                             expandedAlert = false

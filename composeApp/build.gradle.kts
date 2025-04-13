@@ -65,7 +65,6 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
             // Firebase
             implementation(project.dependencies.platform(libs.android.firebase.bom))
-            implementation(libs.firebase.analytics)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -114,6 +113,7 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            pickFirsts += "/META-INF/versions/9/OSGI-INF/MANIFEST.MF"
         }
     }
     buildTypes {
@@ -129,6 +129,7 @@ android {
 
 dependencies {
     implementation(libs.androidx.material3.android)
+    implementation(libs.identity.jvm)
     debugImplementation(compose.uiTooling)
 }
 
