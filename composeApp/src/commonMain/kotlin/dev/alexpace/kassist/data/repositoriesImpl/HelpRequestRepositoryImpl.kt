@@ -11,6 +11,7 @@ class HelpRequestRepositoryImpl: HelpRequestRepository {
     private val firestore = Firebase.firestore
     private val helpRequestCollection = firestore.collection("HelpRequest")
 
+
     override fun getHelpRequests() = flow {
         helpRequestCollection.snapshots.collect { querySnapshot ->
             val helpRequests = querySnapshot

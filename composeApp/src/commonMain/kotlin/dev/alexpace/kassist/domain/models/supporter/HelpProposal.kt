@@ -8,6 +8,7 @@ data class HelpProposal(
     val id: String,
     val supporterId: String,
     val helpRequestId: String,
+    val victimId: String,
     val content: String,
     val status: RequestStatusTypes
 )

@@ -4,7 +4,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import cafe.adriel.voyager.navigator.Navigator
 import dev.alexpace.kassist.data.repositoriesImpl.EmergencyPlanRepositoryImpl
-import dev.alexpace.kassist.ui.navigation.screens.shared.HomeScreen
+import dev.alexpace.kassist.ui.shared.navigation.screens.HomeScreen
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
