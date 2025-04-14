@@ -8,8 +8,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -20,12 +18,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.alexpace.kassist.domain.services.FirebaseAuthService
-import kotlinx.coroutines.launch
+import dev.alexpace.kassist.ui.shared.components.InputField
 
 @Composable
 fun LoginPage(
@@ -33,16 +31,12 @@ fun LoginPage(
     onLoginSuccess: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val coroutineScope = rememberCoroutineScope()
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var isLoginButtonEnabled by remember { mutableStateOf(false) }
-    var errorMessage by remember { mutableStateOf<String?>(null) }
-    var isLoading by remember { mutableStateOf(false) }
-
-    LaunchedEffect(email, password) {
-        isLoginButtonEnabled = email.isNotBlank() && password.length >= 6
-    }
+    val viewModel: LoginPageViewModel = viewModel { LoginPageViewModel(authService) }
+    val email by viewModel.email.collectAsState()
+    val password by viewModel.password.collectAsState()
+    val isLoginButtonEnabled by viewModel.isLoginButtonEnabled.collectAsState()
+    val errorMessage by viewModel.errorMessage.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
 
     Box(
         modifier = modifier
@@ -100,13 +94,13 @@ fun LoginPage(
             ) {
                 InputField(
                     value = email,
-                    onValueChange = { email = it },
+                    onValueChange = { viewModel.updateEmail(it) },
                     placeholder = "Email",
                     keyboardType = KeyboardType.Email
                 )
                 InputField(
                     value = password,
-                    onValueChange = { password = it },
+                    onValueChange = { viewModel.updatePassword(it) },
                     placeholder = "Password",
                     keyboardType = KeyboardType.Password,
                     isPassword = true
@@ -141,19 +135,7 @@ fun LoginPage(
                             else Color(0xFFD3D3D3)
                         )
                         .clickable(enabled = isLoginButtonEnabled && !isLoading) {
-                            coroutineScope.launch {
-                                isLoading = true
-                                errorMessage = null
-                                try {
-                                    authService.authenticate(email, password)
-                                    onLoginSuccess()
-                                } catch (e: Exception) {
-                                    errorMessage = "Invalid email or password"
-                                    println(e.message)
-                                } finally {
-                                    isLoading = false
-                                }
-                            }
+                            viewModel.login(onLoginSuccess)
                         }
                         .padding(horizontal = 32.dp, vertical = 16.dp),
                     contentAlignment = Alignment.Center
@@ -189,48 +171,5 @@ fun LoginPage(
                 )
             }
         }
-    }
-}
-
-@Composable
-fun InputField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    placeholder: String,
-    keyboardType: KeyboardType,
-    isPassword: Boolean = false
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(56.dp)
-            .clip(RoundedCornerShape(8.dp))
-            .background(Color(0xFFF8F9FA))
-            .padding(horizontal = 16.dp, vertical = 16.dp),
-        contentAlignment = Alignment.CenterStart
-    ) {
-        if (value.isEmpty()) {
-            androidx.compose.material.Text(
-                text = placeholder,
-                style = TextStyle(
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Normal,
-                    color = Color(0xFF999999)
-                )
-            )
-        }
-        BasicTextField(
-            value = value,
-            onValueChange = onValueChange,
-            modifier = Modifier.fillMaxWidth(),
-            textStyle = TextStyle(
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Normal,
-                color = Color(0xFF333333)
-            ),
-            keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
-            visualTransformation = if (isPassword) PasswordVisualTransformation() else androidx.compose.ui.text.input.VisualTransformation.None,
-            singleLine = true
-        )
     }
 }

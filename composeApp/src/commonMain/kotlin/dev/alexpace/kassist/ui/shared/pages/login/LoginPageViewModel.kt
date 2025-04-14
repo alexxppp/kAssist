@@ -1,95 +1,60 @@
 package dev.alexpace.kassist.ui.shared.pages.login
 
-import dev.alexpace.kassist.domain.models.shared.User
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dev.alexpace.kassist.domain.services.FirebaseAuthService
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-// TODO: Implement viewModels
-//class LoginViewModel(
-//    private val authService: FirebaseAuthService
-//) : BaseViewModel() {
-//
-//    private val _uiState = MutableStateFlow(LoginUiState())
-//    val uiState = _uiState.asStateFlow()
-//
-//    private val _emailError = MutableStateFlow(false)
-//    val emailError = _emailError.asStateFlow()
-//
-//    private val _passwordError = MutableStateFlow(false)
-//    val passwordError = _passwordError.asStateFlow()
-//
-//    private val _currentUser = MutableStateFlow<User?>(null)
-//    val currentUser = _currentUser.asStateFlow()
-//
-//    private val _isProcessing = MutableStateFlow(false)
-//    val isProcessing = _isProcessing.asStateFlow()
-//
-//    private val isButtonEnabled: StateFlow<Boolean> = combine(uiState) { states ->
-//        val state = states.first()
-//        state.email.isNotBlank() && state.password.isNotBlank()
-//    }.stateIn(
-//        viewModelScope, SharingStarted.WhileSubscribed(5000), false
-//    )
-//
-//    init {
-//
-//        launchWithCatchingException {
-//            authService.currentUser.collect {
-//                _currentUser.value = it
-//            }
-//        }
-//
-//    }
-//
-//    fun onEmailChange(newValue: String) {
-//        _uiState.update { it.copy(email = newValue) }
-//        //reset error
-//        if (newValue.isNotBlank()) _emailError.value = false
-//    }
-//
-//    fun onPasswordChange(newValue: String) {
-//        _uiState.update { it.copy(password = newValue) }
-//        //reset error
-//        if (newValue.isNotBlank()) _passwordError.value = false
-//    }
-//
-//    fun onSignInClick() {
-//
-//        if (_uiState.value.email.isEmpty()) {
-//            _emailError.value = true
-//            return
-//        }
-//
-//        if (_uiState.value.password.isEmpty()) {
-//            _emailError.value = true
-//            return
-//        }
-//
-//        launchWithCatchingException {
-//            _isProcessing.value = true
-//            //val result = authService.createUser(_uiState.value.email, _uiState.value.password)
-//            authService.authenticate(_uiState.value.email, _uiState.value.password)
-//            _isProcessing.value = false
-//        }
-//
-//    }
-//
-//
-//    fun onSignOut() {
-//        launchWithCatchingException {
-//            authService.signOut()
-//        }
-//    }
-//
-//}
-//
-//data class LoginUiState(
-//    val email: String = "",
-//    val password: String = ""
-//)
+class LoginPageViewModel(private val authService: FirebaseAuthService) : ViewModel() {
+    private val _email = MutableStateFlow("")
+    val email: StateFlow<String> = _email.asStateFlow()
+
+    private val _password = MutableStateFlow("")
+    val password: StateFlow<String> = _password.asStateFlow()
+
+    private val _isLoginButtonEnabled = MutableStateFlow(false)
+    val isLoginButtonEnabled: StateFlow<Boolean> = _isLoginButtonEnabled.asStateFlow()
+
+    private val _errorMessage = MutableStateFlow<String?>(null)
+    val errorMessage: StateFlow<String?> = _errorMessage.asStateFlow()
+
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            email.combine(password) { email, password ->
+                email.isNotBlank() && password.length >= 6
+            }.collect { isEnabled ->
+                _isLoginButtonEnabled.value = isEnabled
+            }
+        }
+    }
+
+    fun updateEmail(newEmail: String) {
+        _email.value = newEmail
+    }
+
+    fun updatePassword(newPassword: String) {
+        _password.value = newPassword
+    }
+
+    fun login(onLoginSuccess: () -> Unit) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            _errorMessage.value = null
+            try {
+                authService.authenticate(_email.value, _password.value)
+                onLoginSuccess()
+            } catch (e: Exception) {
+                _errorMessage.value = "Invalid email or password"
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+}

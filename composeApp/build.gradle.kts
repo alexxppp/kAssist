@@ -88,7 +88,8 @@ kotlin {
             // Coroutines for Desktop Firebase
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.gitlive.firebase.auth)
-            // Viewmodel, TODO: Implement
+            // Viewmodel
+            implementation(libs.lifecycle.viewmodel.compose)
 
         }
         nativeMain.dependencies {

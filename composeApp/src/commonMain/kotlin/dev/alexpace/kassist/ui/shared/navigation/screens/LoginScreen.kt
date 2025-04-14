@@ -15,11 +15,11 @@ class LoginScreen: Screen {
 
         val authService: FirebaseAuthService = FirebaseAuthServiceImpl(
             Firebase.auth,
+        )
 
-        ) // Initialize with FirebaseAuth
         LoginPage(
             authService = authService,
-            onLoginSuccess = { /* Navigate to home screen */ }
+            onLoginSuccess = { /* TODO: Navigate to home screen */ }
         )
     }
 
