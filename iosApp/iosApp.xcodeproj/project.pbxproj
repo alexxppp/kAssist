@@ -13,6 +13,8 @@
 		7555FF83242A565900829871 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* ContentView.swift */; };
 		FA00B74C2DAC09E000F94E82 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FA00B74B2DAC09E000F94E82 /* GoogleService-Info.plist */; };
 		FA00B74E2DAC09ED00F94E82 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FA00B74D2DAC09ED00F94E82 /* GoogleService-Info.plist */; };
+		FA4691562DAD434C00ED1ACE /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = FA4691552DAD434C00ED1ACE /* FirebaseAuth */; };
+		FA4691582DAD434C00ED1ACE /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = FA4691572DAD434C00ED1ACE /* FirebaseCore */; };
 		FAF515972DAB25E9009D71C9 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = FAF515962DAB25E9009D71C9 /* FirebaseFirestore */; };
 /* End PBXBuildFile section */
 
@@ -34,6 +36,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				FAF515972DAB25E9009D71C9 /* FirebaseFirestore in Frameworks */,
+				FA4691582DAD434C00ED1ACE /* FirebaseCore in Frameworks */,
+				FA4691562DAD434C00ED1ACE /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,6 +118,8 @@
 			name = iosApp;
 			packageProductDependencies = (
 				FAF515962DAB25E9009D71C9 /* FirebaseFirestore */,
+				FA4691552DAD434C00ED1ACE /* FirebaseAuth */,
+				FA4691572DAD434C00ED1ACE /* FirebaseCore */,
 			);
 			productName = iosApp;
 			productReference = 7555FF7B242A565900829871 /* kAssist.app */;
@@ -413,6 +419,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		FA4691552DAD434C00ED1ACE /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FA462FB32DAB0D2400DD09F5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		FA4691572DAD434C00ED1ACE /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FA462FB32DAB0D2400DD09F5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
 		FAF515962DAB25E9009D71C9 /* FirebaseFirestore */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = FA462FB32DAB0D2400DD09F5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

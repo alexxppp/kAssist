@@ -65,6 +65,7 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
             // Firebase
             implementation(project.dependencies.platform(libs.android.firebase.bom))
+            implementation(libs.firebase.auth)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -86,6 +87,9 @@ kotlin {
             implementation(libs.gitlive.firebase.firestore)
             // Coroutines for Desktop Firebase
             implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.gitlive.firebase.auth)
+            // Viewmodel, TODO: Implement
+
         }
         nativeMain.dependencies {
             implementation(libs.ktor.client.darwin)
@@ -130,6 +134,7 @@ android {
 dependencies {
     implementation(libs.androidx.material3.android)
     implementation(libs.identity.jvm)
+    implementation(libs.firebase.auth.ktx)
     debugImplementation(compose.uiTooling)
 }
 

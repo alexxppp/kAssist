@@ -5,16 +5,13 @@ import androidx.compose.runtime.*
 import cafe.adriel.voyager.navigator.Navigator
 import dev.alexpace.kassist.data.repositoriesImpl.EmergencyPlanRepositoryImpl
 import dev.alexpace.kassist.ui.shared.navigation.screens.HomeScreen
+import dev.alexpace.kassist.ui.shared.navigation.screens.WelcomeScreen
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 @Preview
 fun App() {
-
-    // TODO: Pass later to screens
-    val emergencyPlanRepository = remember { EmergencyPlanRepositoryImpl() }
-
     MaterialTheme {
-        Navigator(screen = HomeScreen(emergencyPlanRepository))
+        Navigator(screen = WelcomeScreen())
     }
 }

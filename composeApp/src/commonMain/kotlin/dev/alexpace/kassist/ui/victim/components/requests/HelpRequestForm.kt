@@ -17,34 +17,18 @@ import androidx.compose.ui.unit.dp
 import dev.alexpace.kassist.domain.models.victim.HelpRequest
 import dev.alexpace.kassist.domain.models.enums.NeedLevelTypes
 import dev.alexpace.kassist.domain.models.enums.RequestStatusTypes
-import kotlin.random.Random
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
+@OptIn(ExperimentalUuidApi::class)
 @Composable
 fun HelpRequestForm(onSubmit: (HelpRequest) -> Unit) {
     // State for form fields
-    var victimId by remember { mutableStateOf("") }
-    var victimName by remember { mutableStateOf("") }
     var address by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var selectedNeedLevel by remember { mutableStateOf(NeedLevelTypes.Moderate) }
-    var selectedStatus by remember { mutableStateOf(RequestStatusTypes.Pending) }
 
     Column {
-        // Victim ID
-        TextField(
-            value = victimId,
-            onValueChange = { victimId = it },
-            label = { Text("Victim ID") }
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // Victim Name
-        TextField(
-            value = victimName,
-            onValueChange = { victimName = it },
-            label = { Text("Victim Name") }
-        )
-        Spacer(modifier = Modifier.height(8.dp))
 
         // Address
         TextField(
@@ -65,7 +49,7 @@ fun HelpRequestForm(onSubmit: (HelpRequest) -> Unit) {
         // Need Level selection with radio buttons
         Text("Need Level")
         Row {
-            NeedLevelTypes.values().forEach { level ->
+            NeedLevelTypes.entries.forEach { level ->
                 Row {
                     RadioButton(
                         selected = selectedNeedLevel == level,
@@ -77,31 +61,16 @@ fun HelpRequestForm(onSubmit: (HelpRequest) -> Unit) {
         }
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Status selection with radio buttons
-        Text("Status")
-        Row {
-            RequestStatusTypes.values().forEach { status ->
-                Row {
-                    RadioButton(
-                        selected = selectedStatus == status,
-                        onClick = { selectedStatus = status }
-                    )
-                    Text(status.name)
-                }
-            }
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-
         // Submit button
         Button(onClick = {
             val newHelpRequest = HelpRequest(
-                id = Random.nextInt(999999999).toString(),
-                victimId = victimId,
-                victimName = victimName,
+                id = Uuid.random().toString(),
+                victimId = Uuid.random().toString(), // TODO: Replace for this.id
+                victimName = Uuid.random().toString(), // TODO: Replace for this.name
                 address = address,
                 description = description,
                 needLevel = selectedNeedLevel,
-                status = selectedStatus
+                status = RequestStatusTypes.Pending
             )
             onSubmit(newHelpRequest)
         }) {
