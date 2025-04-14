@@ -21,7 +21,7 @@ class RegistrationScreen : Screen {
     }
 
     private fun onRegisterSuccess(navigator: Navigator): () -> Unit = {
-        navigator.push(HomeScreen())
+        navigator.push(LoginScreen())
     }
 
 }

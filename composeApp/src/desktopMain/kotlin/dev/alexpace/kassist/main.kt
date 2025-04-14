@@ -4,11 +4,14 @@ import android.app.Application
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import com.google.firebase.FirebasePlatform
+import dev.alexpace.kassist.data.utils.di.initKoin
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.FirebaseOptions
 import dev.gitlive.firebase.initialize
 
 fun main() = application {
+
+    initKoin()
 
     FirebasePlatform.initializeFirebasePlatform(object : FirebasePlatform() {
 

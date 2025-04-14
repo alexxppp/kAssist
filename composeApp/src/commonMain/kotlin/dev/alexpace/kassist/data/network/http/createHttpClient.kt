@@ -1,4 +1,4 @@
-package dev.alexpace.kassist.http
+package dev.alexpace.kassist.data.network.http
 
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine

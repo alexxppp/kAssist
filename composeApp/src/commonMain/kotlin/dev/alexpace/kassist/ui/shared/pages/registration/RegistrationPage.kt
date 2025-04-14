@@ -72,7 +72,7 @@ fun RegistrationPage(
                 modifier = Modifier.padding(top = 64.dp)
             ) {
                 androidx.compose.material.Text(
-                    text = "Log In",
+                    text = "Register",
                     style = TextStyle(
                         fontSize = 32.sp,
                         fontWeight = FontWeight.Bold,
@@ -82,7 +82,7 @@ fun RegistrationPage(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 androidx.compose.material.Text(
-                    text = "Sign in to access kAssist",
+                    text = "Sign up to access kAssist",
                     style = TextStyle(
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Medium,
@@ -164,7 +164,7 @@ fun RegistrationPage(
                         )
                     } else {
                         androidx.compose.material.Text(
-                            text = "Log In",
+                            text = "Register",
                             style = TextStyle(
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold,

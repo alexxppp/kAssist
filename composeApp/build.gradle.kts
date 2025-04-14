@@ -91,6 +91,10 @@ kotlin {
             // Viewmodel
             implementation(libs.lifecycle.viewmodel.compose)
 
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+            implementation(libs.koin.compose.viewmodel.navigation)
+
         }
         nativeMain.dependencies {
             implementation(libs.ktor.client.darwin)

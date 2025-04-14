@@ -1,4 +1,4 @@
-package dev.alexpace.kassist.http.utils
+package dev.alexpace.kassist.data.network.http.utils
 
 enum class NetworkError : Error {
     REQUEST_TIMEOUT,
