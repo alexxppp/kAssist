@@ -34,7 +34,7 @@ class FirebaseAuthServiceImpl(
             auth.signInWithEmailAndPassword(email, password)
         }
     }
-    override suspend fun createUser(email: String, password: String) {
+    override suspend fun register(email: String, password: String) {
         launchWithAwait {
             auth.createUserWithEmailAndPassword(email, password)
         }

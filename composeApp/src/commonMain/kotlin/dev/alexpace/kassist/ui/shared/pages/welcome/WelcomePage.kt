@@ -104,11 +104,11 @@ fun WelcomePage(navigator: Navigator) {
                     modifier = Modifier
                         .clip(RoundedCornerShape(12.dp))
                         .background(Color(0xFF4A90E2))
-                        .clickable { viewModel.onGetStartedClick(navigator) }
+                        .clickable { viewModel.onRegisterClick(navigator) }
                         .padding(horizontal = 32.dp, vertical = 16.dp)
                 ) {
                     Text(
-                        text = "Get Started",
+                        text = "Register",
                         style = TextStyle(
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,

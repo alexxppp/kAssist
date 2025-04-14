@@ -1,4 +1,4 @@
-package dev.alexpace.kassist.ui.shared.pages.login
+package dev.alexpace.kassist.ui.shared.pages.registration
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -6,10 +6,20 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,14 +36,15 @@ import dev.alexpace.kassist.domain.services.FirebaseAuthService
 import dev.alexpace.kassist.ui.shared.components.InputField
 
 @Composable
-fun LoginPage(
+fun RegistrationPage(
     authService: FirebaseAuthService,
-    onLoginSuccess: () -> Unit
+    onRegisterSuccess: () -> Unit
 ) {
-    val viewModel: LoginPageViewModel = viewModel { LoginPageViewModel(authService) }
+    val viewModel: RegistrationPageViewModel = viewModel { RegistrationPageViewModel(authService) }
     val email by viewModel.email.collectAsState()
     val password by viewModel.password.collectAsState()
-    val isLoginButtonEnabled by viewModel.isLoginButtonEnabled.collectAsState()
+    val confirmPassword by viewModel.confirmPassword.collectAsState()
+    val isRegistrationButtonEnabled by viewModel.isRegistrationButtonEnabled.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
 
@@ -56,7 +67,6 @@ fun LoginPage(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            // Top Section: Title
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(top = 64.dp)
@@ -104,6 +114,13 @@ fun LoginPage(
                     keyboardType = KeyboardType.Password,
                     isPassword = true
                 )
+                InputField(
+                    value = confirmPassword,
+                    onValueChange = { viewModel.updateConfirmPassword(it) },
+                    placeholder = "Confirm password",
+                    keyboardType = KeyboardType.Password,
+                    isPassword = true
+                )
                 AnimatedVisibility(
                     visible = errorMessage != null,
                     enter = slideInVertically() + fadeIn(),
@@ -130,11 +147,11 @@ fun LoginPage(
                     modifier = Modifier
                         .clip(RoundedCornerShape(12.dp))
                         .background(
-                            if (isLoginButtonEnabled && !isLoading) Color(0xFF4A90E2)
+                            if (isRegistrationButtonEnabled && !isLoading) Color(0xFF4A90E2)
                             else Color(0xFFD3D3D3)
                         )
-                        .clickable(enabled = isLoginButtonEnabled && !isLoading) {
-                            viewModel.login(onLoginSuccess)
+                        .clickable(enabled = isRegistrationButtonEnabled && !isLoading) {
+                            viewModel.register(onRegisterSuccess)
                         }
                         .padding(horizontal = 32.dp, vertical = 16.dp),
                     contentAlignment = Alignment.Center
@@ -171,4 +188,5 @@ fun LoginPage(
             }
         }
     }
+
 }
