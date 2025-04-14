@@ -32,15 +32,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.alexpace.kassist.domain.services.FirebaseAuthService
 import dev.alexpace.kassist.ui.shared.components.InputField
 
 @Composable
 fun RegistrationPage(
     authService: FirebaseAuthService,
+    userRepository: UserRepository,
     onRegisterSuccess: () -> Unit
 ) {
-    val viewModel: RegistrationPageViewModel = viewModel { RegistrationPageViewModel(authService) }
+    val viewModel: RegistrationPageViewModel = viewModel { RegistrationPageViewModel(authService, userRepository) }
+    val name by viewModel.name.collectAsState()
+    val phoneNumber by viewModel.phoneNumber.collectAsState()
     val email by viewModel.email.collectAsState()
     val password by viewModel.password.collectAsState()
     val confirmPassword by viewModel.confirmPassword.collectAsState()
@@ -101,6 +105,18 @@ fun RegistrationPage(
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp)
             ) {
+                InputField(
+                    value = name,
+                    onValueChange = { viewModel.updateName(it) },
+                    placeholder = "Name",
+                    keyboardType = KeyboardType.Text
+                )
+                InputField(
+                    value = phoneNumber,
+                    onValueChange = { viewModel.updatePhoneNumber(it) },
+                    placeholder = "Phone number",
+                    keyboardType = KeyboardType.Phone
+                )
                 InputField(
                     value = email,
                     onValueChange = { viewModel.updateEmail(it) },

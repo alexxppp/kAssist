@@ -24,7 +24,13 @@ class FirebaseAuthServiceImpl() : FirebaseAuthService {
         get() = auth.currentUser != null && auth.currentUser?.isAnonymous == false
 
     override val currentUser: Flow<User> =
-        auth.authStateChanged.map { it?.let { User(it.uid, it.isAnonymous) } ?: User() }
+        auth.authStateChanged
+            .map {
+                it?.let {
+                    User(it.uid, it.isAnonymous, it.email ?: "", it.displayName ?: "", it.phoneNumber ?: "")
+                }
+                    ?: User("", false, "", "", "")
+            }
 
     private suspend fun launchWithAwait(block: suspend () -> Unit) {
         scope.async {
