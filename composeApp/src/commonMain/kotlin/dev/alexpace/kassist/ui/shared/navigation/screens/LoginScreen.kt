@@ -7,15 +7,14 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.alexpace.kassist.data.servicesImpl.FirebaseAuthServiceImpl
 import dev.alexpace.kassist.ui.shared.pages.login.LoginPage
-import dev.gitlive.firebase.Firebase
-import dev.gitlive.firebase.auth.auth
+import org.koin.compose.koinInject
 
 class LoginScreen : Screen {
 
-    private val authService = FirebaseAuthServiceImpl(Firebase.auth)
 
     @Composable
     override fun Content() {
+        val authService = koinInject<FirebaseAuthServiceImpl>()
         val navigator = LocalNavigator.currentOrThrow
         LoginPage(authService, onLoginSuccess(navigator))
     }

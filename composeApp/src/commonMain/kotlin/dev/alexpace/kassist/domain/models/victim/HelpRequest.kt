@@ -10,8 +10,7 @@ data class HelpRequest (
     val victimId: String,
     val victimName: String,
     val address: String,
-    val description: String,
+    val description: String?,
     val needLevel: NeedLevelTypes,
     val status: RequestStatusTypes
-
 )

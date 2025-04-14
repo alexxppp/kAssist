@@ -5,12 +5,15 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.alexpace.kassist.data.repositoriesImpl.HelpProposalRepositoryImpl
 import dev.alexpace.kassist.data.repositoriesImpl.HelpRequestRepositoryImpl
 import dev.alexpace.kassist.ui.supporter.components.requests.HelpRequestList
+import dev.gitlive.firebase.Firebase
+import dev.gitlive.firebase.auth.auth
+import org.koin.compose.koinInject
 
 @Composable
 fun SupporterHelpPage() {
-    val helpRequestRepository = HelpRequestRepositoryImpl()
-    val helpProposalRepository = HelpProposalRepositoryImpl()
-    val userId = "123456"
+    val helpRequestRepository = koinInject<HelpRequestRepositoryImpl>()
+    val helpProposalRepository = koinInject<HelpProposalRepositoryImpl>()
+    val userId = Firebase.auth.currentUser!!.uid
 
     val viewModel: SupporterHelpPageViewModel = viewModel {
         SupporterHelpPageViewModel(helpRequestRepository, helpProposalRepository, userId)

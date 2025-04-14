@@ -2,19 +2,23 @@ package dev.alexpace.kassist.ui.victim.pages.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dev.alexpace.kassist.data.repositoriesImpl.HelpProposalRepositoryImpl
 import dev.alexpace.kassist.domain.models.enums.NeedLevelTypes
 import dev.alexpace.kassist.domain.models.enums.RequestStatusTypes
 import dev.alexpace.kassist.domain.models.supporter.HelpProposal
 import dev.alexpace.kassist.domain.models.victim.HelpRequest
+import dev.alexpace.kassist.domain.repositories.HelpProposalRepository
+import dev.alexpace.kassist.domain.repositories.HelpRequestRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 
 class VictimHomePageViewModel(
-    private val helpProposalRepository: HelpProposalRepositoryImpl
+    helpProposalRepository: HelpProposalRepository,
+    helpRequestRepositoryImpl: HelpRequestRepository,
+    currentUserId: String
 ) : ViewModel() {
+
     private val placeholderHelpRequest = HelpRequest(
         id = "",
         victimId = "",
