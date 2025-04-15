@@ -5,9 +5,11 @@ import kotlinx.coroutines.flow.Flow
 
 interface HelpProposalRepository {
 
-    fun getHelpProposals(): Flow<List<HelpProposal>>
-    fun getHelpProposalById(id: String): Flow<HelpProposal?>
-    suspend fun addHelpProposal(helpProposal: HelpProposal)
-    suspend fun deleteHelpProposal(helpProposal: HelpProposal)
+    fun getAll(): Flow<List<HelpProposal>>
+    fun getById(id: String): Flow<HelpProposal?>
+    fun getBySupporterId(id: String): Flow<List<HelpProposal>>
+    fun getByVictimId(id: String): Flow<List<HelpProposal?>>
+    suspend fun add(helpProposal: HelpProposal)
+    suspend fun delete(helpProposal: HelpProposal)
 
 }

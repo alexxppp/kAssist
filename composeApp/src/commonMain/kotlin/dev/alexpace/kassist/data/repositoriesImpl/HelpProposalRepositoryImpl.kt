@@ -11,7 +11,7 @@ class HelpProposalRepositoryImpl: HelpProposalRepository {
     private val firestore = Firebase.firestore
     private val helpProposalCollection = firestore.collection("HelpProposal")
 
-    override fun getHelpProposals() = flow {
+    override fun getAll() = flow {
         helpProposalCollection.snapshots.collect { querySnapshot ->
             val helpProposals = querySnapshot
                 .documents
@@ -22,22 +22,46 @@ class HelpProposalRepositoryImpl: HelpProposalRepository {
         }
     }
 
-    override fun getHelpProposalById(id: String) = flow {
+    override fun getById(id: String) = flow {
         helpProposalCollection
             .document(id)
             .snapshots
             .collect { documentSnapshot ->
-                emit(documentSnapshot.data<HelpProposal>())
+                if (documentSnapshot.exists) {
+                    emit(documentSnapshot.data<HelpProposal>())
+                } else {
+                    emit(null)
+                }
             }
     }
 
-    override suspend fun addHelpProposal(helpProposal: HelpProposal) {
+    override fun getBySupporterId(id: String) = flow {
+        helpProposalCollection
+            .where { "supporterId" equalTo id }
+            .snapshots
+            .collect { querySnapshot ->
+                val helpProposals = querySnapshot.documents.map { it.data<HelpProposal>() }
+                emit(helpProposals)
+            }
+    }
+
+    override fun getByVictimId(id: String) = flow {
+        helpProposalCollection
+            .where { "victimId" equalTo id }
+            .snapshots
+            .collect { querySnapshot ->
+                val helpProposals = querySnapshot.documents.map { it.data<HelpProposal>() }
+                emit(helpProposals)
+            }
+    }
+
+    override suspend fun add(helpProposal: HelpProposal) {
         helpProposalCollection
             .document(helpProposal.id)
             .set(helpProposal.copy(id = helpProposal.id))
     }
 
-    override suspend fun deleteHelpProposal(helpProposal: HelpProposal) {
+    override suspend fun delete(helpProposal: HelpProposal) {
         helpProposalCollection
             .document(helpProposal.id)
             .delete()

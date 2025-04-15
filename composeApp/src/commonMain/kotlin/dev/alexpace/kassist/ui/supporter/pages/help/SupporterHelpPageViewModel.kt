@@ -36,7 +36,7 @@ class SupporterHelpPageViewModel(
                 content = content,
                 status = RequestStatusTypes.Pending
             )
-            helpProposalRepository.addHelpProposal(helpProposal)
+            helpProposalRepository.add(helpProposal)
             selectHelpRequest(null) // Close dialog after submission
         }
     }

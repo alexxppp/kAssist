@@ -17,12 +17,13 @@ import androidx.compose.ui.unit.dp
 import dev.alexpace.kassist.domain.models.victim.HelpRequest
 import dev.alexpace.kassist.domain.models.enums.NeedLevelTypes
 import dev.alexpace.kassist.domain.models.enums.RequestStatusTypes
+import dev.alexpace.kassist.domain.models.shared.User
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 @OptIn(ExperimentalUuidApi::class)
 @Composable
-fun HelpRequestForm(onSubmit: (HelpRequest) -> Unit) {
+fun HelpRequestForm(currentUser: User, onSubmit: (HelpRequest) -> Unit) {
     // State for form fields
     var address by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
@@ -65,8 +66,8 @@ fun HelpRequestForm(onSubmit: (HelpRequest) -> Unit) {
         Button(onClick = {
             val newHelpRequest = HelpRequest(
                 id = Uuid.random().toString(),
-                victimId = Uuid.random().toString(), // TODO: Replace for this.id
-                victimName = Uuid.random().toString(), // TODO: Replace for this.name
+                victimId = currentUser.id,
+                victimName = currentUser.name,
                 address = address,
                 description = description,
                 needLevel = selectedNeedLevel,

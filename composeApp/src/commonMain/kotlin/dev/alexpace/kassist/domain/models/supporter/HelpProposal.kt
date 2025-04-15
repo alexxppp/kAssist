@@ -7,8 +7,8 @@ import kotlinx.serialization.Serializable
 data class HelpProposal(
     val id: String,
     val supporterId: String,
-    val helpRequestId: String,
     val victimId: String,
+    val helpRequestId: String,
     val content: String,
     val status: RequestStatusTypes
 )

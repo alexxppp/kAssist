@@ -11,8 +11,7 @@ class HelpRequestRepositoryImpl: HelpRequestRepository {
     private val firestore = Firebase.firestore
     private val helpRequestCollection = firestore.collection("HelpRequest")
 
-
-    override fun getHelpRequests() = flow {
+    override fun getAll() = flow {
         helpRequestCollection.snapshots.collect { querySnapshot ->
             val helpRequests = querySnapshot
                 .documents
@@ -23,7 +22,7 @@ class HelpRequestRepositoryImpl: HelpRequestRepository {
         }
     }
 
-    override fun getHelpRequestById(id: String) = flow {
+    override fun getById(id: String) = flow {
         helpRequestCollection
             .document(id)
             .snapshots
@@ -32,13 +31,23 @@ class HelpRequestRepositoryImpl: HelpRequestRepository {
             }
     }
 
-    override suspend fun addHelpRequest(helpRequest: HelpRequest) {
+    override fun getByVictimId(id: String) = flow {
+        helpRequestCollection
+            .where { "victimId" equalTo id }
+            .snapshots
+            .collect { querySnapshot ->
+                val helpRequests = querySnapshot.documents.map { it.data<HelpRequest>() }
+                emit(helpRequests)
+            }
+    }
+
+    override suspend fun add(helpRequest: HelpRequest) {
         helpRequestCollection
             .document(helpRequest.id)
             .set(helpRequest.copy(id = helpRequest.id))
     }
 
-    override suspend fun deleteHelpRequest(helpRequest: HelpRequest) {
+    override suspend fun delete(helpRequest: HelpRequest) {
         helpRequestCollection
             .document(helpRequest.id)
             .delete()

@@ -36,7 +36,7 @@ fun VictimHomePage() {
         )
     }
 
-    val proposalsWithRequests by viewModel.proposalsWithRequests.collectAsState()
+    val helpProposals by viewModel.helpProposals.collectAsState()
 
     Box(
         modifier = Modifier
@@ -65,7 +65,7 @@ fun VictimHomePage() {
                 ),
                 modifier = Modifier.padding(bottom = 16.dp)
             )
-            if (proposalsWithRequests.isEmpty()) {
+            if (helpProposals.isEmpty()) {
                 Text(
                     text = "No proposals yet.",
                     style = TextStyle(
@@ -75,7 +75,7 @@ fun VictimHomePage() {
                     )
                 )
             } else {
-                ProposalList(proposalsWithRequests)
+                ProposalList(helpProposals)
             }
         }
     }

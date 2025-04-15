@@ -15,7 +15,8 @@ import dev.alexpace.kassist.ui.components.supporter.requests.HelpProposalForm
 
 @Composable
 fun HelpRequestList(viewModel: SupporterHelpPageViewModel) {
-    val helpRequests by viewModel.helpRequestRepository.getHelpRequests().collectAsState(initial = emptyList())
+
+    val helpRequests by viewModel.helpRequestRepository.getAll().collectAsState(initial = emptyList())
     val selectedHelpRequest by viewModel.selectedHelpRequest.collectAsState()
 
     LazyColumn {

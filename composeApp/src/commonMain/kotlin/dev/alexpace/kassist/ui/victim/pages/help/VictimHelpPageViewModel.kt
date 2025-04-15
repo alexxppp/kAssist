@@ -11,7 +11,7 @@ class VictimHelpPageViewModel(
 ) : ViewModel() {
     fun submitHelpRequest(helpRequest: HelpRequest) {
         viewModelScope.launch {
-            helpRequestRepository.addHelpRequest(helpRequest)
+            helpRequestRepository.add(helpRequest)
         }
     }
 }
