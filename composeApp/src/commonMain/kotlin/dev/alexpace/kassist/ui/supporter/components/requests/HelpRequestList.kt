@@ -10,8 +10,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import dev.alexpace.kassist.ui.supporter.components.proposal.HelpProposalForm
 import dev.alexpace.kassist.ui.supporter.pages.help.SupporterHelpPageViewModel
-import dev.alexpace.kassist.ui.components.supporter.requests.HelpProposalForm
 
 @Composable
 fun HelpRequestList(viewModel: SupporterHelpPageViewModel) {

@@ -1,4 +1,4 @@
-package dev.alexpace.kassist.ui.shared.navigation
+package dev.alexpace.kassist.ui.shared.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*

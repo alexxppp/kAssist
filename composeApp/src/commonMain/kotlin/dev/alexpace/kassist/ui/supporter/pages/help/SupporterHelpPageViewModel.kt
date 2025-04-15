@@ -11,13 +11,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlin.random.Random
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 class SupporterHelpPageViewModel(
     val helpRequestRepository: HelpRequestRepositoryImpl,
-    val helpProposalRepository: HelpProposalRepositoryImpl,
-    val userId: String
+    private val helpProposalRepository: HelpProposalRepositoryImpl,
+    private val userId: String
 ) : ViewModel() {
+
     private val _selectedHelpRequest = MutableStateFlow<HelpRequest?>(null)
     val selectedHelpRequest: StateFlow<HelpRequest?> = _selectedHelpRequest.asStateFlow()
 
@@ -27,17 +29,26 @@ class SupporterHelpPageViewModel(
 
     fun submitHelpProposal(content: String, helpRequest: HelpRequest) {
         viewModelScope.launch {
-            val newId = Random.nextInt(999999999).toString()
-            val helpProposal = HelpProposal(
-                id = newId,
-                supporterId = userId,
-                helpRequestId = helpRequest.id,
-                victimId = helpRequest.victimId,
-                content = content,
-                status = RequestStatusTypes.Pending
-            )
-            helpProposalRepository.add(helpProposal)
-            selectHelpRequest(null) // Close dialog after submission
+            try {
+                helpProposalRepository.add(buildHelpProposal(content, helpRequest))
+
+                selectHelpRequest(null)
+            } catch (e: Exception) {
+                // Log error (replace with proper logging in production)
+                println("Error submitting proposal: ${e.message}")
+            }
         }
+    }
+
+    @OptIn(ExperimentalUuidApi::class)
+    private fun buildHelpProposal(content: String, helpRequest: HelpRequest): HelpProposal {
+        return HelpProposal(
+            id = Uuid.random().toString(),
+            supporterId = userId,
+            helpRequestId = helpRequest.id,
+            victimId = helpRequest.victimId,
+            content = content,
+            status = RequestStatusTypes.Pending
+        )
     }
 }
