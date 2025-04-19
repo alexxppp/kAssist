@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -65,11 +64,6 @@ fun HomePage(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(top = 32.dp)
             ) {
-                Box(
-                    modifier = Modifier
-                        .size(80.dp)
-                        .background(Color(0xFF4A90E2), RoundedCornerShape(16.dp))
-                )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     text = "kAssist Home",
@@ -82,7 +76,7 @@ fun HomePage(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Connect with support during natural disasters",
+                    text = "Current active disasters",
                     style = TextStyle(
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Medium,
@@ -102,7 +96,7 @@ fun HomePage(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     items(naturalDisasters) { disaster ->
-                        NaturalDisasterCard(disaster)
+                        NaturalDisasterCard(disaster, navigator)
                     }
                 }
             } else {

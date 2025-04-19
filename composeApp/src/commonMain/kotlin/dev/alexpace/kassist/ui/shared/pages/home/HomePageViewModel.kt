@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class HomePageViewModel(
-    val naturalDisasterApiService: NaturalDisasterApiService
+    private val naturalDisasterApiService: NaturalDisasterApiService
 ) : ViewModel() {
 
     private val _naturalDisasters = MutableStateFlow<List<NaturalDisaster>>(emptyList())
@@ -27,7 +27,14 @@ class HomePageViewModel(
             try {
                 val disasters = naturalDisasterApiService.getNaturalDisasters()
                 println(disasters)
-                _naturalDisasters.value = disasters.features.map { it.properties }
+                _naturalDisasters.value = disasters.features
+                    .map {
+                        it.properties
+                    }
+                    .filter {
+                        (it.alertLevel == "Orange" || it.alertLevel == "Red")
+                                && it.type != "DR"
+                    }
             } catch (e: Exception) {
                 // Handle error (e.g., log it or update UI with error state)
                 _naturalDisasters.value = emptyList()

@@ -1,6 +1,9 @@
 package dev.alexpace.kassist.ui.shared.components
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,29 +14,40 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cafe.adriel.voyager.navigator.Navigator
 import dev.alexpace.kassist.domain.models.shared.naturalDisaster.NaturalDisaster
+import dev.alexpace.kassist.ui.supporter.navigation.screens.SupporterScreen
+import dev.alexpace.kassist.ui.victim.navigation.screens.VictimScreen
 
 @Composable
-fun NaturalDisasterCard(disaster: NaturalDisaster) {
+fun NaturalDisasterCard(disaster: NaturalDisaster, navigator: Navigator) {
+    val showVictimDialog = remember { mutableStateOf(false) }
+    val showSupporterDialog = remember { mutableStateOf(false) }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp)),
-        elevation = 4.dp,
+            .clip(RoundedCornerShape(12.dp))
+            .shadow(8.dp, RoundedCornerShape(12.dp)),
         backgroundColor = Color.White
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
             Text(
-                text = disaster.name,
+                text = disaster.name ?: "Unknown Disaster",
                 style = TextStyle(
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
@@ -42,7 +56,7 @@ fun NaturalDisasterCard(disaster: NaturalDisaster) {
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = disaster.description,
+                text = disaster.description ?: "No description available",
                 style = TextStyle(
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Normal,
@@ -50,12 +64,12 @@ fun NaturalDisasterCard(disaster: NaturalDisaster) {
                 )
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Row (
+            Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = "Location: ${disaster.country}",
+                    text = "Location: ${disaster.country ?: "Unknown"}",
                     style = TextStyle(
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Medium,
@@ -71,6 +85,96 @@ fun NaturalDisasterCard(disaster: NaturalDisaster) {
                     )
                 )
             }
+            Spacer(modifier = Modifier.height(12.dp))
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                // Victim Button
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 8.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(
+                            brush = Brush.linearGradient(
+                                colors = listOf(
+                                    Color(0xFF4A90E2),
+                                    Color(0xFF357ABD)
+                                )
+                            )
+                        )
+                        .clickable { showVictimDialog.value = true }
+                        .padding(vertical = 12.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "I'm a Victim",
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
+                        )
+                    )
+                }
+                // Supporter Button
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(start = 8.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(
+                            brush = Brush.linearGradient(
+                                colors = listOf(
+                                    Color(0xFF333333),
+                                    Color(0xFF1A1A1A)
+                                )
+                            )
+                        )
+                        .clickable { showSupporterDialog.value = true }
+                        .padding(vertical = 12.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "I'm a Supporter",
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
+                        )
+                    )
+                }
+            }
         }
+    }
+
+    // Victim Confirmation Dialog
+    if (showVictimDialog.value) {
+        CustomAlertDialog(
+            title = "Confirm Action",
+            message = "Are you sure you want to register as a victim for ${disaster.name ?: "this disaster"}?",
+            confirmText = "Yes",
+            dismissText = "No",
+            onConfirm = {
+                showVictimDialog.value = false
+                navigator.push(VictimScreen())
+            },
+            onDismiss = { showVictimDialog.value = false }
+        )
+    }
+
+    // Supporter Confirmation Dialog
+    if (showSupporterDialog.value) {
+        CustomAlertDialog(
+            title = "Confirm Action",
+            message = "Are you sure you want to register as a supporter for ${disaster.name ?: "this disaster"}?",
+            confirmText = "Yes",
+            dismissText = "No",
+            onConfirm = {
+                showSupporterDialog.value = false
+                navigator.push(SupporterScreen())
+            },
+            onDismiss = { showSupporterDialog.value = false }
+        )
     }
 }
