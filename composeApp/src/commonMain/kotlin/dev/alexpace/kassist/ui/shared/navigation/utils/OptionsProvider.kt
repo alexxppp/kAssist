@@ -1,6 +1,7 @@
 package dev.alexpace.kassist.ui.shared.navigation.utils
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
@@ -18,12 +19,24 @@ fun homeTabOptions(): TabOptions {
     )
 }
 
+
+@Composable
+fun contactTabOptions(): TabOptions {
+    val title = "Contacts"
+    val icon = rememberVectorPainter(Icons.Default.Email)
+    return TabOptions(
+        index = 1u,
+        title = title,
+        icon = icon
+    )
+}
+
 @Composable
 fun helpTabOptions(): TabOptions {
     val title = "Help"
     val icon = rememberVectorPainter(Icons.Default.Person) // TODO: Change Icon
     return TabOptions(
-        index = 1u,
+        index = 2u,
         title = title,
         icon = icon
     )
