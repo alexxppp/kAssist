@@ -28,11 +28,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.navigator.Navigator
 import dev.alexpace.kassist.domain.models.shared.naturalDisaster.NaturalDisaster
-import dev.alexpace.kassist.ui.supporter.navigation.screens.SupporterScreen
-import dev.alexpace.kassist.ui.victim.navigation.screens.VictimScreen
 
 @Composable
-fun NaturalDisasterCard(disaster: NaturalDisaster, navigator: Navigator) {
+fun NaturalDisasterCard(
+    disaster: NaturalDisaster,
+    navigator: Navigator,
+    onConfirmVictim: () -> Unit,
+    onConfirmSupporter: () -> Unit
+) {
     val showVictimDialog = remember { mutableStateOf(false) }
     val showSupporterDialog = remember { mutableStateOf(false) }
 
@@ -157,7 +160,7 @@ fun NaturalDisasterCard(disaster: NaturalDisaster, navigator: Navigator) {
             dismissText = "No",
             onConfirm = {
                 showVictimDialog.value = false
-                navigator.push(VictimScreen())
+                onConfirmVictim()
             },
             onDismiss = { showVictimDialog.value = false }
         )
@@ -172,7 +175,7 @@ fun NaturalDisasterCard(disaster: NaturalDisaster, navigator: Navigator) {
             dismissText = "No",
             onConfirm = {
                 showSupporterDialog.value = false
-                navigator.push(SupporterScreen())
+                onConfirmSupporter()
             },
             onDismiss = { showSupporterDialog.value = false }
         )

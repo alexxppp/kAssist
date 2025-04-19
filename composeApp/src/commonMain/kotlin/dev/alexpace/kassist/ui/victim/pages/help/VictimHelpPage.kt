@@ -26,7 +26,7 @@ fun VictimHelpPage() {
 
     LaunchedEffect(currentUserId) {
         if (currentUserId != null) {
-            currentUser = userRepository.getUserById(currentUserId).firstOrNull()
+            currentUser = userRepository.getById(currentUserId).firstOrNull()
         }
     }
 

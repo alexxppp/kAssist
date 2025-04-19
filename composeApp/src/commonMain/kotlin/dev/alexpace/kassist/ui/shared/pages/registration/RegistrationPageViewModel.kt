@@ -2,6 +2,7 @@ package dev.alexpace.kassist.ui.shared.pages.registration
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dev.alexpace.kassist.domain.models.enums.UserType
 import dev.alexpace.kassist.domain.models.shared.User
 import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.alexpace.kassist.domain.services.FirebaseAuthService
@@ -81,7 +82,7 @@ class RegistrationPageViewModel(
 
                 if (Firebase.auth.currentUser != null) {
                     println("User not null")
-                    userRepository.addUser(
+                    userRepository.add(
                         User(
                             id = Firebase.auth.currentUser!!.uid,
                             email = _email.value,

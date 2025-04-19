@@ -11,7 +11,7 @@ class UserRepositoryImpl: UserRepository {
     private val firestore = Firebase.firestore
     private val usersCollection = firestore.collection("User")
 
-    override fun getUsers() = flow {
+    override fun getAll() = flow {
         usersCollection.snapshots.collect { querySnapshot ->
             val users = querySnapshot
                 .documents
@@ -22,7 +22,7 @@ class UserRepositoryImpl: UserRepository {
         }
     }
 
-    override fun getUserById(id: String) = flow {
+    override fun getById(id: String) = flow {
         usersCollection
             .document(id)
             .snapshots
@@ -31,19 +31,19 @@ class UserRepositoryImpl: UserRepository {
             }
     }
 
-    override suspend fun addUser(user: User) {
+    override suspend fun add(user: User) {
         usersCollection
             .document(user.id)
             .set(user.copy(id = user.id))
     }
 
-    override suspend fun updateUser(user: User) {
+    override suspend fun update(user: User) {
         usersCollection
             .document(user.id)
             .set(user)
     }
 
-    override suspend fun deleteUser(user: User) {
+    override suspend fun delete(user: User) {
         usersCollection
             .document(user.id)
             .delete()

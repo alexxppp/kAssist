@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.navigator.Navigator
+import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.alexpace.kassist.domain.services.NaturalDisasterApiService
 import dev.alexpace.kassist.ui.shared.components.NaturalDisasterCard
 import org.koin.compose.koinInject
@@ -35,9 +36,11 @@ import org.koin.compose.koinInject
 @Composable
 fun HomePage(
     navigator: Navigator,
-    naturalDisasterApiService: NaturalDisasterApiService = koinInject()
+    naturalDisasterApiService: NaturalDisasterApiService = koinInject(),
+    userRepository: UserRepository = koinInject()
 ) {
-    val viewModel: HomePageViewModel = viewModel { HomePageViewModel(naturalDisasterApiService) }
+    val viewModel: HomePageViewModel =
+        viewModel { HomePageViewModel(naturalDisasterApiService, userRepository) }
     val naturalDisasters = viewModel.naturalDisasters.collectAsState().value
 
     Box(
@@ -96,7 +99,13 @@ fun HomePage(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     items(naturalDisasters) { disaster ->
-                        NaturalDisasterCard(disaster, navigator)
+                        NaturalDisasterCard(
+                            disaster, navigator, {
+                                viewModel.navigateToVictimScreen(navigator)
+                            },
+                            {
+                                viewModel.navigateToSupporterScreen(navigator)
+                            })
                     }
                 }
             } else {
@@ -112,52 +121,6 @@ fun HomePage(
                         .padding(16.dp),
                     textAlign = TextAlign.Center
                 )
-            }
-
-            // Bottom Section: Navigation Buttons
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(bottom = 32.dp)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(Color(0xFF4A90E2))
-                        .clickable { viewModel.navigateToVictimScreen(navigator) }
-                        .padding(horizontal = 32.dp, vertical = 16.dp)
-                ) {
-                    Text(
-                        text = "I Need Help",
-                        style = TextStyle(
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White
-                        ),
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center
-                    )
-                }
-                Spacer(modifier = Modifier.height(16.dp))
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(Color(0xFF333333))
-                        .clickable { viewModel.navigateToSupporterScreen(navigator) }
-                        .padding(horizontal = 32.dp, vertical = 16.dp)
-                ) {
-                    Text(
-                        text = "I Want to Help",
-                        style = TextStyle(
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White
-                        ),
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center
-                    )
-                }
             }
         }
     }
