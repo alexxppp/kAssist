@@ -18,3 +18,10 @@ data class Feature(
 data class Geometry(
     val coordinates: List<Double>
 )
+
+@Serializable
+data class SeverityData(
+    val severity: Double,
+    val severitytext: String,
+    val severityunit: String
+)

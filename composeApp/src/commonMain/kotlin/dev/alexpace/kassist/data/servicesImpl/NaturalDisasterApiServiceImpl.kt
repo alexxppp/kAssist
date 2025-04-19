@@ -15,7 +15,7 @@ class NaturalDisasterApiServiceImpl: NaturalDisasterApiService {
     private val http = createHttpClient(getHttpClient())
 
     override suspend fun getNaturalDisasters(): NaturalDisasterResponse {
-        val response: HttpResponse = http.get(BASE_URL)
+        val response: HttpResponse = http.get(BASE_URL + "/EVENTS4APP")
         if (response.status.isSuccess()) {
             return response.body()
         } else {

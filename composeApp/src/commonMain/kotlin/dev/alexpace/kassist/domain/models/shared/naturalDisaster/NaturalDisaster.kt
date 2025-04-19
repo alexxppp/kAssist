@@ -1,19 +1,19 @@
 package dev.alexpace.kassist.domain.models.shared.naturalDisaster
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class NaturalDisaster(
-    val id: Int,
-    val type: String,
-
-    val name: String,
-    val description: String,
-
-    val alertLevel: String,
-
-    val startDate: String,
-    val endDate: String,
-
-    val country: String
+    @SerialName("eventid") val id: Int,
+    @SerialName("eventtype") val type: String,
+    @SerialName("alertlevel") val alertLevel: String,
+    @SerialName("fromdate") val startDate: String,
+    @SerialName("todate") val endDate: String,
+    @SerialName("name") val name: String,
+    @SerialName("description") val description: String,
+    @SerialName("htmldescription") val htmlDescription: String,
+    @SerialName("icon") val icon: String,
+    @SerialName("country") val country: String,
+    @SerialName("severitydata") val severityData: SeverityData? = null
 )
