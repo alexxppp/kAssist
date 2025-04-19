@@ -26,13 +26,14 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import cafe.adriel.voyager.navigator.Navigator
+import dev.alexpace.kassist.domain.models.enums.UserType
+import dev.alexpace.kassist.domain.models.shared.User
 import dev.alexpace.kassist.domain.models.shared.naturalDisaster.NaturalDisaster
 
 @Composable
 fun NaturalDisasterCard(
     disaster: NaturalDisaster,
-    navigator: Navigator,
+    user: User?,
     onConfirmVictim: () -> Unit,
     onConfirmSupporter: () -> Unit
 ) {
@@ -50,7 +51,7 @@ fun NaturalDisasterCard(
             modifier = Modifier.padding(16.dp)
         ) {
             Text(
-                text = disaster.name ?: "Unknown Disaster",
+                text = disaster.name,
                 style = TextStyle(
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
@@ -59,7 +60,7 @@ fun NaturalDisasterCard(
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = disaster.description ?: "No description available",
+                text = disaster.description,
                 style = TextStyle(
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Normal,
@@ -72,7 +73,7 @@ fun NaturalDisasterCard(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = "Location: ${disaster.country ?: "Unknown"}",
+                    text = "Location: ${disaster.country}",
                     style = TextStyle(
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Medium,
@@ -93,69 +94,103 @@ fun NaturalDisasterCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                // Victim Button
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(end = 8.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(
-                            brush = Brush.linearGradient(
-                                colors = listOf(
-                                    Color(0xFF4A90E2),
-                                    Color(0xFF357ABD)
+                if (user?.type == UserType.Neutral) {
+                    // Victim Button
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(end = 8.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(
+                                brush = Brush.linearGradient(
+                                    colors = listOf(
+                                        Color(0xFF4A90E2),
+                                        Color(0xFF357ABD)
+                                    )
                                 )
                             )
-                        )
-                        .clickable { showVictimDialog.value = true }
-                        .padding(vertical = 12.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "I'm a Victim",
-                        style = TextStyle(
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White
-                        )
-                    )
-                }
-                // Supporter Button
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(start = 8.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(
-                            brush = Brush.linearGradient(
-                                colors = listOf(
-                                    Color(0xFF333333),
-                                    Color(0xFF1A1A1A)
-                                )
+                            .clickable { showVictimDialog.value = true }
+                            .padding(vertical = 12.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "I'm a Victim",
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White
                             )
                         )
-                        .clickable { showSupporterDialog.value = true }
-                        .padding(vertical = 12.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "I'm a Supporter",
-                        style = TextStyle(
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White
+                    }
+                    // Supporter Button
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(start = 8.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(
+                                brush = Brush.linearGradient(
+                                    colors = listOf(
+                                        Color(0xFF333333),
+                                        Color(0xFF1A1A1A)
+                                    )
+                                )
+                            )
+                            .clickable { showSupporterDialog.value = true }
+                            .padding(vertical = 12.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "I'm a Supporter",
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White
+                            )
                         )
-                    )
+                    }
+                } else if (user?.naturalDisaster?.id == disaster.id) {
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(start = 8.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(
+                                brush = Brush.linearGradient(
+                                    colors = listOf(
+                                        Color(0xFF333333),
+                                        Color(0xFF1A1A1A)
+                                    )
+                                )
+                            )
+                            .clickable {
+                                if (user.type == UserType.Supporter) {
+                                    onConfirmSupporter()
+                                } else if (user.type == UserType.Victim) {
+                                    onConfirmVictim()
+                                }
+                            }
+                            .padding(vertical = 12.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "Enter",
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White
+                            )
+                        )
+                    }
                 }
             }
         }
     }
 
-    // Victim Confirmation Dialog
     if (showVictimDialog.value) {
         CustomAlertDialog(
             title = "Confirm Action",
-            message = "Are you sure you want to register as a victim for ${disaster.name ?: "this disaster"}?",
+            message = "Are you sure you want to register as a victim for ${disaster.name}?",
             confirmText = "Yes",
             dismissText = "No",
             onConfirm = {
@@ -166,11 +201,10 @@ fun NaturalDisasterCard(
         )
     }
 
-    // Supporter Confirmation Dialog
     if (showSupporterDialog.value) {
         CustomAlertDialog(
             title = "Confirm Action",
-            message = "Are you sure you want to register as a supporter for ${disaster.name ?: "this disaster"}?",
+            message = "Are you sure you want to register as a supporter for ${disaster.name}?",
             confirmText = "Yes",
             dismissText = "No",
             onConfirm = {

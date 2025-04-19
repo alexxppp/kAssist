@@ -27,111 +27,115 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.navigator.Navigator
 
 @Composable
-fun WelcomePage(navigator: Navigator) {
+fun WelcomePage(navigator: Navigator, isLoading: Boolean) {
     val viewModel: WelcomePageViewModel = viewModel { WelcomePageViewModel() }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color(0xFFE6F0FA),
-                        Color(0xFFFFFFFF)
-                    )
-                )
-            )
-    ) {
-        Column(
+    if(isLoading) {
+        Text("Loading...")
+    } else {
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            Color(0xFFE6F0FA),
+                            Color(0xFFFFFFFF)
+                        )
+                    )
+                )
         ) {
-            // Top Section: Logo and Headline
             Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(top = 64.dp)
+                verticalArrangement = Arrangement.SpaceBetween
             ) {
-                // Placeholder for logo (replace with Image or custom vector)
-                Box(
-                    modifier = Modifier
-                        .size(100.dp)
-                        .background(Color(0xFF4A90E2), RoundedCornerShape(16.dp))
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = "Welcome to kAssist",
-                    style = TextStyle(
-                        fontSize = 32.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF333333)
-                    ),
-                    textAlign = TextAlign.Center
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "Feel safe during emergencies with our cross-platform app",
-                    style = TextStyle(
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = Color(0xFF666666)
-                    ),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                )
-            }
-
-            // Middle Section: Description
-            Text(
-                text = "Make a request, a proposal, or just look around seamlessly across all your devices.",
-                style = TextStyle(
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Normal,
-                    color = Color(0xFF333333)
-                ),
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(horizontal = 24.dp)
-            )
-
-            // Bottom Section: CTAs
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(bottom = 32.dp)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(Color(0xFF4A90E2))
-                        .clickable { viewModel.onRegisterClick(navigator) }
-                        .padding(horizontal = 32.dp, vertical = 16.dp)
+                // Top Section: Logo and Headline
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.padding(top = 64.dp)
                 ) {
+                    // Placeholder for logo (replace with Image or custom vector)
+                    Box(
+                        modifier = Modifier
+                            .size(100.dp)
+                            .background(Color(0xFF4A90E2), RoundedCornerShape(16.dp))
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
                     Text(
-                        text = "Register",
+                        text = "Welcome to kAssist",
+                        style = TextStyle(
+                            fontSize = 32.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF333333)
+                        ),
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "Feel safe during emergencies with our cross-platform app",
                         style = TextStyle(
                             fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White
-                        )
+                            fontWeight = FontWeight.Medium,
+                            color = Color(0xFF666666)
+                        ),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(horizontal = 16.dp)
                     )
                 }
-                Spacer(modifier = Modifier.height(16.dp))
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(Color(0xFF333333))
-                        .clickable { viewModel.onLoginClick(navigator) }
-                        .padding(horizontal = 32.dp, vertical = 16.dp)
+
+                // Middle Section: Description
+                Text(
+                    text = "Make a request, a proposal, or just look around seamlessly across all your devices.",
+                    style = TextStyle(
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Normal,
+                        color = Color(0xFF333333)
+                    ),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(horizontal = 24.dp)
+                )
+
+                // Bottom Section: CTAs
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.padding(bottom = 32.dp)
                 ) {
-                    Text(
-                        text = "Log In",
-                        style = TextStyle(
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(Color(0xFF4A90E2))
+                            .clickable { viewModel.onRegisterClick(navigator) }
+                            .padding(horizontal = 32.dp, vertical = 16.dp)
+                    ) {
+                        Text(
+                            text = "Register",
+                            style = TextStyle(
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White
+                            )
                         )
-                    )
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(Color(0xFF333333))
+                            .clickable { viewModel.onLoginClick(navigator) }
+                            .padding(horizontal = 32.dp, vertical = 16.dp)
+                    ) {
+                        Text(
+                            text = "Log In",
+                            style = TextStyle(
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White
+                            )
+                        )
+                    }
                 }
             }
         }

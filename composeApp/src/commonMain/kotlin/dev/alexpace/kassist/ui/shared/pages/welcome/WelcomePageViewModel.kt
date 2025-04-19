@@ -6,6 +6,9 @@ import dev.alexpace.kassist.ui.shared.navigation.screens.LoginScreen
 import dev.alexpace.kassist.ui.shared.navigation.screens.RegistrationScreen
 
 class WelcomePageViewModel : ViewModel() {
+
+
+
     fun onRegisterClick(navigator: Navigator) {
         navigator.push(RegistrationScreen())
     }

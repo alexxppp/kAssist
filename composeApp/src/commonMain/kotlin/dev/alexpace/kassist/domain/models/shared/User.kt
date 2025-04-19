@@ -1,6 +1,7 @@
 package dev.alexpace.kassist.domain.models.shared
 
 import dev.alexpace.kassist.domain.models.enums.UserType
+import dev.alexpace.kassist.domain.models.shared.naturalDisaster.NaturalDisaster
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -10,6 +11,6 @@ data class User(
     val email: String ,
     val name: String,
     val phoneNumber: String?,
-    val emergencyPlan: EmergencyPlan? = null,
+    val naturalDisaster: NaturalDisaster? = null,
     val type: UserType = UserType.Neutral
 )

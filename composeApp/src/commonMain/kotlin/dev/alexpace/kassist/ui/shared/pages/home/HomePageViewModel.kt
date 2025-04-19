@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cafe.adriel.voyager.navigator.Navigator
 import dev.alexpace.kassist.domain.models.enums.UserType
+import dev.alexpace.kassist.domain.models.shared.User
 import dev.alexpace.kassist.domain.models.shared.naturalDisaster.NaturalDisaster
 import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.alexpace.kassist.domain.services.NaturalDisasterApiService
@@ -26,56 +27,68 @@ class HomePageViewModel(
     private val _naturalDisasters = MutableStateFlow<List<NaturalDisaster>>(emptyList())
     val naturalDisasters = _naturalDisasters.asStateFlow()
 
+    private val _user = MutableStateFlow<User?>(null)
+    val user = _user.asStateFlow()
+
     init {
         fetchNaturalDisasters()
+        fetchUser()
     }
 
     private fun fetchNaturalDisasters() {
         viewModelScope.launch {
             try {
                 val disasters = naturalDisasterApiService.getNaturalDisasters()
-                println(disasters)
                 _naturalDisasters.value = disasters.features
-                    .map {
-                        it.properties
-                    }
+                    .map { it.properties }
                     .filter {
-                        (it.alertLevel == "Orange" || it.alertLevel == "Red")
-                                && it.type != "DR"
+                        (it.alertLevel == "Orange" || it.alertLevel == "Red") &&
+                                it.type != "DR"
                     }
             } catch (e: Exception) {
-                // Handle error (e.g., log it or update UI with error state)
+                println("Error fetching disasters: ${e.message}")
                 _naturalDisasters.value = emptyList()
             }
         }
     }
 
-    private fun registerUserAs(userId: String?, userType: UserType) {
+    private fun fetchUser() {
+        userId?.let { uid ->
+            viewModelScope.launch {
+                try {
+                    _user.value = userRepository.getById(uid).firstOrNull()
+                } catch (e: Exception) {
+                    println("Error fetching user: ${e.message}")
+                    _user.value = null
+                }
+            }
+        }
+    }
+
+    private fun registerUserAs(userId: String?, userType: UserType, disaster: NaturalDisaster) {
         userId?.let { uid ->
             viewModelScope.launch {
                 try {
                     val user = userRepository.getById(uid).firstOrNull()
                     if (user != null) {
-                        val updatedUser = user.copy(type = userType)
+                        val updatedUser = user.copy(type = userType, naturalDisaster = disaster)
                         userRepository.update(updatedUser)
+                        _user.value = updatedUser
                     }
                 } catch (e: Exception) {
                     println("Error registering user: ${e.message}")
-                    e.printStackTrace()
                 }
             }
-        } ?: run {
-            println("No authenticated user found")
-        }
+        } ?: println("No authenticated user found")
     }
 
-    fun navigateToVictimScreen(navigator: Navigator) {
-        registerUserAs(userId, UserType.Victim)
+    fun navigateToVictimScreen(navigator: Navigator, disaster: NaturalDisaster) {
+        registerUserAs(userId, UserType.Victim, disaster)
         navigator.push(VictimScreen())
     }
 
-    fun navigateToSupporterScreen(navigator: Navigator) {
-        registerUserAs(userId, UserType.Supporter)
+    fun navigateToSupporterScreen(navigator: Navigator, disaster: NaturalDisaster) {
+        registerUserAs(userId, UserType.Supporter, disaster)
         navigator.push(SupporterScreen())
     }
 }
