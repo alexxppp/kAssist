@@ -14,6 +14,7 @@ import dev.alexpace.kassist.ui.shared.navigation.utils.BottomBar
 import dev.alexpace.kassist.ui.supporter.navigation.tabs.SupporterHelpTab
 import dev.alexpace.kassist.ui.supporter.navigation.tabs.SupporterHomeTab
 import dev.alexpace.kassist.ui.shared.utils.theme.Colors
+import dev.alexpace.kassist.ui.supporter.navigation.tabs.SupporterContactTab
 
 class SupporterScreen : Screen {
     @Composable
@@ -24,7 +25,7 @@ class SupporterScreen : Screen {
             tabDisposable = {
                 TabDisposable(
                     it,
-                    listOf(SupporterHomeTab, SupporterHelpTab)
+                    listOf(SupporterHomeTab, SupporterContactTab, SupporterHelpTab)
                 )
             }
         ) {
@@ -35,7 +36,8 @@ class SupporterScreen : Screen {
                         backgroundColor = Colors.TopAppBar
                     )
                 },
-                bottomBar = { BottomBar(LocalTabNavigator.current, listOf(SupporterHomeTab, SupporterHelpTab)) },
+                bottomBar = { BottomBar(LocalTabNavigator.current,
+                    listOf(SupporterHomeTab, SupporterContactTab, SupporterHelpTab)) },
                 content = {
                     CurrentTab()
                 },
