@@ -20,18 +20,22 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.alexpace.kassist.domain.models.enums.RequestStatusTypes
 import dev.alexpace.kassist.domain.repositories.HelpProposalRepository
 import dev.alexpace.kassist.domain.repositories.HelpRequestRepository
+import dev.alexpace.kassist.domain.repositories.UserRepository // Assuming this exists
+import kotlinx.coroutines.flow.flowOf
 import org.koin.compose.koinInject
 
 @Composable
 fun ProposalInfoPage(proposalId: String) {
-
     val helpProposalRepository = koinInject<HelpProposalRepository>()
     val helpRequestRepository = koinInject<HelpRequestRepository>()
+    val userRepository = koinInject<UserRepository>() // Correct repository for users
+
     val viewModel: ProposalInfoViewModel = viewModel {
         ProposalInfoViewModel(helpProposalRepository, helpRequestRepository, proposalId)
     }
     val helpProposal by viewModel.helpProposal.collectAsState()
     val helpRequest by viewModel.helpRequest.collectAsState()
+    val supporter by (helpProposal?.supporterId?.let { userRepository.getById(it) } ?: flowOf(null)).collectAsState(initial = null)
 
     Box(
         modifier = Modifier
@@ -55,7 +59,7 @@ fun ProposalInfoPage(proposalId: String) {
                 Text("Loading...")
             } else {
                 Text(
-                    text = "Proposal from: ${helpProposal!!.supporterId}",
+                    text = "Proposal from: ${supporter?.name ?: "Unknown"}",
                     style = TextStyle(
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
