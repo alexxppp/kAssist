@@ -1,6 +1,5 @@
 package dev.alexpace.kassist.ui.victim.pages.home
 
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.alexpace.kassist.domain.models.supporter.HelpProposal
@@ -23,4 +22,5 @@ class VictimHomePageViewModel(
                 started = WhileSubscribed(5000),
                 initialValue = emptyList()
             )
+
 }
