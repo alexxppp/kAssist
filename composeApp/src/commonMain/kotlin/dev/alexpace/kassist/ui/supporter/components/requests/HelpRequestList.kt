@@ -10,13 +10,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import dev.alexpace.kassist.domain.models.enums.RequestStatusTypes
 import dev.alexpace.kassist.ui.supporter.components.proposal.HelpProposalForm
 import dev.alexpace.kassist.ui.supporter.pages.help.SupporterHelpPageViewModel
+import kotlinx.coroutines.flow.map
 
 @Composable
 fun HelpRequestList(viewModel: SupporterHelpPageViewModel) {
 
-    val helpRequests by viewModel.helpRequestRepository.getAll().collectAsState(initial = emptyList())
+    val helpRequests by viewModel.helpRequestRepository.getAll()
+        .map { requests -> requests.filter { it.status == RequestStatusTypes.Pending } }
+        .collectAsState(initial = emptyList())
+
     val selectedHelpRequest by viewModel.selectedHelpRequest.collectAsState()
 
     LazyColumn {

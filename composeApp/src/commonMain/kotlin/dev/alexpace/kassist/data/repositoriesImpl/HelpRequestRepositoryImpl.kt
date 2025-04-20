@@ -47,6 +47,12 @@ class HelpRequestRepositoryImpl: HelpRequestRepository {
             .set(helpRequest.copy(id = helpRequest.id))
     }
 
+    override suspend fun update(helpRequest: HelpRequest) {
+        helpRequestCollection
+            .document(helpRequest.id)
+            .set(helpRequest)
+    }
+
     override suspend fun delete(helpRequest: HelpRequest) {
         helpRequestCollection
             .document(helpRequest.id)

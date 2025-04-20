@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 class ProposalInfoViewModel(
     private val helpProposalRepository: HelpProposalRepository,
     private val helpRequestRepository: HelpRequestRepository,
-    private val proposalId: String
+    proposalId: String
 ) : ViewModel() {
 
     val helpProposal: StateFlow<HelpProposal?> = helpProposalRepository.getById(proposalId)
@@ -34,8 +34,11 @@ class ProposalInfoViewModel(
     fun acceptProposal() {
         val currentProposal = helpProposal.value ?: return
         val updatedProposal = currentProposal.copy(status = RequestStatusTypes.Accepted)
+        val currentRequest = helpRequest.value ?: return
+        val updatedRequest = currentRequest.copy(status = RequestStatusTypes.Accepted)
         viewModelScope.launch {
             helpProposalRepository.update(updatedProposal)
+            helpRequestRepository.update(updatedRequest)
         }
     }
 
