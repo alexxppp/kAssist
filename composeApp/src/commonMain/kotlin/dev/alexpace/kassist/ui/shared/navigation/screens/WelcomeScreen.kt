@@ -25,9 +25,8 @@ class WelcomeScreen : Screen {
         val userRepository = koinInject<UserRepository>()
 
         var user by remember { mutableStateOf<User?>(null) }
-        var isLoading by remember { mutableStateOf(false) }
+        var isLoading by remember { mutableStateOf(true) }
 
-        /* TODO: Implement
         LaunchedEffect(Unit) {
             val userId = Firebase.auth.currentUser?.uid
             if (userId != null) {
@@ -37,6 +36,7 @@ class WelcomeScreen : Screen {
                         Firebase.auth.signOut() // Clear local session
                     }
                 } catch (e: Exception) {
+                    println("$userId  $user")
                     println("Error fetching user: ${e.message}")
                 }
                 isLoading = false
@@ -45,7 +45,7 @@ class WelcomeScreen : Screen {
                 isLoading = false
             }
         }
-        */
+
 
         WelcomePage(navigator, isLoading)
     }

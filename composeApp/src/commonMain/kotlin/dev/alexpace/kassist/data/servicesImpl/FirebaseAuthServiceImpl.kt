@@ -2,6 +2,7 @@ package dev.alexpace.kassist.data.servicesImpl
 
 import dev.alexpace.kassist.domain.models.shared.User
 import dev.alexpace.kassist.domain.services.FirebaseAuthService
+import dev.alexpace.kassist.domain.services.registerWithFirebase
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.auth
 import kotlinx.coroutines.CoroutineScope
@@ -46,7 +47,7 @@ class FirebaseAuthServiceImpl() : FirebaseAuthService {
 
     override suspend fun register(email: String, password: String) {
         launchWithAwait {
-            auth.createUserWithEmailAndPassword(email, password)
+            registerWithFirebase(email, password)
         }
     }
 

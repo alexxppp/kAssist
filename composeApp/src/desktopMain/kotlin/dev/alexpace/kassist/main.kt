@@ -9,6 +9,8 @@ import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.FirebaseOptions
 import dev.gitlive.firebase.initialize
 
+
+// TO RUN: ./gradlew run -Dorg.gradle.jvmargs=-Xmx4g to allocate 4g of heap
 fun main() = application {
 
     initKoin()

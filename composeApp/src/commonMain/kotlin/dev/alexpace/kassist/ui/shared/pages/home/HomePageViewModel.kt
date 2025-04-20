@@ -8,6 +8,7 @@ import dev.alexpace.kassist.domain.models.shared.User
 import dev.alexpace.kassist.domain.models.shared.naturalDisaster.NaturalDisaster
 import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.alexpace.kassist.domain.services.NaturalDisasterApiService
+import dev.alexpace.kassist.ui.shared.navigation.screens.WelcomeScreen
 import dev.alexpace.kassist.ui.supporter.navigation.screens.SupporterScreen
 import dev.alexpace.kassist.ui.victim.navigation.screens.VictimScreen
 import dev.gitlive.firebase.Firebase
@@ -19,7 +20,8 @@ import kotlinx.coroutines.launch
 
 class HomePageViewModel(
     private val naturalDisasterApiService: NaturalDisasterApiService,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val navigator: Navigator
 ) : ViewModel() {
 
     private val userId = Firebase.auth.currentUser?.uid
@@ -58,9 +60,21 @@ class HomePageViewModel(
                 try {
                     _user.value = userRepository.getById(uid).firstOrNull()
                 } catch (e: Exception) {
+                    println(userId)
                     println("Error fetching user: ${e.message}")
                     _user.value = null
                 }
+            }
+        }
+    }
+
+    fun signOut() {
+        viewModelScope.launch {
+            try {
+                Firebase.auth.signOut()
+                navigator.replaceAll(WelcomeScreen())
+            } catch (e: Exception) {
+                println("Error signing out: ${e.message}")
             }
         }
     }
