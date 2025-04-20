@@ -35,7 +35,7 @@ class ProposalInfoViewModel(
         val currentProposal = helpProposal.value ?: return
         val updatedProposal = currentProposal.copy(status = RequestStatusTypes.Accepted)
         viewModelScope.launch {
-            //helpProposalRepository.updateProposal(updatedProposal)
+            helpProposalRepository.update(updatedProposal)
         }
     }
 
@@ -43,7 +43,7 @@ class ProposalInfoViewModel(
         val currentProposal = helpProposal.value ?: return
         val updatedProposal = currentProposal.copy(status = RequestStatusTypes.Declined)
         viewModelScope.launch {
-            //helpProposalRepository.updateProposal(updatedProposal)
+            helpProposalRepository.update(updatedProposal)
         }
     }
 }

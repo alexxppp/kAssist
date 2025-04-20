@@ -28,10 +28,10 @@ import dev.alexpace.kassist.ui.victim.navigation.screens.HelpProposalInfoScreen
 @Composable
 fun ProposalCard(helpProposal: HelpProposal?) {
 
-    val navigator = LocalNavigator.currentOrThrow
+    val navigator = LocalNavigator.currentOrThrow.parent
 
     fun navToDetails(proposalId: String) {
-        navigator.push(HelpProposalInfoScreen(proposalId))
+        navigator!!.push(HelpProposalInfoScreen(proposalId))
     }
 
     Card(

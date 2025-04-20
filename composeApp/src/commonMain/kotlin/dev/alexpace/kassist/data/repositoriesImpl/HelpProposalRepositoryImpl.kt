@@ -55,6 +55,12 @@ class HelpProposalRepositoryImpl: HelpProposalRepository {
             }
     }
 
+    override suspend fun update(helpProposal: HelpProposal) {
+        helpProposalCollection
+            .document(helpProposal.id)
+            .set(helpProposal)
+    }
+
     override suspend fun add(helpProposal: HelpProposal) {
         helpProposalCollection
             .document(helpProposal.id)
