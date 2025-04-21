@@ -8,9 +8,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -50,6 +53,7 @@ fun HomePage(
         }
     val naturalDisasters = viewModel.naturalDisasters.collectAsState().value
     val user = viewModel.user.collectAsState().value
+    val isLoading = viewModel.isLoading.collectAsState().value
 
     Box(
         modifier = Modifier
@@ -97,45 +101,59 @@ fun HomePage(
                 )
             }
 
-            if (naturalDisasters.isNotEmpty()) {
-                LazyColumn(
+            if (isLoading) {
+                Box(
                     modifier = Modifier
-                        .weight(1f)
-                        .padding(vertical = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                        .fillMaxSize()
+                        .wrapContentSize(Alignment.Center)
                 ) {
-                    items(naturalDisasters) { disaster ->
-                        NaturalDisasterCard(
-                            disaster = disaster,
-                            user = user,
-                            onConfirmVictim = {
-                                viewModel.navigateToVictimScreen(
-                                    navigator,
-                                    disaster
-                                )
-                            },
-                            onConfirmSupporter = {
-                                viewModel.navigateToSupporterScreen(
-                                    navigator,
-                                    disaster
-                                )
-                            }
-                        )
-                    }
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(48.dp),
+                        color = Color.White,
+                        strokeWidth = 4.dp
+                    )
                 }
             } else {
-                Text(
-                    text = "No active disasters reported",
-                    style = TextStyle(
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Normal,
-                        color = Color(0xFF666666)
-                    ),
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(16.dp),
-                    textAlign = TextAlign.Center
-                )
+                if (naturalDisasters.isNotEmpty()) {
+                    LazyColumn(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(vertical = 16.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        items(naturalDisasters) { disaster ->
+                            NaturalDisasterCard(
+                                disaster = disaster,
+                                user = user,
+                                onConfirmVictim = {
+                                    viewModel.navigateToVictimScreen(
+                                        navigator,
+                                        disaster
+                                    )
+                                },
+                                onConfirmSupporter = {
+                                    viewModel.navigateToSupporterScreen(
+                                        navigator,
+                                        disaster
+                                    )
+                                }
+                            )
+                        }
+                    }
+                } else {
+                    Text(
+                        text = "No active disasters reported",
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Normal,
+                            color = Color(0xFF666666)
+                        ),
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(16.dp),
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
         }
         Button(onClick = { viewModel.signOut() }) {

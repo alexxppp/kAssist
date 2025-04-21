@@ -1,5 +1,6 @@
 package dev.alexpace.kassist.ui.shared.pages.home
 
+import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cafe.adriel.voyager.navigator.Navigator
@@ -34,6 +35,9 @@ class HomePageViewModel(
     private val _user = MutableStateFlow<User?>(null)
     val user = _user.asStateFlow()
 
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading = _isLoading.asStateFlow()
+
     init {
         fetchNaturalDisasters()
         fetchUser()
@@ -51,6 +55,7 @@ class HomePageViewModel(
                     }
                 _naturalDisasters.value = filteredDisasters
                 naturalDisasterRepository.addAll(filteredDisasters)
+                _isLoading.value = false
             } catch (e: Exception) {
                 println("Error fetching disasters: ${e.message}")
                 _naturalDisasters.value = emptyList()
