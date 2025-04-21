@@ -9,9 +9,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import dev.alexpace.kassist.domain.models.enums.RequestStatusTypes
-import dev.alexpace.kassist.ui.supporter.components.proposal.HelpProposalForm
 import dev.alexpace.kassist.ui.supporter.pages.help.SupporterHelpPageViewModel
 import kotlinx.coroutines.flow.map
 
@@ -22,8 +20,6 @@ fun HelpRequestList(viewModel: SupporterHelpPageViewModel) {
         .map { requests -> requests.filter { it.status == RequestStatusTypes.Pending } }
         .collectAsState(initial = emptyList())
 
-    val selectedHelpRequest by viewModel.selectedHelpRequest.collectAsState()
-
     LazyColumn {
         items(helpRequests) { helpRequest ->
             HelpRequestCard(
@@ -31,18 +27,6 @@ fun HelpRequestList(viewModel: SupporterHelpPageViewModel) {
                 onClick = { viewModel.selectHelpRequest(helpRequest) }
             )
             Spacer(modifier = Modifier.height(8.dp))
-        }
-    }
-
-    if (selectedHelpRequest != null) {
-        Dialog(onDismissRequest = { viewModel.selectHelpRequest(null) }) {
-            HelpProposalForm(
-                helpRequest = selectedHelpRequest!!,
-                onSubmit = { content ->
-                    viewModel.submitHelpProposal(content, selectedHelpRequest!!)
-                },
-                onCancel = { viewModel.selectHelpRequest(null) }
-            )
         }
     }
 }

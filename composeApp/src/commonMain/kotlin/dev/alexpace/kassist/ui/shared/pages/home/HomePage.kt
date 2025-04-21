@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.navigator.Navigator
+import dev.alexpace.kassist.domain.repositories.NaturalDisasterRepository
 import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.alexpace.kassist.domain.services.NaturalDisasterApiService
 import dev.alexpace.kassist.ui.shared.components.NaturalDisasterCard
@@ -32,12 +33,21 @@ import org.koin.compose.koinInject
 
 @Composable
 fun HomePage(
-    navigator: Navigator,
-    naturalDisasterApiService: NaturalDisasterApiService = koinInject(),
-    userRepository: UserRepository = koinInject()
+    navigator: Navigator
 ) {
+    val naturalDisasterApiService = koinInject<NaturalDisasterApiService>()
+    val naturalDisasterRepository = koinInject<NaturalDisasterRepository>()
+    val userRepository = koinInject<UserRepository>()
+
     val viewModel: HomePageViewModel =
-        viewModel { HomePageViewModel(naturalDisasterApiService, userRepository, navigator) }
+        viewModel {
+            HomePageViewModel(
+                naturalDisasterApiService,
+                naturalDisasterRepository,
+                userRepository,
+                navigator
+            )
+        }
     val naturalDisasters = viewModel.naturalDisasters.collectAsState().value
     val user = viewModel.user.collectAsState().value
 
@@ -98,8 +108,18 @@ fun HomePage(
                         NaturalDisasterCard(
                             disaster = disaster,
                             user = user,
-                            onConfirmVictim = { viewModel.navigateToVictimScreen(navigator, disaster) },
-                            onConfirmSupporter = { viewModel.navigateToSupporterScreen(navigator, disaster) }
+                            onConfirmVictim = {
+                                viewModel.navigateToVictimScreen(
+                                    navigator,
+                                    disaster
+                                )
+                            },
+                            onConfirmSupporter = {
+                                viewModel.navigateToSupporterScreen(
+                                    navigator,
+                                    disaster
+                                )
+                            }
                         )
                     }
                 }
@@ -118,7 +138,7 @@ fun HomePage(
                 )
             }
         }
-        Button(onClick = {viewModel.signOut()}) {
+        Button(onClick = { viewModel.signOut() }) {
             Text("Sign out")
         }
     }

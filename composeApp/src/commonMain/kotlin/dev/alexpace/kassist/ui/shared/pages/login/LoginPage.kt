@@ -24,12 +24,13 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.alexpace.kassist.domain.services.FirebaseAuthService
 import dev.alexpace.kassist.ui.shared.components.InputField
+import org.koin.compose.koinInject
 
 @Composable
 fun LoginPage(
-    authService: FirebaseAuthService,
     onLoginSuccess: () -> Unit
 ) {
+    val authService = koinInject<FirebaseAuthService>()
     val viewModel: LoginPageViewModel = viewModel { LoginPageViewModel(authService) }
     val email by viewModel.email.collectAsState()
     val password by viewModel.password.collectAsState()

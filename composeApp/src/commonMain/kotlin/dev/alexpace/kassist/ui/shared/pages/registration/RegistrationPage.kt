@@ -35,14 +35,17 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.alexpace.kassist.domain.services.FirebaseAuthService
 import dev.alexpace.kassist.ui.shared.components.InputField
+import org.koin.compose.koinInject
 
 @Composable
 fun RegistrationPage(
-    authService: FirebaseAuthService,
-    userRepository: UserRepository,
     onRegisterSuccess: () -> Unit
 ) {
-    val viewModel: RegistrationPageViewModel = viewModel { RegistrationPageViewModel(authService, userRepository) }
+    val authService = koinInject<FirebaseAuthService>()
+    val userRepository = koinInject<UserRepository>()
+    val viewModel: RegistrationPageViewModel =
+        viewModel { RegistrationPageViewModel(authService, userRepository) }
+
     val name by viewModel.name.collectAsState()
     val phoneNumber by viewModel.phoneNumber.collectAsState()
     val email by viewModel.email.collectAsState()

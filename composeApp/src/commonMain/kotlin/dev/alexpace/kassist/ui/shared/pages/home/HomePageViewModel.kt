@@ -6,6 +6,7 @@ import cafe.adriel.voyager.navigator.Navigator
 import dev.alexpace.kassist.domain.models.enums.UserType
 import dev.alexpace.kassist.domain.models.shared.User
 import dev.alexpace.kassist.domain.models.shared.naturalDisaster.NaturalDisaster
+import dev.alexpace.kassist.domain.repositories.NaturalDisasterRepository
 import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.alexpace.kassist.domain.services.NaturalDisasterApiService
 import dev.alexpace.kassist.ui.shared.navigation.screens.WelcomeScreen
@@ -20,6 +21,7 @@ import kotlinx.coroutines.launch
 
 class HomePageViewModel(
     private val naturalDisasterApiService: NaturalDisasterApiService,
+    private val naturalDisasterRepository: NaturalDisasterRepository,
     private val userRepository: UserRepository,
     private val navigator: Navigator
 ) : ViewModel() {
@@ -41,12 +43,14 @@ class HomePageViewModel(
         viewModelScope.launch {
             try {
                 val disasters = naturalDisasterApiService.getNaturalDisasters()
-                _naturalDisasters.value = disasters.features
+                val filteredDisasters = disasters.features
                     .map { it.properties }
                     .filter {
                         (it.alertLevel == "Orange" || it.alertLevel == "Red") &&
                                 it.type != "DR"
                     }
+                _naturalDisasters.value = filteredDisasters
+                naturalDisasterRepository.addAll(filteredDisasters)
             } catch (e: Exception) {
                 println("Error fetching disasters: ${e.message}")
                 _naturalDisasters.value = emptyList()

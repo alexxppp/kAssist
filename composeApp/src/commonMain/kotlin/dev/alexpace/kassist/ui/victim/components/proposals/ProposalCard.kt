@@ -52,7 +52,7 @@ fun ProposalCard(helpProposal: HelpProposal?) {
                 )
                 .padding(16.dp)
         ) {
-            // Display the content of the HelpProposal
+            // Display the HelpProposal
             Text(
                 text = helpProposal?.content ?: "No content",
                 style = TextStyle(
@@ -63,7 +63,6 @@ fun ProposalCard(helpProposal: HelpProposal?) {
             )
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Determine color based on proposal status
             val statusColor = when (helpProposal?.status) {
                 RequestStatusTypes.Pending -> Color(0xFF666666)
                 RequestStatusTypes.Accepted -> Color(0xFF4CAF50)
@@ -71,7 +70,7 @@ fun ProposalCard(helpProposal: HelpProposal?) {
                 else -> Color(0xFF333333)
             }
 
-            // Display the status of the proposal
+            // Status
             Text(
                 text = "Status: ${helpProposal?.status?.name ?: "Unknown"}",
                 style = TextStyle(

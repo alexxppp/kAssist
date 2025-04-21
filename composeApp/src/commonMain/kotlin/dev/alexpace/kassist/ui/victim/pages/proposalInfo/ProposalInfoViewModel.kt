@@ -8,28 +8,43 @@ import dev.alexpace.kassist.domain.models.enums.RequestStatusTypes
 import dev.alexpace.kassist.domain.repositories.HelpProposalRepository
 import dev.alexpace.kassist.domain.repositories.HelpRequestRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class ProposalInfoViewModel(
     private val helpProposalRepository: HelpProposalRepository,
     private val helpRequestRepository: HelpRequestRepository,
-    proposalId: String
+    initialProposalId: String
 ) : ViewModel() {
 
-    val helpProposal: StateFlow<HelpProposal?> = helpProposalRepository.getById(proposalId)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+    private val proposalId = MutableStateFlow(initialProposalId)
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val helpProposal: StateFlow<HelpProposal?> = proposalId
+        .flatMapLatest { id -> helpProposalRepository.getById(id) }
+        .stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val helpRequest: StateFlow<HelpRequest?> = helpProposal
-        .map { it?.helpRequestId }
-        .flatMapLatest { id -> if (id != null) helpRequestRepository.getById(id) else flowOf(null) }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+        .flatMapLatest { proposal ->
+            val helpRequestId = proposal?.helpRequestId
+            if (helpRequestId != null) {
+                helpRequestRepository.getById(helpRequestId)
+            } else {
+                flowOf(null)
+            }
+        }
+        .stateIn(viewModelScope, SharingStarted.Lazily, null)
+
+    // Function to update the proposal ID when navigating to a new proposal
+    fun updateProposalId(newProposalId: String) {
+        proposalId.value = newProposalId
+    }
 
     fun acceptProposal() {
         val currentProposal = helpProposal.value ?: return
