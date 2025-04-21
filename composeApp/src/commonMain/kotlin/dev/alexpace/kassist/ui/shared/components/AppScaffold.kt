@@ -6,9 +6,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import dev.alexpace.kassist.ui.shared.utils.theme.Colors
 
 @Composable
 fun AppScaffold(
@@ -20,13 +22,15 @@ fun AppScaffold(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("kAssist") },
+                title = { Text("kAssist", color = Color.White) },
+                backgroundColor = Colors.TopAppBar,
                 navigationIcon = {
                     if (canGoBack) {
                         IconButton(onClick = { navigator.pop() }) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "Back"
+                                contentDescription = "Back",
+                                tint = Color.White
                             )
                         }
                     }

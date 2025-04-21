@@ -5,6 +5,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
@@ -32,7 +33,7 @@ class SupporterScreen : Screen {
             Scaffold(
                 topBar = {
                     TopAppBar(
-                        title = { Text(it.current.options.title) },
+                        title = { Text(text = it.current.options.title, color = Color.White) },
                         backgroundColor = Colors.TopAppBar
                     )
                 },

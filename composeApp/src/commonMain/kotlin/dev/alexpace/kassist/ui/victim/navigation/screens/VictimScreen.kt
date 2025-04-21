@@ -4,12 +4,14 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabDisposable
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import dev.alexpace.kassist.ui.shared.navigation.utils.BottomBar
+import dev.alexpace.kassist.ui.shared.utils.theme.Colors
 import dev.alexpace.kassist.ui.victim.navigation.tabs.VictimContactTab
 import dev.alexpace.kassist.ui.victim.navigation.tabs.VictimHelpTab
 import dev.alexpace.kassist.ui.victim.navigation.tabs.VictimHomeTab
@@ -29,10 +31,17 @@ class VictimScreen : Screen {
         ) {
             Scaffold(
                 topBar = {
-                    TopAppBar(title = { Text(it.current.options.title) })
+                    TopAppBar(
+                        title = { Text(text = it.current.options.title, color = Color.White) },
+                        backgroundColor = Colors.TopAppBar
+                    )
                 },
-                bottomBar = { BottomBar(LocalTabNavigator.current,
-                    listOf(VictimHomeTab, VictimContactTab, VictimHelpTab)) },
+                bottomBar = {
+                    BottomBar(
+                        LocalTabNavigator.current,
+                        listOf(VictimHomeTab, VictimContactTab, VictimHelpTab)
+                    )
+                },
                 content = { CurrentTab() }
             )
         }
