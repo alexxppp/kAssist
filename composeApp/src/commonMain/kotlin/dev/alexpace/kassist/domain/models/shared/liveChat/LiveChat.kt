@@ -12,5 +12,5 @@ data class LiveChat (
     val helpRequest: HelpRequest,
     val helpProposal: HelpProposal,
     val isActive: Boolean,
-    val messages: List<ChatMessage>
+    val messages: List<ChatMessage>?
 )
