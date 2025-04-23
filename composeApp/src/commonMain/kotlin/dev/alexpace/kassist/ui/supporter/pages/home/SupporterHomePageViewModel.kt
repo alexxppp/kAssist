@@ -2,6 +2,7 @@ package dev.alexpace.kassist.ui.supporter.pages.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dev.alexpace.kassist.domain.models.enums.RequestStatusTypes
 import dev.alexpace.kassist.domain.models.supporter.HelpProposal
 import dev.alexpace.kassist.domain.repositories.HelpProposalRepository
 import dev.gitlive.firebase.Firebase
@@ -18,7 +19,7 @@ class SupporterHomePageViewModel(
         ?: throw Exception("No authenticated user found")
 
     val acceptedHelpProposals: StateFlow<List<HelpProposal>> =
-        helpProposalRepository.getAcceptedBySupporterId(userId)
+        helpProposalRepository.getBySupporterIdAndStatuses(userId, listOf(RequestStatusTypes.Accepted))
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5000),

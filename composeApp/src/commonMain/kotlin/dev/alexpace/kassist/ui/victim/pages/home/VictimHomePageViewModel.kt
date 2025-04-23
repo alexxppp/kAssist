@@ -2,6 +2,7 @@ package dev.alexpace.kassist.ui.victim.pages.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dev.alexpace.kassist.domain.models.enums.RequestStatusTypes
 import dev.alexpace.kassist.domain.models.supporter.HelpProposal
 import dev.alexpace.kassist.domain.repositories.HelpProposalRepository
 import dev.alexpace.kassist.domain.repositories.HelpRequestRepository
@@ -21,7 +22,7 @@ class VictimHomePageViewModel(
     val isLoading = _isLoading.asStateFlow()
 
     val helpProposals: StateFlow<List<HelpProposal?>> =
-        helpProposalRepository.getByVictimId(currentUserId)
+        helpProposalRepository.getByVictimIdAndStatuses(currentUserId, listOf(RequestStatusTypes.Pending, RequestStatusTypes.Accepted))
             .stateIn(
                 scope = viewModelScope,
                 started = WhileSubscribed(5000),

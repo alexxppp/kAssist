@@ -1,12 +1,13 @@
 package dev.alexpace.kassist.data.repositoriesImpl
 
+import dev.alexpace.kassist.domain.models.enums.RequestStatusTypes
 import dev.alexpace.kassist.domain.models.supporter.HelpProposal
 import dev.alexpace.kassist.domain.repositories.HelpProposalRepository
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.firestore.firestore
 import kotlinx.coroutines.flow.flow
 
-class HelpProposalRepositoryImpl: HelpProposalRepository {
+class HelpProposalRepositoryImpl : HelpProposalRepository {
 
     private val firestore = Firebase.firestore
     private val helpProposalCollection = firestore.collection("HelpProposal")
@@ -55,10 +56,30 @@ class HelpProposalRepositoryImpl: HelpProposalRepository {
             }
     }
 
-    override fun getAcceptedBySupporterId(id: String) = flow {
+    override fun getBySupporterIdAndStatuses(id: String, statuses: List<RequestStatusTypes>) =
+        flow {
+            if (statuses.isEmpty()) {
+                emit(emptyList())
+                return@flow
+            }
+            helpProposalCollection
+                .where { "supporterId" equalTo id }
+                .where { "status" inArray statuses.map { it.toString() } }
+                .snapshots
+                .collect { querySnapshot ->
+                    val helpProposals = querySnapshot.documents.map { it.data<HelpProposal>() }
+                    emit(helpProposals)
+                }
+        }
+
+    override fun getByVictimIdAndStatuses(id: String, statuses: List<RequestStatusTypes>) = flow {
+        if (statuses.isEmpty()) {
+            emit(emptyList())
+            return@flow
+        }
         helpProposalCollection
-            .where { "supporterId" equalTo id }
-            .where { "status" equalTo "Accepted" }
+            .where { "victimId" equalTo id }
+            .where { "status" inArray statuses.map { it.toString() } }
             .snapshots
             .collect { querySnapshot ->
                 val helpProposals = querySnapshot.documents.map { it.data<HelpProposal>() }
