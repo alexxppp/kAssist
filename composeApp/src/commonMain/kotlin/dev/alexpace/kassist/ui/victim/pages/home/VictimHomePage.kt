@@ -37,6 +37,7 @@ fun VictimHomePage() {
     }
 
     val helpProposals by viewModel.helpProposals.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
 
     Box(
         modifier = Modifier
@@ -65,17 +66,21 @@ fun VictimHomePage() {
                 ),
                 modifier = Modifier.padding(bottom = 16.dp)
             )
-            if (helpProposals.isEmpty()) {
-                Text(
-                    text = "No proposals yet.",
-                    style = TextStyle(
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = Color(0xFF666666)
-                    )
-                )
+            if (isLoading) {
+                Text("Loading...", modifier = Modifier.fillMaxSize())
             } else {
-                ProposalList(helpProposals)
+                if (helpProposals.isEmpty()) {
+                    Text(
+                        text = "No proposals yet.",
+                        style = TextStyle(
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = Color(0xFF666666)
+                        )
+                    )
+                } else {
+                    ProposalList(helpProposals)
+                }
             }
         }
     }

@@ -55,10 +55,11 @@ class HomePageViewModel(
                     }
                 _naturalDisasters.value = filteredDisasters
                 naturalDisasterRepository.addAll(filteredDisasters)
-                _isLoading.value = false
             } catch (e: Exception) {
                 println("Error fetching disasters: ${e.message}")
                 _naturalDisasters.value = emptyList()
+            } finally {
+                _isLoading.value = false
             }
         }
     }
