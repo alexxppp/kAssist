@@ -165,8 +165,5 @@ fun HomePage(
                 }
             }
         }
-        Button(onClick = { viewModel.signOut() }) {
-            Text("Sign out")
-        }
     }
 }

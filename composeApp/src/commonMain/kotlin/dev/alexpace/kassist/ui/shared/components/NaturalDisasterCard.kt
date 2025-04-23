@@ -182,6 +182,32 @@ fun NaturalDisasterCard(
                             )
                         )
                     }
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(end = 8.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(
+                                brush = Brush.linearGradient(
+                                    colors = listOf(
+                                        Color(0xFF4A90E2),
+                                        Color(0xFF357ABD)
+                                    )
+                                )
+                            )
+                            .padding(vertical = 12.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "You can't register at more than one disaster at a time",
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White
+                            )
+                        )
+                    }
                 }
             }
         }
