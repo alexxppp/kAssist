@@ -9,6 +9,7 @@ interface HelpProposalRepository {
     fun getById(id: String): Flow<HelpProposal?>
     fun getBySupporterId(id: String): Flow<List<HelpProposal>>
     fun getByVictimId(id: String): Flow<List<HelpProposal?>>
+    fun getAcceptedBySupporterId(id: String): Flow<List<HelpProposal>>
     suspend fun add(helpProposal: HelpProposal)
     suspend fun update(helpProposal: HelpProposal)
     suspend fun delete(helpProposal: HelpProposal)

@@ -55,6 +55,17 @@ class HelpProposalRepositoryImpl: HelpProposalRepository {
             }
     }
 
+    override fun getAcceptedBySupporterId(id: String) = flow {
+        helpProposalCollection
+            .where { "supporterId" equalTo id }
+            .where { "status" equalTo "Accepted" }
+            .snapshots
+            .collect { querySnapshot ->
+                val helpProposals = querySnapshot.documents.map { it.data<HelpProposal>() }
+                emit(helpProposals)
+            }
+    }
+
     override suspend fun update(helpProposal: HelpProposal) {
         helpProposalCollection
             .document(helpProposal.id)
