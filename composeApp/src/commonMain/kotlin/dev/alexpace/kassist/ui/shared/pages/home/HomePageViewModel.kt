@@ -78,17 +78,6 @@ class HomePageViewModel(
         }
     }
 
-    fun signOut() {
-        viewModelScope.launch {
-            try {
-                Firebase.auth.signOut()
-                navigator.replaceAll(WelcomeScreen())
-            } catch (e: Exception) {
-                println("Error signing out: ${e.message}")
-            }
-        }
-    }
-
     private fun registerUserAs(userId: String?, userType: UserType, disaster: NaturalDisaster) {
         userId?.let { uid ->
             viewModelScope.launch {

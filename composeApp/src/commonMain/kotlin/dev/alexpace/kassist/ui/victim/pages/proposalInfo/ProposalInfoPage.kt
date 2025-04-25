@@ -21,6 +21,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.alexpace.kassist.domain.models.enums.RequestStatusTypes
 import dev.alexpace.kassist.domain.repositories.HelpProposalRepository
 import dev.alexpace.kassist.domain.repositories.HelpRequestRepository
+import dev.alexpace.kassist.domain.repositories.LiveChatRepository
 import dev.alexpace.kassist.domain.repositories.UserRepository
 import kotlinx.coroutines.flow.flowOf
 import org.koin.compose.koinInject
@@ -30,9 +31,10 @@ fun ProposalInfoPage(proposalId: String) {
     val helpProposalRepository = koinInject<HelpProposalRepository>()
     val helpRequestRepository = koinInject<HelpRequestRepository>()
     val userRepository = koinInject<UserRepository>()
+    val liveChatRepository = koinInject<LiveChatRepository>()
 
     val viewModel: ProposalInfoViewModel = viewModel {
-        ProposalInfoViewModel(helpProposalRepository, helpRequestRepository, proposalId)
+        ProposalInfoViewModel(helpProposalRepository, helpRequestRepository, userRepository, liveChatRepository, proposalId)
     }
 
     // Update the proposal ID when it changes (e.g., during navigation)

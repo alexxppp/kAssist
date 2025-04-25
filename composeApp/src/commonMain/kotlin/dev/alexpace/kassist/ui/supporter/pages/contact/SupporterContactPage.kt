@@ -18,7 +18,7 @@ import org.koin.compose.koinInject
 @Composable
 fun SupporterContactPage(supporterId: String) {
     val liveChatRepository = koinInject<LiveChatRepository>()
-    val viewModel: SupporterContactPageViewModel = viewModel {
+    val viewModel = viewModel {
         SupporterContactPageViewModel(liveChatRepository, supporterId)
     }
     val liveChats by viewModel.liveChats.collectAsState()

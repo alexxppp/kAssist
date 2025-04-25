@@ -12,7 +12,7 @@ object SupporterContactTab : Tab {
     @Composable
     override fun Content() {
         val currentUserId = Firebase.auth.currentUser?.uid ?: return
-        SupporterContactPage(currentUserId, )
+        SupporterContactPage(currentUserId)
     }
 
     override val options: TabOptions
