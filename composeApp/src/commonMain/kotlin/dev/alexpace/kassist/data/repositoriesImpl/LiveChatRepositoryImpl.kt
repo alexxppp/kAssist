@@ -1,8 +1,10 @@
 package dev.alexpace.kassist.data.repositoriesImpl
 
+import dev.alexpace.kassist.domain.models.shared.liveChat.ChatMessage
 import dev.alexpace.kassist.domain.models.shared.liveChat.LiveChat
 import dev.alexpace.kassist.domain.repositories.LiveChatRepository
 import dev.gitlive.firebase.Firebase
+import dev.gitlive.firebase.firestore.FieldValue
 import dev.gitlive.firebase.firestore.firestore
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -38,6 +40,15 @@ class LiveChatRepositoryImpl : LiveChatRepository {
             }
     }
 
+    override fun getById(liveChatId: String) = flow {
+        liveChatCollection
+            .document(liveChatId)
+            .snapshots
+            .collect { documentSnapshot ->
+                emit(documentSnapshot.data<LiveChat>())
+            }
+    }
+
     override suspend fun add(liveChat: LiveChat) {
         liveChatCollection
             .document(liveChat.id)
@@ -55,4 +66,11 @@ class LiveChatRepositoryImpl : LiveChatRepository {
             .document(liveChatId)
             .delete()
     }
+
+    override suspend fun sendMessage(liveChatId: String, message: ChatMessage) {
+        liveChatCollection
+            .document(liveChatId)
+            .update("messages" to FieldValue.arrayUnion(message))
+    }
+
 }

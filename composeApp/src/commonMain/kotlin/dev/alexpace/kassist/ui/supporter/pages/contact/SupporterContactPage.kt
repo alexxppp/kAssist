@@ -2,37 +2,52 @@ package dev.alexpace.kassist.ui.supporter.pages.contact
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.alexpace.kassist.domain.repositories.LiveChatRepository
+import dev.alexpace.kassist.ui.shared.components.ChatCard
+import dev.alexpace.kassist.ui.shared.navigation.screens.ChatScreen
+import dev.alexpace.kassist.ui.shared.viewModels.ChatViewModel
+import dev.gitlive.firebase.Firebase
+import dev.gitlive.firebase.auth.auth
 import org.koin.compose.koinInject
 
 @Composable
-fun SupporterContactPage(supporterId: String) {
+fun SupporterContactPage() {
+    val navigator =
+        LocalNavigator.currentOrThrow.parent ?: throw Exception("No parent navigator found")
+    val currentUserId = Firebase.auth.currentUser?.uid ?: return
     val liveChatRepository = koinInject<LiveChatRepository>()
-    val viewModel = viewModel {
-        SupporterContactPageViewModel(liveChatRepository, supporterId)
+    val supporterViewModel = viewModel {
+        SupporterContactPageViewModel(liveChatRepository, currentUserId)
     }
-    val liveChats by viewModel.liveChats.collectAsState()
+    val chatViewModel = viewModel { ChatViewModel(liveChatRepository) }
+    val liveChats by supporterViewModel.liveChats.collectAsState()
 
     Column {
         LazyColumn(
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
         ) {
             items(liveChats) { chat ->
-                Text(
-                    text = "Chat with ${chat.victimId}",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
+                ChatCard(
+                    liveChat = chat,
+                    onChatClick = { chatId ->
+                        navigator.push(
+                            ChatScreen(
+                                liveChat = chat,
+                                chatViewModel = chatViewModel
+                            )
+                        )
+                    }
                 )
             }
         }
