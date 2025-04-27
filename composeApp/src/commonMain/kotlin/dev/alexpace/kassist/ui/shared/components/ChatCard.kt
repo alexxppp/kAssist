@@ -32,7 +32,7 @@ fun ChatCard(
             .padding(16.dp)
     ) {
         Text(
-            text = "Chat with Victim: ${liveChat.victimId}",
+            text = "Chat with: ${liveChat.id}",
             style = TextStyle(
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,

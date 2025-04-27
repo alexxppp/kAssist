@@ -3,10 +3,15 @@ package dev.alexpace.kassist.ui.shared.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,6 +25,9 @@ import androidx.compose.ui.unit.sp
 import dev.alexpace.kassist.domain.models.shared.liveChat.ChatMessage
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.auth
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 @Composable
 fun MessageCard(
@@ -31,14 +39,18 @@ fun MessageCard(
         return message.senderId == currentUserId
     }
 
-    val alignment = if (isFromCurrentUser()) Alignment.End else Alignment.Start
     val backgroundColor = if (isFromCurrentUser()) Color(0xFF4A90E2) else Color(0xFFE6F0FA)
     val textColor = if (isFromCurrentUser()) Color.White else Color(0xFF333333)
 
+    // Format timestamp
+    val instant = Instant.fromEpochMilliseconds(message.timestamp)
+    val dateTime = instant.toLocalDateTime(TimeZone.currentSystemDefault())
+    val formattedTime = "${dateTime.hour.toString().padStart(2, '0')}:${dateTime.minute.toString().padStart(2, '0')}"
+
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp),
+            .padding(vertical = 8.dp)
+            .fillMaxWidth(),
         horizontalArrangement = if (isFromCurrentUser()) Arrangement.End else Arrangement.Start
     ) {
         Box(
@@ -48,14 +60,42 @@ fun MessageCard(
                 .padding(horizontal = 16.dp, vertical = 12.dp)
                 .weight(0.8f, fill = false)
         ) {
-            Text(
-                text = message.content,
-                style = TextStyle(
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Normal,
-                    color = textColor
+            Column(
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Text(
+                    text = message.content,
+                    style = TextStyle(
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Normal,
+                        color = textColor
+                    )
                 )
-            )
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = formattedTime,
+                        style = TextStyle(
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Light,
+                            color = textColor.copy(alpha = 0.7f)
+                        )
+                    )
+                    if (isFromCurrentUser()) {
+                        Icon(
+                            imageVector = Icons.Filled.Check,
+                            contentDescription = if (message.seen) "Message seen" else "Message sent",
+                            tint = if (message.seen) Color(0xFF4CAF50) else Color.Gray,
+                            modifier = Modifier
+                                .size(25.dp)
+                                .weight(10f)
+                        )
+                    }
+                }
+            }
         }
     }
 }

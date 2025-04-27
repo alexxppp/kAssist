@@ -19,8 +19,9 @@ class NaturalDisasterApiServiceImpl: NaturalDisasterApiService {
         if (response.status.isSuccess()) {
             return response.body()
         } else {
-            throw Exception("Failed to fetch natural disasters: ${response.status}")
+            return getNaturalDisasters()
         }
     }
 
 }
+

@@ -12,7 +12,6 @@ class VictimContactPageViewModel(
     private val liveChatRepository: LiveChatRepository,
     private val victimId: String
 ) : ViewModel() {
-
     private val _liveChats = MutableStateFlow<List<LiveChat>>(emptyList())
     val liveChats = _liveChats.asStateFlow()
 
@@ -23,5 +22,4 @@ class VictimContactPageViewModel(
             }
         }
     }
-
 }

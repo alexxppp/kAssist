@@ -78,4 +78,19 @@ class LiveChatRepositoryImpl : LiveChatRepository {
             .document(liveChatId)
             .update("messages" to FieldValue.arrayUnion(messageMap))
     }
+
+    override suspend fun setAllMessagesToSeen(liveChatId: String) {
+        val documentSnapshot = liveChatCollection
+            .document(liveChatId)
+            .get()
+
+        val liveChat = documentSnapshot.data<LiveChat>()
+        val updatedMessages = liveChat.messages.map { message ->
+            message.copy(seen = true)
+        }
+
+        liveChatCollection
+            .document(liveChatId)
+            .update("messages" to updatedMessages)
+    }
 }

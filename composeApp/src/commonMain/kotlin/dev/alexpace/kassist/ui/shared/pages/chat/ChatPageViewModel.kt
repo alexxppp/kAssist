@@ -24,6 +24,7 @@ class ChatPageViewModel(
         viewModelScope.launch {
             liveChatRepository.getById(liveChatId).collect { chat ->
                 _liveChat.value = chat
+                setAllMessagesToSeen(liveChatId)
             }
         }
     }
@@ -33,10 +34,17 @@ class ChatPageViewModel(
         val message = ChatMessage(
             senderId = currentUserId,
             content = content,
-            timestamp = Clock.System.now().toEpochMilliseconds()
+            timestamp = Clock.System.now().toEpochMilliseconds(),
+            seen = false
         )
         viewModelScope.launch {
             liveChatRepository.sendMessage(liveChatId, message)
+        }
+    }
+
+    private fun setAllMessagesToSeen(liveChatId: String) {
+        viewModelScope.launch {
+            liveChatRepository.setAllMessagesToSeen(liveChatId)
         }
     }
 }

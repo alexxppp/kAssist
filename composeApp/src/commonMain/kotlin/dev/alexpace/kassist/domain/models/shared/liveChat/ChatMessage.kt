@@ -6,5 +6,6 @@ import kotlinx.serialization.Serializable
 data class ChatMessage(
     val senderId: String,
     val content: String,
-    val timestamp: Long
+    val timestamp: Long,
+    val seen: Boolean = false
 )

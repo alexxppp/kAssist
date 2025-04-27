@@ -12,4 +12,5 @@ interface LiveChatRepository {
     suspend fun update(liveChat: LiveChat)
     suspend fun delete(liveChatId: String)
     suspend fun sendMessage(liveChatId: String, message: ChatMessage)
+    suspend fun setAllMessagesToSeen(liveChatId: String)
 }

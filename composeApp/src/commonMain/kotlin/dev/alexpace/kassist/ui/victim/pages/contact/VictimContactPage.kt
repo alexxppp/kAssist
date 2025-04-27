@@ -20,7 +20,6 @@ import org.koin.compose.koinInject
 
 @Composable
 fun VictimContactPage() {
-
     val navigator =
         LocalNavigator.currentOrThrow.parent ?: throw Exception("No parent navigator found")
     val currentUserId = Firebase.auth.currentUser?.uid ?: return
