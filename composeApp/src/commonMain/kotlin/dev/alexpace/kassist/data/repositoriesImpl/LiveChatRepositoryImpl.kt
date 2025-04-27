@@ -68,9 +68,14 @@ class LiveChatRepositoryImpl : LiveChatRepository {
     }
 
     override suspend fun sendMessage(liveChatId: String, message: ChatMessage) {
+        // Convert ChatMessage to a Map for Firestore compatibility
+        val messageMap = mapOf(
+            "senderId" to message.senderId,
+            "content" to message.content,
+            "timestamp" to message.timestamp
+        )
         liveChatCollection
             .document(liveChatId)
-            .update("messages" to FieldValue.arrayUnion(message))
+            .update("messages" to FieldValue.arrayUnion(messageMap))
     }
-
 }

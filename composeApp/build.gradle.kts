@@ -90,10 +90,12 @@ kotlin {
             implementation(libs.gitlive.firebase.auth)
             // Viewmodel
             implementation(libs.lifecycle.viewmodel.compose)
-
+            // Koin for DI
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.koin.compose.viewmodel.navigation)
+            // Date time
+            implementation(libs.kotlinx.datetime)
 
         }
         nativeMain.dependencies {

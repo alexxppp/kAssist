@@ -40,8 +40,8 @@ fun CustomAlertDialog(
             modifier = modifier
                 .clip(RoundedCornerShape(16.dp))
                 .background(Color.White)
-                .shadow(8.dp, RoundedCornerShape(16.dp))
                 .padding(16.dp)
+                .shadow(8.dp, RoundedCornerShape(16.dp))
         ) {
             Column(
                 modifier = Modifier.fillMaxWidth(),

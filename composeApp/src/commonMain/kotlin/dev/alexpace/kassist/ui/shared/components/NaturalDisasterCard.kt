@@ -200,7 +200,7 @@ fun NaturalDisasterCard(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "You can't register at more than one disaster at a time",
+                            text = "You are already registered in another disaster",
                             style = TextStyle(
                                 fontSize = 14.sp,
                                 fontWeight = FontWeight.Bold,

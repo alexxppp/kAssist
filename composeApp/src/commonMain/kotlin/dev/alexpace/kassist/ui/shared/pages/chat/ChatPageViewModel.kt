@@ -1,4 +1,4 @@
-package dev.alexpace.kassist.ui.shared.viewModels
+package dev.alexpace.kassist.ui.shared.pages.chat
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,8 +11,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
 
-class ChatViewModel(
+class ChatPageViewModel(
     private val liveChatRepository: LiveChatRepository
 ) : ViewModel() {
 
@@ -32,7 +33,7 @@ class ChatViewModel(
         val message = ChatMessage(
             senderId = currentUserId,
             content = content,
-            timestamp = 123456
+            timestamp = Clock.System.now().toEpochMilliseconds()
         )
         viewModelScope.launch {
             liveChatRepository.sendMessage(liveChatId, message)
