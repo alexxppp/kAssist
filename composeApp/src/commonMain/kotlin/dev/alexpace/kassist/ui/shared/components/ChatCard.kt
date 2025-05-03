@@ -20,6 +20,7 @@ import dev.alexpace.kassist.domain.models.shared.liveChat.LiveChat
 @Composable
 fun ChatCard(
     liveChat: LiveChat,
+    receiverName: String,
     onChatClick: (String) -> Unit
 ) {
     Column(
@@ -32,7 +33,7 @@ fun ChatCard(
             .padding(16.dp)
     ) {
         Text(
-            text = "Chat with: ${liveChat.id}",
+            text = "Chat with: $receiverName",
             style = TextStyle(
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,

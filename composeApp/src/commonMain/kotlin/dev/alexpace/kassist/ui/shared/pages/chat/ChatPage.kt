@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.alexpace.kassist.domain.models.shared.liveChat.LiveChat
 import dev.alexpace.kassist.domain.repositories.LiveChatRepository
+import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.alexpace.kassist.ui.shared.components.MessageCard
 import org.koin.compose.koinInject
 
@@ -42,9 +43,11 @@ fun ChatPage(
     liveChat: LiveChat,
 ) {
     val liveChatRepository = koinInject<LiveChatRepository>()
-    val viewModel = viewModel { ChatPageViewModel(liveChatRepository) }
+    val userRepository = koinInject<UserRepository>()
+    val viewModel = viewModel { ChatPageViewModel(liveChatRepository, userRepository) }
 
     val liveChatState by viewModel.liveChat.collectAsState()
+    val receiverName by viewModel.receiverName.collectAsState()
 
     // Load chat once when the composable is first composed
     LaunchedEffect(key1 = liveChat.id) {
@@ -69,11 +72,22 @@ fun ChatPage(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 16.dp) // Adjusted to 'top' for clarity
+                    .padding(top = 16.dp)
             ) {
+                Text(
+                    text = receiverName ?: "Chat",
+                    style = TextStyle(
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF333333)
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                )
                 LazyColumn(
                     modifier = Modifier
-                        .weight(1f) // Allow column to take remaining space
+                        .weight(1f)
                         .padding(horizontal = 16.dp),
                     reverseLayout = true
                 ) {

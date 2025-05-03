@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dev.alexpace.kassist.domain.models.shared.liveChat.ChatMessage
 import dev.alexpace.kassist.domain.models.shared.liveChat.LiveChat
 import dev.alexpace.kassist.domain.repositories.LiveChatRepository
+import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.auth
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,18 +15,41 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 
 class ChatPageViewModel(
-    private val liveChatRepository: LiveChatRepository
+    private val liveChatRepository: LiveChatRepository,
+    private val userRepository: UserRepository
 ) : ViewModel() {
 
     private val _liveChat = MutableStateFlow<LiveChat?>(null)
     val liveChat: StateFlow<LiveChat?> = _liveChat.asStateFlow()
 
+    private val _receiverName = MutableStateFlow<String?>(null)
+    val receiverName: StateFlow<String?> = _receiverName.asStateFlow()
+
     fun loadChat(liveChatId: String) {
         viewModelScope.launch {
             liveChatRepository.getById(liveChatId).collect { chat ->
                 _liveChat.value = chat
+                if (chat != null) {
+                    val receiverId = getReceiverId(chat)
+                    if (receiverId != null) {
+                        viewModelScope.launch {
+                            userRepository.getById(receiverId).collect { user ->
+                                _receiverName.value = user?.name
+                            }
+                        }
+                    }
+                }
                 setAllMessagesToSeen(liveChatId)
             }
+        }
+    }
+
+    private fun getReceiverId(liveChat: LiveChat): String? {
+        val currentUserId = Firebase.auth.currentUser?.uid ?: return null
+        return when (currentUserId) {
+            liveChat.victimId -> liveChat.supporterId
+            liveChat.supporterId -> liveChat.victimId
+            else -> null
         }
     }
 

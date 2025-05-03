@@ -12,6 +12,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.alexpace.kassist.domain.repositories.LiveChatRepository
+import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.alexpace.kassist.ui.shared.components.ChatCard
 import dev.alexpace.kassist.ui.shared.navigation.screens.ChatScreen
 import dev.gitlive.firebase.Firebase
@@ -24,10 +25,12 @@ fun SupporterContactPage() {
         LocalNavigator.currentOrThrow.parent ?: throw Exception("No parent navigator found")
     val currentUserId = Firebase.auth.currentUser?.uid ?: return
     val liveChatRepository = koinInject<LiveChatRepository>()
+    val userRepository = koinInject<UserRepository>()
     val supporterViewModel = viewModel {
-        SupporterContactPageViewModel(liveChatRepository, currentUserId)
+        SupporterContactPageViewModel(liveChatRepository, userRepository, currentUserId)
     }
     val liveChats by supporterViewModel.liveChats.collectAsState()
+    val userNames by supporterViewModel.userNames.collectAsState()
 
     Column {
         LazyColumn(
@@ -36,8 +39,11 @@ fun SupporterContactPage() {
                 .fillMaxWidth()
         ) {
             items(liveChats) { chat ->
+                val receiverId = if (chat.victimId == currentUserId) chat.supporterId else chat.victimId
+                val receiverName = userNames[receiverId] ?: "Loading..."
                 ChatCard(
                     liveChat = chat,
+                    receiverName = receiverName,
                     onChatClick = { chatId ->
                         navigator.push(
                             ChatScreen(
