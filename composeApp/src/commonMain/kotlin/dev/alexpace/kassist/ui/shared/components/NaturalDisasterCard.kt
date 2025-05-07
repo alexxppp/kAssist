@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.alexpace.kassist.domain.models.enums.UserType
 import dev.alexpace.kassist.domain.models.shared.User
-import dev.alexpace.kassist.domain.models.shared.naturalDisaster.NaturalDisaster
+import dev.alexpace.kassist.domain.models.shared.NaturalDisaster
 
 @Composable
 fun NaturalDisasterCard(

@@ -1,5 +1,6 @@
-package dev.alexpace.kassist.domain.models.shared.naturalDisaster
+package dev.alexpace.kassist.data.network.responses
 
+import dev.alexpace.kassist.domain.models.shared.NaturalDisaster
 import kotlinx.serialization.Serializable
 
 @Serializable

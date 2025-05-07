@@ -83,11 +83,11 @@ kotlin {
             implementation(libs.voyager.transitions)
             // Ktor
             implementation(libs.bundles.ktor)
-            // FireStore
+            // Firebase
             implementation(libs.gitlive.firebase.firestore)
+            implementation(libs.gitlive.firebase.auth)
             // Coroutines for Desktop Firebase
             implementation(libs.kotlinx.coroutines.core)
-            implementation(libs.gitlive.firebase.auth)
             // Viewmodel
             implementation(libs.lifecycle.viewmodel.compose)
             // Koin for DI
@@ -106,6 +106,10 @@ kotlin {
             implementation(libs.kotlinx.coroutines.swing)
             // Ktor
             implementation(libs.ktor.client.okhttp)
+        }
+        wasmJsMain.dependencies {
+            // Javascript SDK for Firebase
+            implementation(npm("firebase", "10.12.2"))
         }
     }
 }

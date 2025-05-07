@@ -1,16 +1,14 @@
 package dev.alexpace.kassist.ui.shared.pages.home
 
-import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cafe.adriel.voyager.navigator.Navigator
 import dev.alexpace.kassist.domain.models.enums.UserType
 import dev.alexpace.kassist.domain.models.shared.User
-import dev.alexpace.kassist.domain.models.shared.naturalDisaster.NaturalDisaster
+import dev.alexpace.kassist.domain.models.shared.NaturalDisaster
 import dev.alexpace.kassist.domain.repositories.NaturalDisasterRepository
 import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.alexpace.kassist.domain.services.NaturalDisasterApiService
-import dev.alexpace.kassist.ui.shared.navigation.screens.WelcomeScreen
 import dev.alexpace.kassist.ui.supporter.navigation.screens.SupporterScreen
 import dev.alexpace.kassist.ui.victim.navigation.screens.VictimScreen
 import dev.gitlive.firebase.Firebase

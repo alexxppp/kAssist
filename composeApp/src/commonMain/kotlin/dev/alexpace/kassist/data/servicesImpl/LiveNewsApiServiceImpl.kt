@@ -12,12 +12,17 @@ import io.ktor.http.isSuccess
 class LiveNewsApiServiceImpl: LiveNewsApiService {
 
     private val http = createHttpClient(getHttpClient())
+    private var count = 0
 
     override suspend fun getByKeywords(keywords: String): LiveNewsResponse {
         val response: HttpResponse = http.get("http://127.0.0.1:8000/summarize-disaster-news")
         return if (response.status.isSuccess()) {
             response.body()
         } else {
+            count++
+            if (count >= 5) {
+                throw Exception("Error fetching news")
+            }
             getByKeywords(keywords)
         }
     }

@@ -1,6 +1,6 @@
 package dev.alexpace.kassist.domain.repositories
 
-import dev.alexpace.kassist.domain.models.shared.naturalDisaster.NaturalDisaster
+import dev.alexpace.kassist.domain.models.shared.NaturalDisaster
 import kotlinx.coroutines.flow.Flow
 
 interface NaturalDisasterRepository {

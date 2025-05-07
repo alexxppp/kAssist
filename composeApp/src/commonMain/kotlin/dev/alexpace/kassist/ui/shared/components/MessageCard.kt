@@ -3,7 +3,6 @@ package dev.alexpace.kassist.ui.shared.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -58,42 +57,38 @@ fun MessageCard(
                 .clip(RoundedCornerShape(12.dp))
                 .background(backgroundColor)
                 .padding(horizontal = 16.dp, vertical = 12.dp)
-                .weight(0.8f, fill = false)
         ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+            Text(
+                text = message.content,
+                style = TextStyle(
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Normal,
+                    color = textColor
+                ),
+                modifier = Modifier.align(Alignment.TopStart)
+            )
+            Row(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = message.content,
+                    text = formattedTime,
                     style = TextStyle(
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Normal,
-                        color = textColor
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Light,
+                        color = textColor.copy(alpha = 0.7f)
                     )
                 )
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = formattedTime,
-                        style = TextStyle(
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Light,
-                            color = textColor.copy(alpha = 0.7f)
-                        )
+                if (isFromCurrentUser()) {
+                    Icon(
+                        imageVector = Icons.Filled.Check,
+                        contentDescription = if (message.seen) "Message seen" else "Message sent",
+                        tint = if (message.seen) Color(0xFF4CAF50) else Color.Gray,
+                        modifier = Modifier
+                            .size(16.dp)
+                            .padding(start = 4.dp)
                     )
-                    if (isFromCurrentUser()) {
-                        Icon(
-                            imageVector = Icons.Filled.Check,
-                            contentDescription = if (message.seen) "Message seen" else "Message sent",
-                            tint = if (message.seen) Color(0xFF4CAF50) else Color.Gray,
-                            modifier = Modifier
-                                .size(25.dp)
-                                .weight(10f)
-                        )
-                    }
                 }
             }
         }

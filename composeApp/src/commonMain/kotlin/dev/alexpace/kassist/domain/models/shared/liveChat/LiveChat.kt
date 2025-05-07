@@ -1,6 +1,6 @@
 package dev.alexpace.kassist.domain.models.shared.liveChat
 
-import dev.alexpace.kassist.domain.models.shared.naturalDisaster.NaturalDisaster
+import dev.alexpace.kassist.domain.models.shared.NaturalDisaster
 import dev.alexpace.kassist.domain.models.supporter.HelpProposal
 import dev.alexpace.kassist.domain.models.victim.HelpRequest
 import kotlinx.serialization.Serializable

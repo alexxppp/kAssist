@@ -14,16 +14,13 @@ import kotlinx.serialization.json.Json
 private data class SignUpRequest(val email: String, val password: String, val returnSecureToken: Boolean = true)
 
 @Serializable
-private data class SignUpResponse(val idToken: String, val email: String, val refreshToken: String, val expiresIn: String)
-
-@Serializable
 private data class ErrorResponse(val error: ErrorDetails)
 
 @Serializable
 private data class ErrorDetails(val message: String)
 
 actual suspend fun registerWithFirebase(email: String, password: String) {
-    val apiKey = "AIzaSyDXO57XUvfdnNmWjUaTNuF3k2x9DfhCq2Y" // Replace with your actual Firebase Web API Key
+    val apiKey = "AIzaSyDXO57XUvfdnNmWjUaTNuF3k2x9DfhCq2Y"
     val client = createHttpClient(getHttpClient())
     val json = Json { ignoreUnknownKeys = true }
     try {
@@ -32,12 +29,9 @@ actual suspend fun registerWithFirebase(email: String, password: String) {
             setBody(SignUpRequest(email, password))
         }
         if (response.status.isSuccess()) {
-            // Parse the response to verify registration
-            val result = json.decodeFromString<SignUpResponse>(response.bodyAsText())
-            // Sign in the user to update the Firebase.auth state
+            // Do login when user is successfully created
             Firebase.auth.signInWithEmailAndPassword(email, password)
         } else {
-            // Handle Firebase-specific errors
             val error = json.decodeFromString<ErrorResponse>(response.bodyAsText())
             throw Exception(when (error.error.message) {
                 "EMAIL_EXISTS" -> "Email already in use"
