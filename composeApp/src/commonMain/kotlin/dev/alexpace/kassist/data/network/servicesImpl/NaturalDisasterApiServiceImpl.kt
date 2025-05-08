@@ -1,4 +1,4 @@
-package dev.alexpace.kassist.data.servicesImpl
+package dev.alexpace.kassist.data.network.servicesImpl
 
 import dev.alexpace.kassist.data.network.http.createHttpClient
 import dev.alexpace.kassist.data.network.http.getHttpClient
@@ -16,6 +16,7 @@ import io.ktor.http.isSuccess
 class NaturalDisasterApiServiceImpl: NaturalDisasterApiService {
 
     private val http = createHttpClient(getHttpClient())
+    private var count = 0;
 
     override suspend fun getNaturalDisasters(): NaturalDisasterResponse {
         val response: HttpResponse = http.get("$BASE_URL/EVENTS4APP")
@@ -49,6 +50,10 @@ class NaturalDisasterApiServiceImpl: NaturalDisasterApiService {
             )
             // response.body()
         } else {
+            if (count > 5) {
+                throw Exception("Error fetching news")
+            }
+            count++
             getNaturalDisasters()
         }
     }

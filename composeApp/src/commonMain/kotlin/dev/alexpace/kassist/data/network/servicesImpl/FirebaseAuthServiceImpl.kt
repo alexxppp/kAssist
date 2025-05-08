@@ -1,4 +1,4 @@
-package dev.alexpace.kassist.data.servicesImpl
+package dev.alexpace.kassist.data.network.servicesImpl
 
 import dev.alexpace.kassist.domain.models.shared.User
 import dev.alexpace.kassist.domain.services.FirebaseAuthService

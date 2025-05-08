@@ -1,4 +1,4 @@
-package dev.alexpace.kassist.data.servicesImpl
+package dev.alexpace.kassist.data.network.servicesImpl
 
 import dev.alexpace.kassist.data.network.http.createHttpClient
 import dev.alexpace.kassist.data.network.http.getHttpClient
@@ -19,10 +19,10 @@ class LiveNewsApiServiceImpl: LiveNewsApiService {
         return if (response.status.isSuccess()) {
             response.body()
         } else {
-            count++
             if (count >= 5) {
                 throw Exception("Error fetching news")
             }
+            count++
             getByKeywords(keywords)
         }
     }
