@@ -9,14 +9,9 @@ import dev.alexpace.kassist.ui.shared.pages.login.LoginPage
 
 class LoginScreen : Screen {
 
+    // Content
     @Composable
     override fun Content() {
-        val navigator = LocalNavigator.currentOrThrow
-        LoginPage(onLoginSuccess(navigator))
+        LoginPage()
     }
-
-    private fun onLoginSuccess(navigator: Navigator): () -> Unit = {
-        navigator.push(HomeScreen())
-    }
-
 }

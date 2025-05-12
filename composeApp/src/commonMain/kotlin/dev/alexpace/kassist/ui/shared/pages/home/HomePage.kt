@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -31,35 +30,38 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import cafe.adriel.voyager.navigator.Navigator
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.alexpace.kassist.domain.repositories.NaturalDisasterRepository
 import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.alexpace.kassist.domain.services.NaturalDisasterApiService
-import dev.alexpace.kassist.ui.shared.components.NaturalDisasterCard
+import dev.alexpace.kassist.ui.shared.components.nd.NaturalDisasterCard
 import dev.alexpace.kassist.ui.shared.navigation.screens.SettingsScreen
 import org.koin.compose.koinInject
 
 @Composable
-fun HomePage(
-    navigator: Navigator
-) {
+fun HomePage() {
+    val navigator = LocalNavigator.currentOrThrow
+
+    // DI
     val naturalDisasterApiService = koinInject<NaturalDisasterApiService>()
     val naturalDisasterRepository = koinInject<NaturalDisasterRepository>()
     val userRepository = koinInject<UserRepository>()
 
+    // ViewModel
     val viewModel: HomePageViewModel =
         viewModel {
             HomePageViewModel(
                 naturalDisasterApiService,
                 naturalDisasterRepository,
-                userRepository,
-                navigator
+                userRepository
             )
         }
     val naturalDisasters = viewModel.naturalDisasters.collectAsState().value
     val user = viewModel.user.collectAsState().value
     val isLoading = viewModel.isLoading.collectAsState().value
 
+    // UI
     Box(
         modifier = Modifier
             .fillMaxSize()

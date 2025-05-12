@@ -16,4 +16,3 @@ interface FirebaseAuthService {
     suspend fun signOut()
 }
 
-expect suspend fun registerWithFirebase(email: String, password: String)

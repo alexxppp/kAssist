@@ -32,19 +32,25 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.alexpace.kassist.domain.services.FirebaseAuthService
-import dev.alexpace.kassist.ui.shared.components.InputField
+import dev.alexpace.kassist.ui.shared.components.app.InputField
 import org.koin.compose.koinInject
 
 @Composable
-fun RegistrationPage(
-    onRegisterSuccess: () -> Unit
-) {
+fun RegistrationPage() {
+
+    val navigator = LocalNavigator.currentOrThrow
+
+    // DI
     val authService = koinInject<FirebaseAuthService>()
     val userRepository = koinInject<UserRepository>()
+
+    // ViewModel
     val viewModel: RegistrationPageViewModel =
-        viewModel { RegistrationPageViewModel(authService, userRepository) }
+        viewModel { RegistrationPageViewModel(authService, userRepository, navigator) }
 
     val name by viewModel.name.collectAsState()
     val phoneNumber by viewModel.phoneNumber.collectAsState()
@@ -55,6 +61,7 @@ fun RegistrationPage(
     val errorMessage by viewModel.errorMessage.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
 
+    // UI
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -170,7 +177,7 @@ fun RegistrationPage(
                             else Color(0xFFD3D3D3)
                         )
                         .clickable(enabled = isRegistrationButtonEnabled && !isLoading) {
-                            viewModel.register(onRegisterSuccess)
+                            viewModel.register()
                         }
                         .padding(horizontal = 32.dp, vertical = 16.dp),
                     contentAlignment = Alignment.Center
@@ -201,7 +208,7 @@ fun RegistrationPage(
                         color = Color(0xFF4A90E2)
                     ),
                     modifier = Modifier
-                        .clickable { /* Handle forgot password */ }
+                        .clickable { /* TODO: Handle forgot password */ }
                         .padding(vertical = 8.dp)
                 )
             }

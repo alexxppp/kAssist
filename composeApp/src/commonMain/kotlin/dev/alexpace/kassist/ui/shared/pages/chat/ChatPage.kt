@@ -35,26 +35,29 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.alexpace.kassist.domain.models.shared.liveChat.LiveChat
 import dev.alexpace.kassist.domain.repositories.LiveChatRepository
 import dev.alexpace.kassist.domain.repositories.UserRepository
-import dev.alexpace.kassist.ui.shared.components.MessageCard
+import dev.alexpace.kassist.ui.shared.components.chat.MessageCard
 import org.koin.compose.koinInject
 
 @Composable
 fun ChatPage(
     liveChat: LiveChat,
 ) {
+    // DI
     val liveChatRepository = koinInject<LiveChatRepository>()
     val userRepository = koinInject<UserRepository>()
+
+    // ViewModel
     val viewModel = viewModel { ChatPageViewModel(liveChatRepository, userRepository) }
 
     val liveChatState by viewModel.liveChat.collectAsState()
     val receiverName by viewModel.receiverName.collectAsState()
 
     // Load chat once when the composable is first composed
-    LaunchedEffect(key1 = liveChat.id) {
+    LaunchedEffect(liveChat.id) {
         viewModel.loadChat(liveChat.id)
     }
 
-    // Handle null state (e.g., while loading)
+    // UI
     if (liveChatState == null) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text("Loading...", style = TextStyle(fontSize = 16.sp, color = Color.Gray))

@@ -12,7 +12,6 @@ import dev.alexpace.kassist.domain.models.supporter.HelpProposal
 @Composable
 fun ProposalList(helpProposals: List<HelpProposal?>) {
 
-
     LazyColumn {
         items(helpProposals) { helpProposal ->
             helpProposal?.let {

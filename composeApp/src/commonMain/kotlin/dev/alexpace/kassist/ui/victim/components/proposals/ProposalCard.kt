@@ -30,8 +30,8 @@ fun ProposalCard(helpProposal: HelpProposal?) {
 
     val navigator = LocalNavigator.currentOrThrow.parent
 
-    fun navToDetails(proposalId: String) {
-        navigator!!.push(HelpProposalInfoScreen(proposalId))
+    fun navToDetails(proposal: HelpProposal) {
+        navigator!!.push(HelpProposalInfoScreen(proposal))
     }
 
     Card(
@@ -83,7 +83,7 @@ fun ProposalCard(helpProposal: HelpProposal?) {
 
             // Button to navigate to info page
             Button(
-                onClick = { helpProposal?.id?.let { navToDetails(it) } },
+                onClick = { helpProposal?.let { navToDetails(it) } },
                 modifier = Modifier
                     .clip(RoundedCornerShape(12.dp)),
                 colors = ButtonDefaults.buttonColors(

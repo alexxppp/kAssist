@@ -6,7 +6,6 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -19,34 +18,31 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.alexpace.kassist.domain.models.enums.RequestStatusTypes
+import dev.alexpace.kassist.domain.models.supporter.HelpProposal
 import dev.alexpace.kassist.domain.repositories.HelpProposalRepository
 import dev.alexpace.kassist.domain.repositories.HelpRequestRepository
 import dev.alexpace.kassist.domain.repositories.LiveChatRepository
 import dev.alexpace.kassist.domain.repositories.UserRepository
-import kotlinx.coroutines.flow.flowOf
 import org.koin.compose.koinInject
 
 @Composable
-fun ProposalInfoPage(proposalId: String) {
+fun ProposalInfoPage(proposal: HelpProposal) {
+
+    // DI
     val helpProposalRepository = koinInject<HelpProposalRepository>()
     val helpRequestRepository = koinInject<HelpRequestRepository>()
     val userRepository = koinInject<UserRepository>()
     val liveChatRepository = koinInject<LiveChatRepository>()
 
+    // ViewModel
     val viewModel: ProposalInfoViewModel = viewModel {
-        ProposalInfoViewModel(helpProposalRepository, helpRequestRepository, userRepository, liveChatRepository, proposalId)
+        ProposalInfoViewModel(helpProposalRepository, helpRequestRepository, userRepository, liveChatRepository, proposal)
     }
 
-    // Update the proposal ID when it changes (e.g., during navigation)
-    LaunchedEffect(proposalId) {
-        viewModel.updateProposalId(proposalId)
-    }
-
-    val helpProposal by viewModel.helpProposal.collectAsState()
     val helpRequest by viewModel.helpRequest.collectAsState()
-    // Collect supporter data only if supporterId is available
-    val supporter by (helpProposal?.supporterId?.let { userRepository.getById(it) } ?: flowOf(null)).collectAsState(initial = null)
+    val supporter by viewModel.supporter.collectAsState()
 
+    // UI
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -66,11 +62,8 @@ fun ProposalInfoPage(proposalId: String) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             when {
-                helpProposal == null || helpRequest == null -> {
+                helpRequest == null -> {
                     Text("Loading...")
-                }
-                helpProposal?.status == null -> {
-                    Text("Error: Proposal data is incomplete")
                 }
                 else -> {
                     Text(
@@ -83,7 +76,7 @@ fun ProposalInfoPage(proposalId: String) {
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "Content: ${helpProposal!!.content}",
+                        text = "Content: ${proposal.content}",
                         style = TextStyle(
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Medium,
@@ -92,15 +85,14 @@ fun ProposalInfoPage(proposalId: String) {
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "Status: ${helpProposal!!.status.name}",
+                        text = "Status: ${proposal.status.name}",
                         style = TextStyle(
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Normal,
-                            color = when (helpProposal!!.status) {
+                            color = when (proposal.status) {
                                 RequestStatusTypes.Pending -> Color(0xFF666666)
                                 RequestStatusTypes.Accepted -> Color(0xFF4CAF50)
                                 RequestStatusTypes.Declined -> Color(0xFFE57373)
-                                else -> Color(0xFF333333)
                             }
                         )
                     )
@@ -114,7 +106,7 @@ fun ProposalInfoPage(proposalId: String) {
                         )
                     )
                     Spacer(modifier = Modifier.height(24.dp))
-                    if (helpProposal!!.status == RequestStatusTypes.Pending) {
+                    if (proposal.status == RequestStatusTypes.Pending) {
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(16.dp)
                         ) {

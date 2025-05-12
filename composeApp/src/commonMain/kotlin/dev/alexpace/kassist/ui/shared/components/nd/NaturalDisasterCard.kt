@@ -1,4 +1,4 @@
-package dev.alexpace.kassist.ui.shared.components
+package dev.alexpace.kassist.ui.shared.components.nd
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import dev.alexpace.kassist.domain.models.enums.UserType
 import dev.alexpace.kassist.domain.models.shared.User
 import dev.alexpace.kassist.domain.models.shared.NaturalDisaster
+import dev.alexpace.kassist.ui.shared.components.app.CustomAlertDialog
 
 @Composable
 fun NaturalDisasterCard(

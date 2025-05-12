@@ -6,6 +6,7 @@ import dev.alexpace.kassist.ui.shared.pages.settings.SettingsPage
 
 class SettingsScreen: Screen {
 
+    // Content
     @Composable
     override fun Content() {
         SettingsPage()

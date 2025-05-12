@@ -18,8 +18,13 @@ import kotlinx.coroutines.flow.firstOrNull
 import org.koin.compose.koinInject
 
 class WelcomeScreen : Screen {
+
+    // Content
     @Composable
     override fun Content() {
+
+        // TODO: Change location of code
+
         // Declaring non-nullable navigator
         val navigator = LocalNavigator.currentOrThrow
         val userRepository = koinInject<UserRepository>()
@@ -27,13 +32,15 @@ class WelcomeScreen : Screen {
         var user by remember { mutableStateOf<User?>(null) }
         var isLoading by remember { mutableStateOf(true) }
 
+        // Check if user is logged in, if true pushes home screen,
+        // else, keeps user on welcome screen
         LaunchedEffect(Unit) {
             val userId = Firebase.auth.currentUser?.uid
             if (userId != null) {
                 try {
                     user = userRepository.getById(userId).firstOrNull()
                     if (user == null) {
-                        Firebase.auth.signOut() // Clear local session
+                        Firebase.auth.signOut() // Clear session
                     }
                 } catch (e: Exception) {
                     println("$userId  $user")

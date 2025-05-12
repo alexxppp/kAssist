@@ -33,7 +33,7 @@ import dev.alexpace.kassist.domain.models.victim.HelpRequest
 import dev.alexpace.kassist.domain.models.enums.NeedLevelTypes
 import dev.alexpace.kassist.domain.models.enums.RequestStatusTypes
 import dev.alexpace.kassist.domain.models.shared.User
-import dev.alexpace.kassist.ui.shared.components.InputField
+import dev.alexpace.kassist.ui.shared.components.app.InputField
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 

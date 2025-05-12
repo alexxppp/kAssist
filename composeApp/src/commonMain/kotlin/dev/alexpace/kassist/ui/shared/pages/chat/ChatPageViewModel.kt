@@ -19,18 +19,25 @@ class ChatPageViewModel(
     private val userRepository: UserRepository
 ) : ViewModel() {
 
+    // State Flows
     private val _liveChat = MutableStateFlow<LiveChat?>(null)
     val liveChat: StateFlow<LiveChat?> = _liveChat.asStateFlow()
 
     private val _receiverName = MutableStateFlow<String?>(null)
     val receiverName: StateFlow<String?> = _receiverName.asStateFlow()
 
+    // Functions
+
+    /**
+     * Loads chat from repository and sets receiver name
+     */
     fun loadChat(liveChatId: String) {
         viewModelScope.launch {
             liveChatRepository.getById(liveChatId).collect { chat ->
                 _liveChat.value = chat
                 if (chat != null) {
                     val receiverId = getReceiverId(chat)
+                    // Set receiver name (the other user in the chat)
                     if (receiverId != null) {
                         viewModelScope.launch {
                             userRepository.getById(receiverId).collect { user ->
@@ -39,11 +46,14 @@ class ChatPageViewModel(
                         }
                     }
                 }
-                setAllMessagesToSeen(liveChatId)
+                setAllMessagesToSeen(liveChatId) // TODO: Fix
             }
         }
     }
 
+    /**
+     * Gets the ID of the receiver based on the current user's ID
+     */
     private fun getReceiverId(liveChat: LiveChat): String? {
         val currentUserId = Firebase.auth.currentUser?.uid ?: return null
         return when (currentUserId) {
@@ -53,6 +63,9 @@ class ChatPageViewModel(
         }
     }
 
+    /**
+     * Creates and sends a message
+     */
     fun sendMessage(liveChatId: String, content: String) {
         val currentUserId = Firebase.auth.currentUser?.uid ?: return
         val message = ChatMessage(
@@ -66,6 +79,9 @@ class ChatPageViewModel(
         }
     }
 
+    /**
+     * TODO: Fix
+     */
     private fun setAllMessagesToSeen(liveChatId: String) {
         viewModelScope.launch {
             liveChatRepository.setAllMessagesToSeen(liveChatId)

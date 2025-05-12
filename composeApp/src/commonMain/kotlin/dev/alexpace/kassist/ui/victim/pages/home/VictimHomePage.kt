@@ -16,29 +16,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.alexpace.kassist.data.repositoriesImpl.HelpProposalRepositoryImpl
-import dev.alexpace.kassist.data.repositoriesImpl.HelpRequestRepositoryImpl
 import dev.alexpace.kassist.ui.victim.components.proposals.ProposalList
-import dev.gitlive.firebase.Firebase
-import dev.gitlive.firebase.auth.auth
 import org.koin.compose.koinInject
 
 @Composable
 fun VictimHomePage() {
-    val helpProposalRepository = koinInject<HelpProposalRepositoryImpl>()
-    val helpRequestRepository = koinInject<HelpRequestRepositoryImpl>()
-    val currentUserId = Firebase.auth.currentUser!!.uid
 
+    // DI
+    val helpProposalRepository = koinInject<HelpProposalRepositoryImpl>()
+
+    // ViewModel
     val viewModel: VictimHomePageViewModel = viewModel {
-        VictimHomePageViewModel(
-            helpProposalRepository,
-            helpRequestRepository,
-            currentUserId
-        )
+        VictimHomePageViewModel(helpProposalRepository)
     }
 
     val helpProposals by viewModel.helpProposals.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
 
+    // UI
     Box(
         modifier = Modifier
             .fillMaxSize()

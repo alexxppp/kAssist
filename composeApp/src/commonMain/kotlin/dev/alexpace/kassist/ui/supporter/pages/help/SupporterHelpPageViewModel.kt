@@ -20,26 +20,40 @@ class SupporterHelpPageViewModel(
     private val userId: String
 ) : ViewModel() {
 
+    // State Flows
     private val _selectedHelpRequest = MutableStateFlow<HelpRequest?>(null)
     val selectedHelpRequest: StateFlow<HelpRequest?> = _selectedHelpRequest.asStateFlow()
+
+    // Functions
 
     fun selectHelpRequest(request: HelpRequest?) {
         _selectedHelpRequest.value = request
     }
 
+    /**
+     * Submits help proposal by calling the HelpProposalRepository
+     * and sets the selected help request to null
+     */
     fun submitHelpProposal(content: String, helpRequest: HelpRequest) {
         viewModelScope.launch {
             try {
                 helpProposalRepository.add(buildHelpProposal(content, helpRequest))
-
                 selectHelpRequest(null)
             } catch (e: Exception) {
-                // Log error (replace with proper logging in production)
                 println("Error submitting proposal: ${e.message}")
             }
         }
     }
 
+    // TODO: Implement
+    private fun checkForm() {
+
+    }
+
+    /**
+     * Builds a help proposal from the given content and help request
+     * Uuid is experimental
+     */
     @OptIn(ExperimentalUuidApi::class)
     private fun buildHelpProposal(content: String, helpRequest: HelpRequest): HelpProposal {
         return HelpProposal(

@@ -6,6 +6,7 @@ import dev.alexpace.kassist.data.repositoriesImpl.UserRepositoryImpl
 import dev.alexpace.kassist.data.repositoriesImpl.HelpProposalRepositoryImpl
 import dev.alexpace.kassist.data.repositoriesImpl.LiveChatRepositoryImpl
 import dev.alexpace.kassist.data.network.servicesImpl.FirebaseAuthServiceImpl
+import dev.alexpace.kassist.data.network.servicesImpl.LiveNewsApiServiceImpl
 import dev.alexpace.kassist.data.network.servicesImpl.NaturalDisasterApiServiceImpl
 import dev.alexpace.kassist.domain.repositories.NaturalDisasterRepository
 import dev.alexpace.kassist.domain.repositories.HelpProposalRepository
@@ -13,6 +14,7 @@ import dev.alexpace.kassist.domain.repositories.HelpRequestRepository
 import dev.alexpace.kassist.domain.repositories.LiveChatRepository
 import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.alexpace.kassist.domain.services.FirebaseAuthService
+import dev.alexpace.kassist.domain.services.LiveNewsApiService
 import dev.alexpace.kassist.domain.services.NaturalDisasterApiService
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
@@ -27,4 +29,5 @@ val sharedModule = module {
     singleOf(::NaturalDisasterApiServiceImpl).bind<NaturalDisasterApiService>()
     singleOf(::NaturalDisasterRepositoryImpl).bind<NaturalDisasterRepository>()
     singleOf(::LiveChatRepositoryImpl).bind<LiveChatRepository>()
+    singleOf(::LiveNewsApiServiceImpl).bind<LiveNewsApiService>()
 }

@@ -1,4 +1,4 @@
-package dev.alexpace.kassist.ui.shared.components
+package dev.alexpace.kassist.ui.shared.components.app
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -17,6 +17,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation.Companion.None
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -57,7 +58,7 @@ fun InputField(
                 color = Color(0xFF333333)
             ),
             keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
-            visualTransformation = if (isPassword) PasswordVisualTransformation() else androidx.compose.ui.text.input.VisualTransformation.None,
+            visualTransformation = if (isPassword) PasswordVisualTransformation() else None,
             singleLine = true
         )
     }

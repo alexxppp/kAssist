@@ -11,17 +11,12 @@ import dev.alexpace.kassist.domain.repositories.HelpProposalRepository
 import dev.alexpace.kassist.domain.repositories.HelpRequestRepository
 import dev.alexpace.kassist.domain.repositories.LiveChatRepository
 import dev.alexpace.kassist.domain.repositories.UserRepository
+import dev.alexpace.kassist.ui.shared.utils.controllers.SnackbarController
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.auth
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -31,70 +26,79 @@ class ProposalInfoViewModel(
     private val helpRequestRepository: HelpRequestRepository,
     private val userRepository: UserRepository,
     private val liveChatRepository: LiveChatRepository,
-    initialProposalId: String
+    private val proposal: HelpProposal
 ) : ViewModel() {
 
-    private val proposalId = MutableStateFlow(initialProposalId)
+    // Values
+    private val currentUserId =
+        Firebase.auth.currentUser?.uid ?: throw Exception("User not authenticated")
 
-    private val userId = Firebase.auth.currentUser?.uid
-
+    // State Flows
     private val _user = MutableStateFlow<User?>(null)
     val user = _user.asStateFlow()
 
+    private val _helpRequest = MutableStateFlow<HelpRequest?>(null)
+    val helpRequest = _helpRequest.asStateFlow()
+
+    private val _supporter = MutableStateFlow<User?>(null)
+    val supporter = _supporter.asStateFlow()
+
+    // Init
     init {
         fetchUser()
+        fetchData()
     }
 
+    // Functions
+
+    /**
+     * Fetches user from UserRepository
+     */
     private fun fetchUser() {
-        userId?.let { uid ->
-            viewModelScope.launch {
-                try {
-                    _user.value = userRepository.getById(uid).firstOrNull()
-                } catch (e: Exception) {
-                    println(userId)
-                    println("Error fetching user: ${e.message}")
-                    _user.value = null
-                }
+        viewModelScope.launch {
+            try {
+                _user.value = userRepository.getById(currentUserId).firstOrNull()
+            } catch (e: Exception) {
+                _user.value = null
             }
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val helpProposal: StateFlow<HelpProposal?> = proposalId
-        .flatMapLatest { id -> helpProposalRepository.getById(id) }
-        .stateIn(viewModelScope, SharingStarted.Lazily, null)
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val helpRequest: StateFlow<HelpRequest?> = helpProposal
-        .flatMapLatest { proposal ->
-            val helpRequestId = proposal?.helpRequestId
-            if (helpRequestId != null) {
-                helpRequestRepository.getById(helpRequestId)
-            } else {
-                flowOf(null)
+    /**
+     * Fetches all necessary data once based on the initial proposalId
+     */
+    private fun fetchData() {
+        viewModelScope.launch {
+            try {
+                val helpRequest =
+                    helpRequestRepository.getById(proposal.helpRequestId).firstOrNull()
+                _helpRequest.value = helpRequest
+                val supporter = userRepository.getById(proposal.supporterId).firstOrNull()
+                _supporter.value = supporter
+            } catch (e: Exception) {
+                _helpRequest.value = null
+                _supporter.value = null
             }
         }
-        .stateIn(viewModelScope, SharingStarted.Lazily, null)
-
-    // Function to update the proposal ID when navigating to a new proposal
-    fun updateProposalId(newProposalId: String) {
-        proposalId.value = newProposalId
     }
 
+    /**
+     * Handles the accept button click by updating the proposal status to Accepted
+     * and creating a new live chat with both users.
+     */
     @OptIn(ExperimentalUuidApi::class)
     fun acceptProposal() {
-        val currentProposal = helpProposal.value ?: return
-        val updatedProposal = currentProposal.copy(status = RequestStatusTypes.Accepted)
-        val currentRequest = helpRequest.value ?: return
+        val updatedProposal = proposal.copy(status = RequestStatusTypes.Accepted)
+        val currentRequest = _helpRequest.value ?: return
         val updatedRequest = currentRequest.copy(status = RequestStatusTypes.Accepted)
 
         val newChat = LiveChat(
             id = Uuid.random().toString(),
-            victimId = currentProposal.victimId,
-            supporterId = currentProposal.supporterId,
-            naturalDisaster = user.value!!.naturalDisaster!!,
+            victimId = proposal.victimId,
+            supporterId = proposal.supporterId,
+            naturalDisaster = _user.value!!.naturalDisaster!!,
             helpRequest = currentRequest,
-            helpProposal = currentProposal,
+            helpProposal = proposal,
             isActive = true,
             messages = emptyList(),
         )
@@ -104,13 +108,18 @@ class ProposalInfoViewModel(
             helpRequestRepository.update(updatedRequest)
             liveChatRepository.add(newChat)
         }
+
+        SnackbarController.showSnackbar("Proposal accepted!")
     }
 
+    /**
+     * Handles the decline button click by updating the proposal status to Declined
+     */
     fun declineProposal() {
-        val currentProposal = helpProposal.value ?: return
-        val updatedProposal = currentProposal.copy(status = RequestStatusTypes.Declined)
+        val updatedProposal = proposal.copy(status = RequestStatusTypes.Declined)
         viewModelScope.launch {
             helpProposalRepository.update(updatedProposal)
         }
+        SnackbarController.showSnackbar("Proposal declined")
     }
 }

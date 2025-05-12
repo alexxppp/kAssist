@@ -22,22 +22,30 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.alexpace.kassist.domain.services.FirebaseAuthService
-import dev.alexpace.kassist.ui.shared.components.InputField
+import dev.alexpace.kassist.ui.shared.components.app.InputField
 import org.koin.compose.koinInject
 
 @Composable
-fun LoginPage(
-    onLoginSuccess: () -> Unit
-) {
+fun LoginPage() {
+
+    val navigator = LocalNavigator.currentOrThrow
+
+    // DI
     val authService = koinInject<FirebaseAuthService>()
-    val viewModel: LoginPageViewModel = viewModel { LoginPageViewModel(authService) }
+
+    // ViewModel
+    val viewModel: LoginPageViewModel = viewModel { LoginPageViewModel(authService, navigator) }
+
     val email by viewModel.email.collectAsState()
     val password by viewModel.password.collectAsState()
     val isLoginButtonEnabled by viewModel.isLoginButtonEnabled.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
 
+    // UI
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -135,7 +143,7 @@ fun LoginPage(
                             else Color(0xFFD3D3D3)
                         )
                         .clickable(enabled = isLoginButtonEnabled && !isLoading) {
-                            viewModel.login(onLoginSuccess)
+                            viewModel.login()
                         }
                         .padding(horizontal = 32.dp, vertical = 16.dp),
                     contentAlignment = Alignment.Center
@@ -166,7 +174,7 @@ fun LoginPage(
                         color = Color(0xFF4A90E2)
                     ),
                     modifier = Modifier
-                        .clickable { /* Handle forgot password */ }
+                        .clickable { /* TODO: Handle forgot password */ }
                         .padding(vertical = 8.dp)
                 )
             }

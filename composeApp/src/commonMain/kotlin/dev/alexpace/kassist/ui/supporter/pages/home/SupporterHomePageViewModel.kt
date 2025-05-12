@@ -7,22 +7,39 @@ import dev.alexpace.kassist.domain.models.supporter.HelpProposal
 import dev.alexpace.kassist.domain.repositories.HelpProposalRepository
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.auth
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class SupporterHomePageViewModel(
     private val helpProposalRepository: HelpProposalRepository
 ) : ViewModel() {
 
+    // Values
     private val userId = Firebase.auth.currentUser?.uid
-        ?: throw Exception("No authenticated user found")
+        ?: throw Exception("No authenticated user found") // TODO: Handle null user more nicely
 
-    val acceptedHelpProposals: StateFlow<List<HelpProposal>> =
-        helpProposalRepository.getBySupporterIdAndStatuses(userId, listOf(RequestStatusTypes.Accepted))
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5000),
-                initialValue = emptyList()
-            )
+    // State Flows
+    private val _acceptedHelpProposals = MutableStateFlow<List<HelpProposal>>(emptyList())
+    val acceptedHelpProposals: StateFlow<List<HelpProposal>> = _acceptedHelpProposals
+
+    // Init
+    init {
+        fetchAcceptedHelpProposals()
+    }
+
+    // Functions
+
+    /**
+     * Fetches all accepted help proposals from the HelpProposalRepository
+     */
+    private fun fetchAcceptedHelpProposals() {
+        viewModelScope.launch {
+            helpProposalRepository.getBySupporterIdAndStatuses(
+                userId, listOf(RequestStatusTypes.Accepted)
+            ).collect { acceptedProposals ->
+                _acceptedHelpProposals.value = acceptedProposals
+            }
+        }
+    }
 }

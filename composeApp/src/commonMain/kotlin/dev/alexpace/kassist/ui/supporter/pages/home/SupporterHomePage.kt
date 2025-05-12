@@ -1,7 +1,6 @@
 package dev.alexpace.kassist.ui.supporter.pages.home
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,7 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -28,17 +26,21 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import dev.alexpace.kassist.domain.models.supporter.HelpProposal
 import dev.alexpace.kassist.domain.repositories.HelpProposalRepository
 import dev.alexpace.kassist.ui.supporter.components.proposal.AcceptedProposalCard
 import org.koin.compose.koinInject
 
 @Composable
 fun SupporterHomePage() {
+
+    // DI
     val helpProposalRepository = koinInject<HelpProposalRepository>()
+
+    // ViewModel
     val viewModel = viewModel { SupporterHomePageViewModel(helpProposalRepository) }
     val acceptedHelpProposals = viewModel.acceptedHelpProposals.collectAsState().value
 
+    // UI
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -58,7 +60,6 @@ fun SupporterHomePage() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            // Top Section: Title
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(top = 64.dp)
@@ -90,7 +91,7 @@ fun SupporterHomePage() {
                 )
             }
 
-            // Middle Section: List of Accepted Proposals
+            // List of Accepted Proposals
             if (acceptedHelpProposals.isEmpty()) {
                 Text(
                     text = "No accepted proposals yet.",

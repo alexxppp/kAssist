@@ -28,8 +28,11 @@ import cafe.adriel.voyager.navigator.Navigator
 
 @Composable
 fun WelcomePage(navigator: Navigator, isLoading: Boolean) {
+
+    // ViewModel
     val viewModel: WelcomePageViewModel = viewModel { WelcomePageViewModel() }
 
+    // UI
     if(isLoading) {
         Text("Loading...")
     } else {

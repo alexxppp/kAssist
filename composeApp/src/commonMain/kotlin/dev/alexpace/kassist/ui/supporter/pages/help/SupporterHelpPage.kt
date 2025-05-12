@@ -1,3 +1,5 @@
+package dev.alexpace.kassist.ui.supporter.pages.help
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,14 +22,21 @@ import org.koin.compose.koinInject
 
 @Composable
 fun SupporterHelpPage() {
+
+    val userId = Firebase.auth.currentUser?.uid
+        // TODO: Handle more nicely
+        ?: throw Exception("User not authenticated")
+
+    // DI
     val helpRequestRepository = koinInject<HelpRequestRepositoryImpl>()
     val helpProposalRepository = koinInject<HelpProposalRepositoryImpl>()
-    val userId = Firebase.auth.currentUser?.uid ?: return // Handle null user
 
+    // ViewModel
     val viewModel: SupporterHelpPageViewModel = viewModel {
         SupporterHelpPageViewModel(helpRequestRepository, helpProposalRepository, userId)
     }
 
+    // UI
     Scaffold(
         modifier = Modifier
             .fillMaxSize()

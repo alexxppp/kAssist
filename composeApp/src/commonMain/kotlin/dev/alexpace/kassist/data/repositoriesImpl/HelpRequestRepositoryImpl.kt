@@ -18,6 +18,7 @@ class HelpRequestRepositoryImpl: HelpRequestRepository {
                 .map { documentSnapshot ->
                     documentSnapshot.data<HelpRequest>()
                 }
+                .sortedBy { it.needLevel }
             emit(helpRequests)
         }
     }

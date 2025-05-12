@@ -3,6 +3,7 @@ package dev.alexpace.kassist.ui.shared.pages.settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cafe.adriel.voyager.navigator.Navigator
+import dev.alexpace.kassist.domain.models.enums.UserType
 import dev.alexpace.kassist.domain.models.shared.User
 import dev.alexpace.kassist.domain.models.supporter.HelpProposal
 import dev.alexpace.kassist.domain.models.victim.HelpRequest
@@ -10,6 +11,7 @@ import dev.alexpace.kassist.domain.repositories.HelpProposalRepository
 import dev.alexpace.kassist.domain.repositories.HelpRequestRepository
 import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.alexpace.kassist.ui.shared.navigation.screens.WelcomeScreen
+import dev.alexpace.kassist.ui.shared.utils.controllers.SnackbarController
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.auth
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,6 +25,11 @@ class SettingsPageViewModel(
     private val navigator: Navigator
 ) : ViewModel() {
 
+    // Values
+    private val userId = Firebase.auth.currentUser?.uid
+        ?: throw Exception("No authenticated user found")
+
+    // State Flows
     private val _isLoading = MutableStateFlow(true)
     val isLoading = _isLoading.asStateFlow()
 
@@ -38,20 +45,16 @@ class SettingsPageViewModel(
     private val _helpProposals = MutableStateFlow(emptyList<HelpProposal>())
     val helpProposals = _helpProposals.asStateFlow()
 
-    private val userId = Firebase.auth.currentUser?.uid
-        ?: throw Exception("No authenticated user found")
-
+    // Init
     init {
         fetchAllData()
     }
 
-    fun logOut() {
-        viewModelScope.launch {
-            Firebase.auth.signOut()
-            navigator.replaceAll(WelcomeScreen())
-        }
-    }
+    // Functions
 
+    /**
+     * Fetches user, help requests, and help proposals from the repositories
+     */
     private fun fetchAllData() {
         viewModelScope.launch {
             try {
@@ -72,8 +75,34 @@ class SettingsPageViewModel(
 
             } catch (e: Exception) {
                 _error.value = "Failed to load data: ${e.message}"
+            }
+        }
+        _isLoading.value = false
+    }
+
+    /**
+     * Logs user out and navigates to the welcome screen
+     */
+    fun logOut() {
+        viewModelScope.launch {
+            Firebase.auth.signOut()
+            SnackbarController.showSnackbar("Logged out successfully")
+            navigator.replaceAll(WelcomeScreen())
+        }
+    }
+
+    /**
+     * Logs user out of current disaster by updating user's natural disaster
+     * to null and type to UserType.Neutral
+     */
+    fun logOutFromCurrentDisaster() {
+        viewModelScope.launch {
+            try {
+                userRepository.update(user.value!!.copy(naturalDisaster = null, type = UserType.Neutral))
+            } catch (e: Exception) {
+                _error.value = "Failed to log out from current disaster: ${e.message}"
             } finally {
-                _isLoading.value = false
+                SnackbarController.showSnackbar("Logged out from disaster successfully")
             }
         }
     }

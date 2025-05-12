@@ -14,13 +14,25 @@ class VictimContactPageViewModel(
     private val userRepository: UserRepository,
     private val victimId: String
 ) : ViewModel() {
+
+    // State Flows
     private val _liveChats = MutableStateFlow<List<LiveChat>>(emptyList())
     val liveChats = _liveChats.asStateFlow()
 
     private val _userNames = MutableStateFlow<Map<String, String>>(emptyMap())
     val userNames = _userNames.asStateFlow()
 
+    // Init
     init {
+        fetchAllChats()
+    }
+
+    // Functions
+
+    /**
+     * Fetches all user chats from LiveChatRepository
+     */
+    private fun fetchAllChats() {
         viewModelScope.launch {
             liveChatRepository.getAllById(victimId).collect { chats ->
                 _liveChats.value = chats
@@ -29,15 +41,20 @@ class VictimContactPageViewModel(
         }
     }
 
+    /**
+     * Updates the user names map based on the live chats, changing the displayed
+     * IDs to the name of the receiver
+     */
     private fun updateUserNames(chats: List<LiveChat>) {
-        val receiverIds = chats.map { if (it.victimId == victimId) it.supporterId else it.victimId }.toSet()
+        val receiverIds =
+            chats.map { if (it.victimId == victimId) it.victimId else it.supporterId }.toSet()
         val currentNames = _userNames.value
         for (id in receiverIds) {
             if (!currentNames.containsKey(id)) {
                 viewModelScope.launch {
                     userRepository.getById(id).collect { user ->
                         user?.let {
-                            _userNames.value = _userNames.value + (id to it.name)
+                            _userNames.value += (id to it.name)
                         }
                     }
                 }

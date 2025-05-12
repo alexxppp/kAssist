@@ -21,12 +21,15 @@ import kotlinx.coroutines.launch
 class HomePageViewModel(
     private val naturalDisasterApiService: NaturalDisasterApiService,
     private val naturalDisasterRepository: NaturalDisasterRepository,
-    private val userRepository: UserRepository,
-    private val navigator: Navigator
+    private val userRepository: UserRepository
 ) : ViewModel() {
 
+    // Values
     private val userId = Firebase.auth.currentUser?.uid
+    // TODO: Handle more nicely
+        ?: throw Exception("User not authenticated")
 
+    // State Flows
     private val _naturalDisasters = MutableStateFlow<List<NaturalDisaster>>(emptyList())
     val naturalDisasters = _naturalDisasters.asStateFlow()
 
@@ -36,17 +39,24 @@ class HomePageViewModel(
     private val _isLoading = MutableStateFlow(true)
     val isLoading = _isLoading.asStateFlow()
 
+    // Init
     init {
         fetchNaturalDisasters()
         fetchUser()
     }
 
+    // Functions
+
+    /**
+     * Fetches natural disasters from NaturalDisasterApiService
+     */
     private fun fetchNaturalDisasters() {
         viewModelScope.launch {
             try {
                 val disasters = naturalDisasterApiService.getNaturalDisasters()
                 val filteredDisasters = disasters.features
                     .map { it.properties }
+                    // Filters by type and alert level
                     .filter {
                         (it.alertLevel == "Orange" || it.alertLevel == "Red") &&
                                 it.type != "DR"
@@ -62,20 +72,24 @@ class HomePageViewModel(
         }
     }
 
+    /**
+     * Fetches user from UserRepository
+     */
     private fun fetchUser() {
-        userId?.let { uid ->
-            viewModelScope.launch {
-                try {
-                    _user.value = userRepository.getById(uid).firstOrNull()
-                } catch (e: Exception) {
-                    println(userId)
-                    println("Error fetching user: ${e.message}")
-                    _user.value = null
+        viewModelScope.launch {
+            try {
+                userRepository.getById(userId).collect { user ->
+                    _user.value = user
                 }
+            } catch (e: Exception) {
+                _user.value = null
             }
         }
     }
 
+    /**
+     * Registers user as victim or supporter
+     */
     private fun registerUserAs(userId: String?, userType: UserType, disaster: NaturalDisaster) {
         userId?.let { uid ->
             viewModelScope.launch {

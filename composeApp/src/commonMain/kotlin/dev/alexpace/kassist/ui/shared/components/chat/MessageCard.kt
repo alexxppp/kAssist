@@ -1,4 +1,4 @@
-package dev.alexpace.kassist.ui.shared.components
+package dev.alexpace.kassist.ui.shared.components.chat
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -44,7 +44,8 @@ fun MessageCard(
     // Format timestamp
     val instant = Instant.fromEpochMilliseconds(message.timestamp)
     val dateTime = instant.toLocalDateTime(TimeZone.currentSystemDefault())
-    val formattedTime = "${dateTime.hour.toString().padStart(2, '0')}:${dateTime.minute.toString().padStart(2, '0')}"
+    val formattedTime = "${dateTime.hour.toString().padStart(2, '0')}:${
+        dateTime.minute.toString().padStart(2, '0')}"
 
     Row(
         modifier = Modifier

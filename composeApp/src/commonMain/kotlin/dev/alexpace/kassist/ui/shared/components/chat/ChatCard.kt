@@ -1,4 +1,4 @@
-package dev.alexpace.kassist.ui.shared.components
+package dev.alexpace.kassist.ui.shared.components.chat
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

@@ -9,6 +9,7 @@ class ChatScreen(
     val liveChat: LiveChat
 ) : Screen {
 
+    // Content
     @Composable
     override fun Content() {
         ChatPage(liveChat)

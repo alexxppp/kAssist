@@ -13,7 +13,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.alexpace.kassist.domain.repositories.LiveChatRepository
 import dev.alexpace.kassist.domain.repositories.UserRepository
-import dev.alexpace.kassist.ui.shared.components.ChatCard
+import dev.alexpace.kassist.ui.shared.components.chat.ChatCard
 import dev.alexpace.kassist.ui.shared.navigation.screens.ChatScreen
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.auth
@@ -21,17 +21,26 @@ import org.koin.compose.koinInject
 
 @Composable
 fun VictimContactPage() {
+
+    // Values
     val navigator =
         LocalNavigator.currentOrThrow.parent ?: throw Exception("No parent navigator found")
-    val currentUserId = Firebase.auth.currentUser?.uid ?: return
+    val currentUserId = Firebase.auth.currentUser?.uid
+        // TODO: Handle more nicely
+        ?: throw Exception("User not authenticated")
+
+    // DI
     val liveChatRepository = koinInject<LiveChatRepository>()
     val userRepository = koinInject<UserRepository>()
-    val victimViewModel = viewModel {
+
+    // ViewModel
+    val viewModel = viewModel {
         VictimContactPageViewModel(liveChatRepository, userRepository, currentUserId)
     }
-    val liveChats by victimViewModel.liveChats.collectAsState()
-    val userNames by victimViewModel.userNames.collectAsState()
+    val liveChats by viewModel.liveChats.collectAsState()
+    val userNames by viewModel.userNames.collectAsState()
 
+    // UI
     Column {
         LazyColumn(
             modifier = Modifier
@@ -39,12 +48,13 @@ fun VictimContactPage() {
                 .fillMaxWidth()
         ) {
             items(liveChats) { chat ->
-                val receiverId = if (chat.victimId == currentUserId) chat.supporterId else chat.victimId
+                val receiverId =
+                    if (chat.victimId == currentUserId) chat.supporterId else chat.victimId
                 val receiverName = userNames[receiverId] ?: "Loading..."
                 ChatCard(
                     liveChat = chat,
                     receiverName = receiverName,
-                    onChatClick = { chatId ->
+                    onChatClick = { _ ->
                         navigator.push(
                             ChatScreen(
                                 liveChat = chat

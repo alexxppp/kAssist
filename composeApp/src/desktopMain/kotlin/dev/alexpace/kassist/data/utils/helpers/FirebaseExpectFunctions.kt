@@ -1,23 +1,17 @@
-package dev.alexpace.kassist.domain.services
+package dev.alexpace.kassist.data.utils.helpers
 
 import dev.alexpace.kassist.data.network.http.createHttpClient
 import dev.alexpace.kassist.data.network.http.getHttpClient
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.auth
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.http.*
-import kotlinx.serialization.Serializable
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsText
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
+import io.ktor.http.isSuccess
 import kotlinx.serialization.json.Json
-
-@Serializable
-private data class SignUpRequest(val email: String, val password: String, val returnSecureToken: Boolean = true)
-
-@Serializable
-private data class ErrorResponse(val error: ErrorDetails)
-
-@Serializable
-private data class ErrorDetails(val message: String)
 
 actual suspend fun registerWithFirebase(email: String, password: String) {
     val apiKey = "AIzaSyDXO57XUvfdnNmWjUaTNuF3k2x9DfhCq2Y"

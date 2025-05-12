@@ -1,4 +1,4 @@
-package dev.alexpace.kassist.domain.services
+package dev.alexpace.kassist.data.utils.helpers
 
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.auth
