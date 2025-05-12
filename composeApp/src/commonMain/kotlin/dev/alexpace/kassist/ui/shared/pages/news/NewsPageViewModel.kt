@@ -21,7 +21,6 @@ class NewsPageViewModel(
 
     // Values
     private val currentUserId =
-        // TODO: Handle more nicely
         Firebase.auth.currentUser?.uid ?: throw Exception("User not authenticated")
 
     // State Flows
@@ -37,7 +36,6 @@ class NewsPageViewModel(
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error.asStateFlow()
 
-
     // Init
     init {
         fetchUser()
@@ -50,18 +48,17 @@ class NewsPageViewModel(
      */
     private fun fetchUser() {
         viewModelScope.launch {
-            viewModelScope.launch {
-                try {
-                    _user.value = userRepository.getById(currentUserId).firstOrNull()
-                } catch (e: Exception) {
-                    _user.value = null
-                }
+            try {
+                _user.value = userRepository.getById(currentUserId).firstOrNull()
+                println("Raw disaster name: '${_user.value?.naturalDisaster?.name}', country: '${_user.value?.naturalDisaster?.country}'")
+            } catch (e: Exception) {
+                _user.value = null
             }
         }
     }
 
     /**
-     * Fetches news from Python Fastapi API
+     * Fetches news from Python FastAPI API
      * Triggered on button press
      */
     fun fetchLiveNews() {
@@ -71,20 +68,26 @@ class NewsPageViewModel(
             _news.value = null
             return
         }
-
+        val disasterName = currentUserDisaster.name.trim()
+        val country = currentUserDisaster.country.trim()
+        if (disasterName.isEmpty() || country.isEmpty()) {
+            _error.value = "Disaster name or country is empty"
+            _news.value = null
+            return
+        }
+        val keywords = "$disasterName in $country"
         viewModelScope.launch {
             _isLoadingNews.value = true
             try {
-                val newsResponse =
-                    liveNewsApiService.getByKeywords(
-                        currentUserDisaster.name + " disaster in " +
-                                currentUserDisaster.country,
-                        _user.value!!.type
-                    )
+                val newsResponse = liveNewsApiService.getByKeywords(
+                    keywords,
+                    _user.value!!.type
+                )
                 _news.value = newsResponse
                 _error.value = null
             } catch (e: Exception) {
                 _error.value = "Error fetching news: ${e.message}"
+                println("Exception: ${e.message}")
                 _news.value = null
             } finally {
                 _isLoadingNews.value = false

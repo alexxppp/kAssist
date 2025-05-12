@@ -5,13 +5,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -43,7 +43,8 @@ fun NewsPage() {
         NewsPageViewModel(liveNewsApiService, userRepository)
     }
     val news by viewModel.news.collectAsState()
-    val isLoadingNews by viewModel.isLoadingNews.collectAsState()
+    val isLoading by viewModel.isLoadingNews.collectAsState()
+    val error by viewModel.error.collectAsState()
 
     // UI
     Box(
@@ -63,8 +64,109 @@ fun NewsPage() {
                 .fillMaxSize()
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
+            // News Content
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                contentAlignment = Alignment.TopCenter
+            ) {
+                if (isLoading) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(48.dp),
+                            color = Color(0xFF4A90E2),
+                            strokeWidth = 4.dp
+                        )
+                    }
+                } else if (error != null) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = error.toString(),
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Normal,
+                                color = Color(0xFF666666),
+                                textAlign = TextAlign.Center
+                            )
+                        )
+                    }
+                } else if (news == null) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "Press 'Fetch News' to get updates about your current disaster",
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Normal,
+                                color = Color(0xFF666666),
+                                textAlign = TextAlign.Center
+                            )
+                        )
+                    }
+                } else {
+                    news?.let { newsResponse ->
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(12.dp))
+                                .shadow(8.dp, RoundedCornerShape(12.dp)),
+                            backgroundColor = Color.White
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(16.dp),
+                                verticalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                Text(
+                                    text = "Latest News",
+                                    style = TextStyle(
+                                        fontSize = 18.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color(0xFF333333)
+                                    )
+                                )
+                                if (newsResponse.summary.isBlank()) {
+                                    Text(
+                                        text = "No news available",
+                                        style = TextStyle(
+                                            fontSize = 14.sp,
+                                            fontWeight = FontWeight.Normal,
+                                            color = Color(0xFF666666)
+                                        )
+                                    )
+                                } else {
+                                    Text(
+                                        text = newsResponse.summary,
+                                        style = TextStyle(
+                                            fontSize = 14.sp,
+                                            fontWeight = FontWeight.Normal,
+                                            color = Color(0xFF666666)
+                                        )
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Fetch News Button
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -89,78 +191,6 @@ fun NewsPage() {
                         color = Color.White
                     )
                 )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // News Display
-            if (isLoadingNews) {
-                Text(
-                    text = "Loading news...",
-                    style = TextStyle(
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Normal,
-                        color = Color(0xFF666666)
-                    ),
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center
-                )
-            } else {
-                news?.let { newsResponse ->
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(12.dp))
-                            .shadow(8.dp, RoundedCornerShape(12.dp)),
-                        backgroundColor = Color.White
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(16.dp),
-                            verticalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            Text(
-                                text = "Latest News",
-                                style = TextStyle(
-                                    fontSize = 18.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = Color(0xFF333333)
-                                )
-                            )
-                            if (newsResponse.summaries.isEmpty()) {
-                                Text(
-                                    text = "No news available",
-                                    style = TextStyle(
-                                        fontSize = 14.sp,
-                                        fontWeight = FontWeight.Normal,
-                                        color = Color(0xFF666666)
-                                    )
-                                )
-                            } else {
-                                newsResponse.summaries.forEach { summary ->
-                                    Column {
-                                        Text(
-                                            text = summary.title,
-                                            style = TextStyle(
-                                                fontSize = 14.sp,
-                                                fontWeight = FontWeight.Medium,
-                                                color = Color(0xFF333333)
-                                            )
-                                        )
-                                        Spacer(modifier = Modifier.height(4.dp))
-                                        Text(
-                                            text = summary.summary,
-                                            style = TextStyle(
-                                                fontSize = 12.sp,
-                                                fontWeight = FontWeight.Normal,
-                                                color = Color(0xFF666666)
-                                            )
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
             }
         }
     }

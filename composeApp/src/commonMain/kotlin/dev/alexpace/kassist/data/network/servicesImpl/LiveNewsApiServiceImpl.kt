@@ -7,10 +7,10 @@ import dev.alexpace.kassist.data.utils.constants.BASE_URL_TIPS
 import dev.alexpace.kassist.domain.models.enums.UserType
 import dev.alexpace.kassist.domain.services.LiveNewsApiService
 import io.ktor.client.call.body
+import io.ktor.client.plugins.timeout
 import io.ktor.client.request.get
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.isSuccess
-import io.ktor.http.parameters
 
 class LiveNewsApiServiceImpl : LiveNewsApiService {
 
@@ -18,21 +18,24 @@ class LiveNewsApiServiceImpl : LiveNewsApiService {
     private var count = 0
 
     override suspend fun getByKeywords(keywords: String, userRole: UserType): LiveNewsResponse {
-        val response: HttpResponse = http.get(BASE_URL_TIPS, {
-            parameters {
-                append("keywords", keywords)
-                append("user_role", userRole.toString())
+        println("Sending keywords: '$keywords'")
+        val response: HttpResponse = http.get("$BASE_URL_TIPS?disaster=$keywords&user_role=${userRole.name}") {
+            timeout {
+                requestTimeoutMillis = 30_000
+                connectTimeoutMillis = 10_000
+                socketTimeoutMillis = 15_000
             }
-        })
+        }
+        println("Response status: ${response.status}")
         return if (response.status.isSuccess()) {
+            count = 0
             response.body()
         } else {
             if (count >= 5) {
-                throw Exception("Error fetching news")
+                throw Exception("Error fetching news: ${response.status.value}")
             }
             count++
             getByKeywords(keywords, userRole)
         }
     }
-
 }
