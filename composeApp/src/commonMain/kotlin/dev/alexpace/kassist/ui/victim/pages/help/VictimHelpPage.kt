@@ -60,14 +60,6 @@ fun VictimHelpPage() {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(
-                            Color(0xFFE6F0FA),
-                            Color(0xFFFFFFFF)
-                        )
-                    )
-                )
         ) {
             Column(
                 modifier = Modifier

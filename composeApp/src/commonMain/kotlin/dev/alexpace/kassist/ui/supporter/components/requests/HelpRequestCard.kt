@@ -1,6 +1,7 @@
 package dev.alexpace.kassist.ui.supporter.components.requests
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,9 +26,11 @@ fun HelpRequestCard(helpRequest: HelpRequest, onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(8.dp)
             .clip(RoundedCornerShape(12.dp))
-            .background(Color.White.copy(alpha = 0.9f))
+            .background(Color(0xFFF5F5F5))
             .clickable(onClick = onClick)
+            .border(0.1.dp, Color.DarkGray, RoundedCornerShape(12.dp))
             .padding(16.dp)
     ) {
         Column {

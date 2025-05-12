@@ -28,14 +28,7 @@ fun HelpRequestList(viewModel: SupporterHelpPageViewModel) {
 
     Box(
         modifier = Modifier
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color(0xFFE6F0FA),
-                        Color(0xFFFFFFFF)
-                    )
-                )
-            )
+            .padding(bottom = 30.dp)
     ) {
         if (helpRequests.isEmpty()) {
             Text("No help requests found", modifier = Modifier.fillMaxSize())
@@ -48,7 +41,7 @@ fun HelpRequestList(viewModel: SupporterHelpPageViewModel) {
                         helpRequest = helpRequest,
                         onClick = { viewModel.selectHelpRequest(helpRequest) }
                     )
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
                 }
             }
         }

@@ -1,6 +1,7 @@
 package dev.alexpace.kassist.ui.shared.components.chat
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,6 +31,7 @@ fun ChatCard(
             .clip(RoundedCornerShape(12.dp))
             .background(Color(0xFFF5F5F5))
             .clickable { onChatClick(liveChat.id) }
+            .border(0.1.dp, Color.DarkGray, RoundedCornerShape(12.dp))
             .padding(16.dp)
     ) {
         Text(

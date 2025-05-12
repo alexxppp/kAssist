@@ -27,7 +27,7 @@ fun AcceptedProposalCard(proposal: HelpProposal) {
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
             .background(Color(0xFFF5F5F5))
-            .border(1.dp, Color(0xFF4A90E2), RoundedCornerShape(12.dp))
+            .border(0.1.dp, Color.DarkGray, RoundedCornerShape(12.dp))
             .padding(16.dp)
     ) {
         Column {
@@ -42,11 +42,11 @@ fun AcceptedProposalCard(proposal: HelpProposal) {
 
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Status: ${proposal.status}",
+                text = proposal.status.toString(),
                 style = TextStyle(
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium,
-                    color = Color(0xFF4A90E2)
+                    color = Color.Green
                 )
             )
         }
