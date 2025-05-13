@@ -153,6 +153,7 @@ fun ProposalInfoPage(proposal: HelpProposal) {
                                         RequestStatusTypes.Pending -> Color(0xFF666666)
                                         RequestStatusTypes.Accepted -> Color(0xFF4CAF50)
                                         RequestStatusTypes.Declined -> Color(0xFFE57373)
+                                        else -> Color(0xFF666666)
                                     }
                                 )
                             )

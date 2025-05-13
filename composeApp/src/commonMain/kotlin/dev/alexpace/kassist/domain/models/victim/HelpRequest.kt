@@ -9,6 +9,7 @@ data class HelpRequest (
     val id: String,
     val victimId: String,
     val victimName: String,
+    val disasterId: Int?,
     val address: String,
     val description: String?,
     val needLevel: NeedLevelTypes,

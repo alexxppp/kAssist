@@ -22,6 +22,7 @@ kotlinxDatetime = "0.6.1"
 ktor = "3.1.2"
 lifecycleViewmodelCompose = "2.8.3"
 logback = "1.5.16"
+playServicesLocation = "21.3.0"
 voyager = "1.1.0-beta02"
 retrofit = "2.11.0"
 moshiKotlin = "1.15.2"
@@ -30,6 +31,7 @@ firebase-bom = "33.12.0"
 gitlive = "2.1.0"
 identityJvm = "202411.1"
 firebaseAuthKtx = "23.2.0"
+junitJupiter = "5.8.1"
 
 [libraries]
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
@@ -60,6 +62,7 @@ logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 ktor-server-core = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
 ktor-server-netty = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor" }
 ktor-server-tests = { module = "io.ktor:ktor-server-tests-jvm", version.ref = "ktor" }
+play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 voyager-tabNavigator = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyager" }
 voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
@@ -81,6 +84,7 @@ gitlive-firebase-firestore = {group = "dev.gitlive", name = "firebase-firestore"
 identity-jvm = { group = "com.android.identity", name = "identity-jvm", version.ref = "identityJvm" }
 firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
 gitlive-firebase-auth = {group = "dev.gitlive", name = "firebase-auth", version.ref = "gitlive"}
+junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiter" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.update
 
 class NewsPageViewModel(
     private val liveNewsApiService: LiveNewsApiService,
@@ -36,6 +37,10 @@ class NewsPageViewModel(
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error.asStateFlow()
 
+    // TODO: Implement
+    private val _state = MutableStateFlow(NewsPageState())
+    val state = _state.asStateFlow()
+
     // Init
     init {
         fetchUser()
@@ -49,6 +54,9 @@ class NewsPageViewModel(
     private fun fetchUser() {
         viewModelScope.launch {
             try {
+                _state.update {
+                    it.copy(user = userRepository.getById(currentUserId).firstOrNull())
+                }
                 _user.value = userRepository.getById(currentUserId).firstOrNull()
                 println("Raw disaster name: '${_user.value?.naturalDisaster?.name}', country: '${_user.value?.naturalDisaster?.country}'")
             } catch (e: Exception) {

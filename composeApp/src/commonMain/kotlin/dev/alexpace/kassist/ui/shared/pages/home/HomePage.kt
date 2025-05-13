@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -36,6 +37,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.alexpace.kassist.domain.repositories.NaturalDisasterRepository
 import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.alexpace.kassist.domain.services.NaturalDisasterApiService
+import dev.alexpace.kassist.ui.admin.navigation.screens.AdminScreen
 import dev.alexpace.kassist.ui.shared.components.nd.NaturalDisasterCard
 import dev.alexpace.kassist.ui.shared.navigation.screens.SettingsScreen
 import org.koin.compose.koinInject
@@ -137,6 +139,17 @@ fun HomePage() {
                     )
                 }
             } else {
+                Button(
+                    onClick = { navigator.push(AdminScreen()) }
+                ) {
+                    Text("Nav to Admin")
+                }
+                Button(
+                    onClick = { viewModel.filterNaturalDisastersByRadius() }
+                ) {
+                    Text("Filter Disasters by Location")
+                }
+
                 if (naturalDisasters.isNotEmpty()) {
                     LazyColumn(
                         modifier = Modifier

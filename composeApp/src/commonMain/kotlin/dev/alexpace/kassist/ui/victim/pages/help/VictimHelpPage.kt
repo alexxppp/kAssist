@@ -51,7 +51,6 @@ fun VictimHelpPage() {
     val user by viewModel.user.collectAsState()
     val address by viewModel.address.collectAsState()
     val description by viewModel.description.collectAsState()
-    val selectedNeedLevel by viewModel.selectedNeedLevel.collectAsState()
 
     // UI
     if (user != null) {
@@ -141,75 +140,6 @@ fun VictimHelpPage() {
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
                         )
 
-                        // Need Level selection
-                        Text(
-                            text = "Need Level",
-                            style = TextStyle(
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Medium,
-                                color = Color(0xFF333333)
-                            )
-                        )
-                        Box {
-                            OutlinedTextField(
-                                value = selectedNeedLevel.name,
-                                onValueChange = { },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clip(RoundedCornerShape(8.dp)),
-                                readOnly = true,
-                                textStyle = TextStyle(
-                                    fontSize = 16.sp,
-                                    fontWeight = FontWeight.Normal,
-                                    color = Color(0xFF333333)
-                                ),
-                                trailingIcon = {
-                                    Icon(
-                                        Icons.Default.ArrowDropDown,
-                                        contentDescription = "Expand need level dropdown",
-                                        tint = Color(0xFF666666),
-                                        modifier = Modifier
-                                            .clickable { isDropdownExpanded = !isDropdownExpanded }
-                                            .semantics { contentDescription = "Toggle need level dropdown" }
-                                    )
-                                },
-                                colors = TextFieldDefaults.outlinedTextFieldColors(
-                                    focusedBorderColor = Color(0xFF4A90E2),
-                                    unfocusedBorderColor = Color(0xFF666666),
-                                    cursorColor = Color(0xFF4A90E2)
-                                )
-                            )
-                            DropdownMenu(
-                                expanded = isDropdownExpanded,
-                                onDismissRequest = { isDropdownExpanded = false },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .background(Color.White)
-                                    .clip(RoundedCornerShape(8.dp))
-                            ) {
-                                NeedLevelTypes.entries.forEach { level ->
-                                    DropdownMenuItem(
-                                        onClick = {
-                                            viewModel.updateSelectedNeedLevel(level)
-                                            isDropdownExpanded = false
-                                        }
-                                    ) {
-                                        Text(
-                                            text = level.name,
-                                            style = TextStyle(
-                                                fontSize = 16.sp,
-                                                fontWeight = FontWeight.Normal,
-                                                color = Color(0xFF333333)
-                                            )
-                                        )
-                                    }
-                                    if (level != NeedLevelTypes.entries.last()) {
-                                        Divider(color = Color(0xFFEEEEEE))
-                                    }
-                                }
-                            }
-                        }
-
                         // Submit button
                         Button(
                             onClick = {
@@ -217,10 +147,11 @@ fun VictimHelpPage() {
                                     id = Uuid.random().toString(),
                                     victimId = user!!.id,
                                     victimName = user!!.name,
+                                    disasterId = user!!.naturalDisaster!!.id,
                                     address = address,
                                     description = description,
-                                    needLevel = selectedNeedLevel,
-                                    status = RequestStatusTypes.Pending
+                                    needLevel = NeedLevelTypes.NotAssigned,
+                                    status = RequestStatusTypes.NotAssigned
                                 )
                                 viewModel.submitHelpRequest(newHelpRequest)
                             },

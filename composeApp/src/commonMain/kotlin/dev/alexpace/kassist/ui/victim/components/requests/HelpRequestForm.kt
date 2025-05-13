@@ -175,6 +175,7 @@ fun HelpRequestForm(currentUser: User, onSubmit: (HelpRequest) -> Unit) {
                             id = Uuid.random().toString(),
                             victimId = currentUser.id,
                             victimName = currentUser.name,
+                            disasterId = currentUser.naturalDisaster!!.id,
                             address = address,
                             description = description,
                             needLevel = selectedNeedLevel,

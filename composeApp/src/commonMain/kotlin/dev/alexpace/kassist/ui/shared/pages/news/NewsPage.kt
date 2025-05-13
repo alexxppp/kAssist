@@ -46,6 +46,8 @@ fun NewsPage() {
     val isLoading by viewModel.isLoadingNews.collectAsState()
     val error by viewModel.error.collectAsState()
 
+    val state = viewModel.state.collectAsState().value
+
     // UI
     Box(
         modifier = Modifier

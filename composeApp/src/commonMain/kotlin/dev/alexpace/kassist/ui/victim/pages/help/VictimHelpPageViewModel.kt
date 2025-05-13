@@ -34,9 +34,6 @@ class VictimHelpPageViewModel(
     private val _description = MutableStateFlow("")
     val description = _description.asStateFlow()
 
-    private val _selectedNeedLevel = MutableStateFlow(NeedLevelTypes.Moderate)
-    val selectedNeedLevel = _selectedNeedLevel.asStateFlow()
-
     // Init
     init {
         fetchUser()
@@ -72,19 +69,12 @@ class VictimHelpPageViewModel(
     }
 
     /**
-     * Updates selected need level
-     */
-    fun updateSelectedNeedLevel(newLevel: NeedLevelTypes) {
-        _selectedNeedLevel.value = newLevel
-    }
-
-    /**
      * Submits a help request by calling the HelpRequestRepository
      */
     fun submitHelpRequest(helpRequest: HelpRequest) {
         if (checkForm()) {
             viewModelScope.launch {
-                helpRequestRepository.add(helpRequest)
+                helpRequestRepository.addPending(helpRequest)
                 clearForm()
                 SnackbarController.showSnackbar("Help request submitted!")
             }
@@ -105,6 +95,5 @@ class VictimHelpPageViewModel(
     private fun clearForm() {
         _address.value = ""
         _description.value = ""
-        _selectedNeedLevel.value = NeedLevelTypes.Moderate
     }
 }

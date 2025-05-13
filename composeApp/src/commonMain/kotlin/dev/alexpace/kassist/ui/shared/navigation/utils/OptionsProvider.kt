@@ -41,3 +41,16 @@ fun helpTabOptions(): TabOptions {
         icon = icon
     )
 }
+
+// Admin
+
+@Composable
+fun adminModeratorTabOptions(): TabOptions {
+    val title = "Moderate"
+    val icon = rememberVectorPainter(Icons.Default.Person)
+    return TabOptions(
+        index = 0u,
+        title = title,
+        icon = icon
+    )
+}

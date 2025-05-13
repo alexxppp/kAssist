@@ -16,5 +16,6 @@ data class NaturalDisaster(
     @SerialName("htmldescription") val htmlDescription: String,
     @SerialName("icon") val icon: String,
     @SerialName("country") val country: String,
-    @SerialName("severitydata") val severityData: SeverityData? = null
+    @SerialName("severitydata") val severityData: SeverityData? = null,
+    @SerialName("coordinates") val coordinates: Coordinates
 )

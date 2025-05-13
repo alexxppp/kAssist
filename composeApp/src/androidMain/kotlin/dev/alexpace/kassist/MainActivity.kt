@@ -9,6 +9,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import dev.alexpace.kassist.data.utils.helpers.LocationServiceProvider
 
 class MainActivity : ComponentActivity() {
 
@@ -18,6 +19,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         FirebaseApp.initializeApp(this)
+        LocationServiceProvider.initialize(applicationContext)
 
         auth = Firebase.auth
 

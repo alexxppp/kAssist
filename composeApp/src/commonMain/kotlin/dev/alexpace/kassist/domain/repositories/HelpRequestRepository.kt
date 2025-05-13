@@ -9,6 +9,7 @@ interface HelpRequestRepository {
     fun getById(id: String): Flow<HelpRequest?>
     fun getByVictimId(id: String): Flow<List<HelpRequest>>
     suspend fun add(helpRequest: HelpRequest)
+    suspend fun addPending(helpRequest: HelpRequest)
     suspend fun update(helpRequest: HelpRequest)
     suspend fun delete(helpRequest: HelpRequest)
 

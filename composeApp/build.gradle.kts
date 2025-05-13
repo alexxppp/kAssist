@@ -66,6 +66,8 @@ kotlin {
             // Firebase
             implementation(project.dependencies.platform(libs.android.firebase.bom))
             implementation(libs.firebase.auth)
+            // Location
+            implementation(libs.play.services.location)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -146,6 +148,9 @@ dependencies {
     implementation(libs.androidx.material3.android)
     implementation(libs.identity.jvm)
     implementation(libs.firebase.auth.ktx)
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.junit.jupiter)
     debugImplementation(compose.uiTooling)
 }
 

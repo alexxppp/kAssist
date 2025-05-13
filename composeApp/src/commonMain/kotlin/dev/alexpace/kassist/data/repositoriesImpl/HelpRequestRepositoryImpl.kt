@@ -10,6 +10,7 @@ class HelpRequestRepositoryImpl: HelpRequestRepository {
 
     private val firestore = Firebase.firestore
     private val helpRequestCollection = firestore.collection("HelpRequest")
+    private val pendingRequestsCollection = firestore.collection("pendingRequests")
 
     override fun getAll() = flow {
         helpRequestCollection.snapshots.collect { querySnapshot ->
@@ -44,6 +45,12 @@ class HelpRequestRepositoryImpl: HelpRequestRepository {
 
     override suspend fun add(helpRequest: HelpRequest) {
         helpRequestCollection
+            .document(helpRequest.id)
+            .set(helpRequest.copy(id = helpRequest.id))
+    }
+
+    override suspend fun addPending(helpRequest: HelpRequest) {
+        pendingRequestsCollection
             .document(helpRequest.id)
             .set(helpRequest.copy(id = helpRequest.id))
     }
