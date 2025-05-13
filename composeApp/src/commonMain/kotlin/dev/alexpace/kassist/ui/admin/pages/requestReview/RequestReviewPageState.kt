@@ -6,8 +6,9 @@ import dev.alexpace.kassist.domain.models.victim.HelpRequest
 
 data class RequestReviewPageState(
     val helpRequest: HelpRequest? = null,
+    val selectedStatus: RequestStatusTypes? = null,
+    val selectedNeedLevel: NeedLevelTypes? = null,
     val isLoading: Boolean = false,
     val error: String? = null,
-    val selectedStatus: RequestStatusTypes? = null,
-    val selectedNeedLevel: NeedLevelTypes? = null
+    val isAddressValid: Boolean? = null
 )

@@ -7,26 +7,18 @@ import dev.alexpace.kassist.domain.repositories.AdminPendingDataRepository
 import dev.alexpace.kassist.domain.repositories.UserRepository
 import org.koin.compose.koinInject
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
-import dev.alexpace.kassist.domain.models.enums.RequestStatusTypes
-import dev.alexpace.kassist.domain.models.victim.HelpRequest
-import dev.alexpace.kassist.ui.admin.navigation.screens.RequestReviewScreen
+import dev.alexpace.kassist.ui.admin.components.HelpRequestCard
 
 @Composable
 fun DashboardPage() {
@@ -92,55 +84,6 @@ fun DashboardPage() {
                         }
                     }
                 }
-            }
-        }
-    }
-}
-
-@Composable
-private fun HelpRequestCard(request: HelpRequest) {
-    val navigator = LocalNavigator.currentOrThrow.parent
-        ?: throw Exception("Could not find parent navigator")
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
-            .border(1.dp, Color(0xFFE0E0E0), RoundedCornerShape(12.dp))
-            .clickable { navigator.push(RequestReviewScreen(request)) }
-            .padding(16.dp),
-        elevation = 4.dp
-    ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Text(
-                text = request.victimName,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.Black
-            )
-            Text(
-                text = "Address: ${request.address}",
-                fontSize = 14.sp,
-                color = Color.Gray
-            )
-            Text(
-                text = "Status: ${request.status.name}",
-                fontSize = 14.sp,
-                color = Color(0xFFFFA500)
-            )
-            Text(
-                text = "Need Level: ${request.needLevel.name}",
-                fontSize = 14.sp,
-                color = Color.Gray
-            )
-            if (request.description != null) {
-                Text(
-                    text = "Description: ${request.description}",
-                    fontSize = 14.sp,
-                    color = Color.Gray
-                )
             }
         }
     }

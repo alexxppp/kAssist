@@ -8,6 +8,6 @@ interface AdminPendingDataRepository {
 
     fun getAllHelpRequestsByDisaster(disasterId: Int): Flow<List<HelpRequest>>
     suspend fun acceptHelpRequest(helpRequest: HelpRequest, needLevel: NeedLevelTypes)
-    suspend fun rejectHelpRequest(helpRequestId: String)
+    suspend fun rejectOrDeleteHelpRequest(helpRequestId: String)
 
 }

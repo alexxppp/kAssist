@@ -13,6 +13,7 @@ class AdminPendingDataRepositoryImpl : AdminPendingDataRepository {
 
     private val firestore = Firebase.firestore
     private val pendingHelpRequestsCollection = firestore.collection("pendingRequests")
+    private val helpRequestsCollection = firestore.collection("HelpRequest")
 
     override fun getAllHelpRequestsByDisaster(disasterId: Int) = flow {
         pendingHelpRequestsCollection.snapshots.collect { querySnapshot ->
@@ -29,7 +30,7 @@ class AdminPendingDataRepositoryImpl : AdminPendingDataRepository {
     }
 
     override suspend fun acceptHelpRequest(helpRequest: HelpRequest, needLevel: NeedLevelTypes) {
-        pendingHelpRequestsCollection
+        helpRequestsCollection
             .document(helpRequest.id)
             .set(
                 helpRequest.copy(
@@ -40,7 +41,7 @@ class AdminPendingDataRepositoryImpl : AdminPendingDataRepository {
             )
     }
 
-    override suspend fun rejectHelpRequest(helpRequestId: String) {
+    override suspend fun rejectOrDeleteHelpRequest(helpRequestId: String) {
         pendingHelpRequestsCollection
             .document(helpRequestId)
             .delete()

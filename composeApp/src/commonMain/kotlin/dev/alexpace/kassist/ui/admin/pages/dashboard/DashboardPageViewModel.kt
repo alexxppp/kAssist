@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-
 class DashboardPageViewModel(
     private val userRepository: UserRepository,
     private val adminPendingDataRepository: AdminPendingDataRepository
@@ -21,7 +20,6 @@ class DashboardPageViewModel(
 
     // Values
     val currentUserId = Firebase.auth.currentUser?.uid
-    // TODO: Handle more nicely
         ?: throw Exception("User not authenticated")
 
     // State Flows
@@ -31,21 +29,22 @@ class DashboardPageViewModel(
     // Init
     init {
         fetchUser()
-        fetchHelpRequests()
     }
 
     // Functions
 
     /**
-     * Fetches user
+     * Fetches user and triggers fetchHelpRequests if user and disaster are available
      */
     private fun fetchUser() {
         viewModelScope.launch {
             try {
+                val user = userRepository.getById(currentUserId).firstOrNull()
                 _dashboardPageState.update {
-                    it.copy(
-                        user = userRepository.getById(currentUserId).firstOrNull()
-                    )
+                    it.copy(user = user)
+                }
+                if (user?.naturalDisaster != null) {
+                    fetchHelpRequests()
                 }
             } catch (e: Exception) {
                 println("Error fetching user: ${e.message}")
@@ -58,11 +57,6 @@ class DashboardPageViewModel(
      * with the current db state
      */
     private fun fetchHelpRequests() {
-        if (_dashboardPageState.value.user == null
-            || _dashboardPageState.value.user!!.naturalDisaster == null
-        )
-            return
-
         viewModelScope.launch {
             try {
                 adminPendingDataRepository.getAllHelpRequestsByDisaster(

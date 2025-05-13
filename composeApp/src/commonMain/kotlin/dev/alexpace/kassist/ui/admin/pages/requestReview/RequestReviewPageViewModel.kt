@@ -2,17 +2,23 @@ package dev.alexpace.kassist.ui.admin.pages.requestReview
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dev.alexpace.kassist.data.utils.helpers.Codes.countryCodeMap
 import dev.alexpace.kassist.domain.models.victim.HelpRequest
 import dev.alexpace.kassist.domain.models.enums.NeedLevelTypes
-import dev.alexpace.kassist.domain.models.enums.RequestStatusTypes
 import dev.alexpace.kassist.domain.repositories.AdminPendingDataRepository
+import dev.alexpace.kassist.domain.repositories.NaturalDisasterRepository
+import dev.alexpace.kassist.domain.services.GeoapifyApiService
+import dev.alexpace.kassist.ui.shared.utils.controllers.SnackbarController
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class RequestReviewPageViewModel(
-    private val adminPendingDataRepository: AdminPendingDataRepository
+    private val adminPendingDataRepository: AdminPendingDataRepository,
+    private val geoapifyApiService: GeoapifyApiService,
+    private val naturalDisasterRepository: NaturalDisasterRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(RequestReviewPageState())
@@ -23,29 +29,27 @@ class RequestReviewPageViewModel(
             it.copy(
                 helpRequest = helpRequest,
                 selectedStatus = helpRequest.status,
-                selectedNeedLevel = helpRequest.needLevel
+                selectedNeedLevel = helpRequest.needLevel,
+                isAddressValid = null
             )
         }
-    }
-
-    fun updateStatus(status: RequestStatusTypes) {
-        _state.update { it.copy(selectedStatus = status) }
     }
 
     fun updateNeedLevel(needLevel: NeedLevelTypes) {
         _state.update { it.copy(selectedNeedLevel = needLevel) }
     }
 
-    fun saveChanges() {
+    fun saveChangesAndAccept() {
         val helpRequest = _state.value.helpRequest ?: return
-        val status = _state.value.selectedStatus ?: return
         val needLevel = _state.value.selectedNeedLevel ?: return
 
         _state.update { it.copy(isLoading = true, error = null) }
         viewModelScope.launch {
             try {
                 adminPendingDataRepository.acceptHelpRequest(helpRequest, needLevel)
+                adminPendingDataRepository.rejectOrDeleteHelpRequest(helpRequest.id)
                 _state.update { it.copy(isLoading = false) }
+                SnackbarController.showSnackbar("Request accepted!")
             } catch (e: Exception) {
                 _state.update {
                     it.copy(isLoading = false, error = "Failed to save: ${e.message}")
@@ -60,13 +64,63 @@ class RequestReviewPageViewModel(
         _state.update { it.copy(isLoading = true, error = null) }
         viewModelScope.launch {
             try {
-                adminPendingDataRepository.rejectHelpRequest(helpRequest.id)
+                adminPendingDataRepository.rejectOrDeleteHelpRequest(helpRequest.id)
                 _state.update { it.copy(isLoading = false) }
+                SnackbarController.showSnackbar("Request rejected")
             } catch (e: Exception) {
                 _state.update {
                     it.copy(isLoading = false, error = "Failed to reject: ${e.message}")
                 }
             }
         }
+    }
+
+    fun getAddressConfidenceScore() {
+        val helpRequest = _state.value.helpRequest ?: return
+        val disasterId = helpRequest.disasterId?.toString() ?: return
+
+        _state.update { it.copy(isLoading = true, error = null, isAddressValid = null) }
+        viewModelScope.launch {
+            try {
+                // Get country code
+                val countryCode = getCountryCode(disasterId)
+                if (countryCode.isEmpty()) {
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            error = "Country code not found for disaster ID: $disasterId",
+                            isAddressValid = null
+                        )
+                    }
+                    return@launch
+                }
+
+                // Call Geoapify API
+                val isValid = geoapifyApiService.getConfidenceScoreForAddress(
+                    address = helpRequest.address,
+                    countryCode = countryCode
+                )
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        isAddressValid = isValid,
+                        error = null
+                    )
+                }
+            } catch (e: Exception) {
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        error = "Failed to validate address: ${e.message}",
+                        isAddressValid = null
+                    )
+                }
+            }
+        }
+    }
+
+    private suspend fun getCountryCode(disasterId: String): String {
+        val country = naturalDisasterRepository.getById(disasterId).firstOrNull()?.country
+        return countryCodeMap[country?.lowercase()] ?: ""
     }
 }
