@@ -42,8 +42,8 @@ class NaturalDisasterApiServiceImpl: NaturalDisasterApiService {
                             icon = "https://www.gdacs.org/images/gdacs_icons/maps/Green/EQ.png",
                             country = "",
                             coordinates = Coordinates(
-                                latitude = -16.0113,
-                                longitude = -43.6369
+                                latitude = 37.785834,
+                                longitude = -122.406417
                             ),
                             severityData = SeverityData(
                                 severity = 4.8,

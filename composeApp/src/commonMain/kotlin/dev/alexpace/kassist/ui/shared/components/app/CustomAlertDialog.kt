@@ -38,10 +38,10 @@ fun CustomAlertDialog(
     Dialog(onDismissRequest = onDismiss) {
         Box(
             modifier = modifier
+                .shadow(8.dp, RoundedCornerShape(16.dp))
                 .clip(RoundedCornerShape(16.dp))
                 .background(Color.White)
-                .shadow(8.dp, RoundedCornerShape(16.dp))
-                .padding(16.dp)
+                .padding(24.dp)
         ) {
             Column(
                 modifier = Modifier.fillMaxWidth(),

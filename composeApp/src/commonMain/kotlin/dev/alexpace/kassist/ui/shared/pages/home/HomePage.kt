@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
+import androidx.compose.material.Checkbox
+import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -63,6 +65,7 @@ fun HomePage() {
     val naturalDisasters = viewModel.naturalDisasters.collectAsState().value
     val user = viewModel.user.collectAsState().value
     val isLoading = viewModel.isLoading.collectAsState().value
+    val isFilterActive = viewModel.isFilterActive.collectAsState().value
 
     // UI
     Box(
@@ -144,10 +147,30 @@ fun HomePage() {
                 ) {
                     Text("Nav to Admin")
                 }
-                Button(
-                    onClick = { viewModel.filterNaturalDisastersByRadius() }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start
                 ) {
-                    Text("Filter Disasters by Location")
+                    Checkbox(
+                        checked = isFilterActive,
+                        onCheckedChange = { viewModel.toggleFilterNaturalDisastersByRadius() },
+                        colors = CheckboxDefaults.colors(
+                            checkedColor = Color(0xFF4A90E2),
+                            uncheckedColor = Color(0xFF666666)
+                        )
+                    )
+                    Text(
+                        text = "Show disasters within 500km",
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = Color(0xFF333333)
+                        ),
+                        modifier = Modifier.padding(start = 8.dp)
+                    )
                 }
 
                 if (naturalDisasters.isNotEmpty()) {

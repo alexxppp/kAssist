@@ -3,7 +3,6 @@ package dev.alexpace.kassist.ui.shared.pages.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cafe.adriel.voyager.navigator.Navigator
-import dev.alexpace.kassist.data.network.servicesImpl.LocationServiceImpl
 import dev.alexpace.kassist.data.utils.helpers.LocationServiceProvider
 import dev.alexpace.kassist.data.utils.helpers.areCoordinatesWithinRadius
 import dev.alexpace.kassist.domain.models.enums.UserType
@@ -13,7 +12,6 @@ import dev.alexpace.kassist.domain.models.shared.NaturalDisaster
 import dev.alexpace.kassist.domain.repositories.NaturalDisasterRepository
 import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.alexpace.kassist.domain.services.NaturalDisasterApiService
-import dev.alexpace.kassist.ui.shared.utils.controllers.SnackbarController
 import dev.alexpace.kassist.ui.supporter.navigation.screens.SupporterScreen
 import dev.alexpace.kassist.ui.victim.navigation.screens.VictimScreen
 import dev.gitlive.firebase.Firebase
@@ -21,7 +19,6 @@ import dev.gitlive.firebase.auth.auth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.launch
 
 class HomePageViewModel(
@@ -32,10 +29,10 @@ class HomePageViewModel(
 
     // Values
     private val userId = Firebase.auth.currentUser?.uid
-    // TODO: Handle more nicely
         ?: throw Exception("User not authenticated")
 
     private val r = 500.0 // Radius in km
+    private var unfilteredDisasters: List<NaturalDisaster> = emptyList()
 
     // State Flows
     private val _naturalDisasters = MutableStateFlow<List<NaturalDisaster>>(emptyList())
@@ -47,6 +44,9 @@ class HomePageViewModel(
     private val _isLoading = MutableStateFlow(true)
     val isLoading = _isLoading.asStateFlow()
 
+    private val _isFilterActive = MutableStateFlow(false)
+    val isFilterActive = _isFilterActive.asStateFlow()
+
     // Init
     init {
         fetchNaturalDisasters()
@@ -54,24 +54,30 @@ class HomePageViewModel(
     }
 
     // Functions
-    fun filterNaturalDisastersByRadius() {
+
+    /**
+     * Toggles the filter on or off for natural disasters by radius
+     */
+    fun toggleFilterNaturalDisastersByRadius() {
         viewModelScope.launch {
-            val userCoordinates = LocationServiceProvider.getLocationService()
-                .getCurrentLocation()
-
-            if (userCoordinates == null) {
-                SnackbarController.showSnackbar("Cannot access user location")
-                return@launch
-            }
-
-            _naturalDisasters.collect {
-                _naturalDisasters.value = it.filter { disaster ->
-                    areCoordinatesWithinRadius(
-                        userCoordinates,
-                        disaster.coordinates,
-                        r
-                    )
+            _isFilterActive.value = !_isFilterActive.value
+            if (_isFilterActive.value) {
+                val userCoordinates = LocationServiceProvider.getLocationService()
+                    .getCurrentLocation()
+                if (userCoordinates != null) {
+                    println("${userCoordinates.latitude}, ${userCoordinates.longitude}")
+                    _naturalDisasters.value = unfilteredDisasters.filter { disaster ->
+                        areCoordinatesWithinRadius(
+                            userCoordinates,
+                            disaster.coordinates,
+                            r
+                        )
+                    }
+                } else {
+                    _isFilterActive.value = false
                 }
+            } else {
+                _naturalDisasters.value = unfilteredDisasters
             }
         }
     }
@@ -97,11 +103,13 @@ class HomePageViewModel(
                         (it.alertLevel == "Orange" || it.alertLevel == "Red") &&
                                 it.type != "DR"
                     }
+                unfilteredDisasters = filteredDisasters
                 _naturalDisasters.value = filteredDisasters
                 naturalDisasterRepository.addAll(filteredDisasters)
             } catch (e: Exception) {
                 println("Error fetching disasters: ${e.message}")
                 _naturalDisasters.value = emptyList()
+                unfilteredDisasters = emptyList()
             } finally {
                 _isLoading.value = false
             }
