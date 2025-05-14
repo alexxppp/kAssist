@@ -125,7 +125,9 @@ class SupporterHelpPageViewModel(
             helpRequestId = helpRequest.id,
             victimId = helpRequest.victimId,
             content = content,
-            status = RequestStatusTypes.Pending
+            status = RequestStatusTypes.Pending,
+            supporterName = user.value!!.name,
+            victimName = helpRequest.victimName
         )
     }
 }

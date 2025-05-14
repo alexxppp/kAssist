@@ -88,18 +88,8 @@ fun HelpRequestList(helpRequests: List<HelpRequest>, selectHelpRequest: (HelpReq
         } else {
             Column(
                 modifier = Modifier
-                    .padding(bottom = 45.dp)
+                    .padding(bottom = 45.dp, top = 25.dp)
             ) {
-                Text(
-                    text = "Help Requests",
-                    style = TextStyle(
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF333333)
-                    ),
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp, vertical = 8.dp)
-                )
                 LazyColumn(
                     modifier = Modifier
                         .padding(horizontal = 8.dp)

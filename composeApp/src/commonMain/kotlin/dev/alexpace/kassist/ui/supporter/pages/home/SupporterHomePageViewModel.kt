@@ -23,6 +23,9 @@ class SupporterHomePageViewModel(
     private val _acceptedHelpProposals = MutableStateFlow<List<HelpProposal>>(emptyList())
     val acceptedHelpProposals: StateFlow<List<HelpProposal>> = _acceptedHelpProposals
 
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
     // Init
     init {
         fetchAcceptedHelpProposals()
@@ -34,6 +37,7 @@ class SupporterHomePageViewModel(
      * Fetches all accepted help proposals from the HelpProposalRepository
      */
     private fun fetchAcceptedHelpProposals() {
+        _isLoading.value = true
         viewModelScope.launch {
             helpProposalRepository.getBySupporterIdAndStatuses(
                 userId, listOf(RequestStatusTypes.Accepted)
@@ -41,5 +45,6 @@ class SupporterHomePageViewModel(
                 _acceptedHelpProposals.value = acceptedProposals
             }
         }
+        _isLoading.value = false
     }
 }
