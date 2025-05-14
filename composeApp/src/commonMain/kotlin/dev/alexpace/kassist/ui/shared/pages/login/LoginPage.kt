@@ -39,11 +39,7 @@ fun LoginPage() {
     // ViewModel
     val viewModel: LoginPageViewModel = viewModel { LoginPageViewModel(authService, navigator) }
 
-    val email by viewModel.email.collectAsState()
-    val password by viewModel.password.collectAsState()
-    val isLoginButtonEnabled by viewModel.isLoginButtonEnabled.collectAsState()
-    val errorMessage by viewModel.errorMessage.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
+    val state by viewModel.state.collectAsState()
 
     // UI
     Box(
@@ -101,25 +97,25 @@ fun LoginPage() {
                     .padding(horizontal = 24.dp)
             ) {
                 InputField(
-                    value = email,
+                    value = state.email,
                     onValueChange = { viewModel.updateEmail(it) },
                     placeholder = "Email",
                     keyboardType = KeyboardType.Email
                 )
                 InputField(
-                    value = password,
+                    value = state.password,
                     onValueChange = { viewModel.updatePassword(it) },
                     placeholder = "Password",
                     keyboardType = KeyboardType.Password,
                     isPassword = true
                 )
                 AnimatedVisibility(
-                    visible = errorMessage != null,
+                    visible = state.errorMessage != null,
                     enter = slideInVertically() + fadeIn(),
                     exit = fadeOut()
                 ) {
                     androidx.compose.material.Text(
-                        text = errorMessage ?: "",
+                        text = state.errorMessage ?: "",
                         style = TextStyle(
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Normal,
@@ -139,16 +135,16 @@ fun LoginPage() {
                     modifier = Modifier
                         .clip(RoundedCornerShape(12.dp))
                         .background(
-                            if (isLoginButtonEnabled && !isLoading) Color(0xFF4A90E2)
+                            if (state.isLoginButtonEnabled && !state.isLoading) Color(0xFF4A90E2)
                             else Color(0xFFD3D3D3)
                         )
-                        .clickable(enabled = isLoginButtonEnabled && !isLoading) {
+                        .clickable(enabled = state.isLoginButtonEnabled && !state.isLoading) {
                             viewModel.login()
                         }
                         .padding(horizontal = 32.dp, vertical = 16.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    if (isLoading) {
+                    if (state.isLoading) {
                         CircularProgressIndicator(
                             color = Color.White,
                             strokeWidth = 2.dp,

@@ -9,14 +9,18 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Switch
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -52,14 +56,7 @@ fun RegistrationPage() {
     val viewModel: RegistrationPageViewModel =
         viewModel { RegistrationPageViewModel(authService, userRepository, navigator) }
 
-    val name by viewModel.name.collectAsState()
-    val phoneNumber by viewModel.phoneNumber.collectAsState()
-    val email by viewModel.email.collectAsState()
-    val password by viewModel.password.collectAsState()
-    val confirmPassword by viewModel.confirmPassword.collectAsState()
-    val isRegistrationButtonEnabled by viewModel.isRegistrationButtonEnabled.collectAsState()
-    val errorMessage by viewModel.errorMessage.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
+    val state by viewModel.state.collectAsState()
 
     // UI
     Box(
@@ -85,7 +82,7 @@ fun RegistrationPage() {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(top = 64.dp)
             ) {
-                androidx.compose.material.Text(
+                Text(
                     text = "Register",
                     style = TextStyle(
                         fontSize = 32.sp,
@@ -95,7 +92,7 @@ fun RegistrationPage() {
                     textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                androidx.compose.material.Text(
+                Text(
                     text = "Sign up to access kAssist",
                     style = TextStyle(
                         fontSize = 18.sp,
@@ -116,44 +113,55 @@ fun RegistrationPage() {
                     .padding(horizontal = 24.dp)
             ) {
                 InputField(
-                    value = name,
+                    value = state.name,
                     onValueChange = { viewModel.updateName(it) },
                     placeholder = "Name",
                     keyboardType = KeyboardType.Text
                 )
                 InputField(
-                    value = phoneNumber,
+                    value = state.phoneNumber,
                     onValueChange = { viewModel.updatePhoneNumber(it) },
                     placeholder = "Phone number",
                     keyboardType = KeyboardType.Phone
                 )
                 InputField(
-                    value = email,
+                    value = state.email,
                     onValueChange = { viewModel.updateEmail(it) },
                     placeholder = "Email",
                     keyboardType = KeyboardType.Email
                 )
                 InputField(
-                    value = password,
+                    value = state.password,
                     onValueChange = { viewModel.updatePassword(it) },
                     placeholder = "Password",
                     keyboardType = KeyboardType.Password,
                     isPassword = true
                 )
                 InputField(
-                    value = confirmPassword,
+                    value = state.confirmPassword,
                     onValueChange = { viewModel.updateConfirmPassword(it) },
                     placeholder = "Confirm password",
                     keyboardType = KeyboardType.Password,
                     isPassword = true
                 )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                ) {
+                    Switch(
+                        checked = state.isAdmin,
+                        onCheckedChange = { viewModel.updateIsAdmin(it) }
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("Register as Admin")
+                }
                 AnimatedVisibility(
-                    visible = errorMessage != null,
+                    visible = state.errorMessage != null,
                     enter = slideInVertically() + fadeIn(),
                     exit = fadeOut()
                 ) {
-                    androidx.compose.material.Text(
-                        text = errorMessage ?: "",
+                    Text(
+                        text = state.errorMessage ?: "",
                         style = TextStyle(
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Normal,
@@ -173,23 +181,23 @@ fun RegistrationPage() {
                     modifier = Modifier
                         .clip(RoundedCornerShape(12.dp))
                         .background(
-                            if (isRegistrationButtonEnabled && !isLoading) Color(0xFF4A90E2)
+                            if (state.isRegistrationButtonEnabled && !state.isLoading) Color(0xFF4A90E2)
                             else Color(0xFFD3D3D3)
                         )
-                        .clickable(enabled = isRegistrationButtonEnabled && !isLoading) {
+                        .clickable(enabled = state.isRegistrationButtonEnabled && !state.isLoading) {
                             viewModel.register()
                         }
                         .padding(horizontal = 32.dp, vertical = 16.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    if (isLoading) {
+                    if (state.isLoading) {
                         CircularProgressIndicator(
                             color = Color.White,
                             strokeWidth = 2.dp,
                             modifier = Modifier.size(24.dp)
                         )
                     } else {
-                        androidx.compose.material.Text(
+                        Text(
                             text = "Register",
                             style = TextStyle(
                                 fontSize = 18.sp,
@@ -200,7 +208,7 @@ fun RegistrationPage() {
                     }
                 }
                 Spacer(modifier = Modifier.height(16.dp))
-                androidx.compose.material.Text(
+                Text(
                     text = "Forgot Password?",
                     style = TextStyle(
                         fontSize = 16.sp,
@@ -214,5 +222,4 @@ fun RegistrationPage() {
             }
         }
     }
-
 }

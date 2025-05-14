@@ -62,90 +62,81 @@ fun HomePage() {
                 userRepository
             )
         }
-    val naturalDisasters = viewModel.naturalDisasters.collectAsState().value
-    val user = viewModel.user.collectAsState().value
-    val isLoading = viewModel.isLoading.collectAsState().value
-    val isFilterActive = viewModel.isFilterActive.collectAsState().value
+    val state = viewModel.state.collectAsState().value
 
     // UI
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color(0xFFE6F0FA),
-                        Color(0xFFFFFFFF)
-                    )
-                )
-            )
-    ) {
-        Column(
+    if (state.isLoading) {
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
+            contentAlignment = Alignment.Center
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 32.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = "kAssist Home",
-                        style = TextStyle(
-                            fontSize = 28.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color(0xFF333333)
-                        ),
-                        textAlign = TextAlign.Center
+            CircularProgressIndicator(
+                modifier = Modifier.size(48.dp),
+                color = Color(0xFF4A90E2),
+                strokeWidth = 4.dp
+            )
+        }
+    } else {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            Color(0xFFE6F0FA),
+                            Color(0xFFFFFFFF)
+                        )
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = "Current active disasters",
-                        style = TextStyle(
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Medium,
-                            color = Color(0xFF666666)
-                        ),
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(horizontal = 16.dp)
-                    )
-                }
-                Icon(
-                    imageVector = Icons.Default.Settings,
-                    contentDescription = "Settings",
-                    tint = Color(0xFF333333),
-                    modifier = Modifier
-                        .size(32.dp)
-                        .clickable { navigator.push(SettingsScreen()) }
                 )
-            }
-
-            if (isLoading) {
-                Box(
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                Row(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
-                    contentAlignment = Alignment.Center
+                        .fillMaxWidth()
+                        .padding(top = 32.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(48.dp),
-                        color = Color(0xFF4A90E2),
-                        strokeWidth = 4.dp
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "kAssist Home",
+                            style = TextStyle(
+                                fontSize = 28.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF333333)
+                            ),
+                            textAlign = TextAlign.Center
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "Current active disasters",
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Medium,
+                                color = Color(0xFF666666)
+                            ),
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(horizontal = 16.dp)
+                        )
+                    }
+                    Icon(
+                        imageVector = Icons.Default.Settings,
+                        contentDescription = "Settings",
+                        tint = Color(0xFF333333),
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clickable { navigator.push(SettingsScreen()) }
                     )
-                }
-            } else {
-                Button(
-                    onClick = { navigator.push(AdminScreen()) }
-                ) {
-                    Text("Nav to Admin")
                 }
                 Row(
                     modifier = Modifier
@@ -155,7 +146,7 @@ fun HomePage() {
                     horizontalArrangement = Arrangement.Start
                 ) {
                     Checkbox(
-                        checked = isFilterActive,
+                        checked = state.isFilterActive,
                         onCheckedChange = { viewModel.toggleFilterNaturalDisastersByRadius() },
                         colors = CheckboxDefaults.colors(
                             checkedColor = Color(0xFF4A90E2),
@@ -173,17 +164,17 @@ fun HomePage() {
                     )
                 }
 
-                if (naturalDisasters.isNotEmpty()) {
+                if (state.naturalDisasters.isNotEmpty()) {
                     LazyColumn(
                         modifier = Modifier
                             .weight(1f)
                             .padding(vertical = 16.dp),
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        items(naturalDisasters) { disaster ->
+                        items(state.naturalDisasters) { disaster ->
                             NaturalDisasterCard(
                                 disaster = disaster,
-                                user = user,
+                                user = state.user,
                                 onConfirmVictim = {
                                     viewModel.navigateToVictimScreen(
                                         navigator,
@@ -192,6 +183,12 @@ fun HomePage() {
                                 },
                                 onConfirmSupporter = {
                                     viewModel.navigateToSupporterScreen(
+                                        navigator,
+                                        disaster
+                                    )
+                                },
+                                onConfirmAdmin = {
+                                    viewModel.navigateToAdminScreen(
                                         navigator,
                                         disaster
                                     )
@@ -211,6 +208,21 @@ fun HomePage() {
                             .weight(1f)
                             .padding(16.dp),
                         textAlign = TextAlign.Center
+                    )
+                }
+            }
+
+            // Navigation loading overlay
+            if (state.isNavigating) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(48.dp),
+                        color = Color(0xFF4A90E2),
+                        strokeWidth = 4.dp
                     )
                 }
             }

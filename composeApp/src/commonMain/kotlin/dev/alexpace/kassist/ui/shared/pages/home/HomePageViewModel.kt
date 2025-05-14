@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import cafe.adriel.voyager.navigator.Navigator
 import dev.alexpace.kassist.data.utils.helpers.LocationServiceProvider
 import dev.alexpace.kassist.data.utils.helpers.areCoordinatesWithinRadius
+import dev.alexpace.kassist.domain.models.enums.UserRole
 import dev.alexpace.kassist.domain.models.enums.UserType
 import dev.alexpace.kassist.domain.models.shared.Coordinates
 import dev.alexpace.kassist.domain.models.shared.User
@@ -12,6 +13,7 @@ import dev.alexpace.kassist.domain.models.shared.NaturalDisaster
 import dev.alexpace.kassist.domain.repositories.NaturalDisasterRepository
 import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.alexpace.kassist.domain.services.NaturalDisasterApiService
+import dev.alexpace.kassist.ui.admin.navigation.screens.AdminScreen
 import dev.alexpace.kassist.ui.supporter.navigation.screens.SupporterScreen
 import dev.alexpace.kassist.ui.victim.navigation.screens.VictimScreen
 import dev.gitlive.firebase.Firebase
@@ -34,18 +36,9 @@ class HomePageViewModel(
     private val r = 500.0 // Radius in km
     private var unfilteredDisasters: List<NaturalDisaster> = emptyList()
 
-    // State Flows
-    private val _naturalDisasters = MutableStateFlow<List<NaturalDisaster>>(emptyList())
-    val naturalDisasters = _naturalDisasters.asStateFlow()
-
-    private val _user = MutableStateFlow<User?>(null)
-    val user = _user.asStateFlow()
-
-    private val _isLoading = MutableStateFlow(true)
-    val isLoading = _isLoading.asStateFlow()
-
-    private val _isFilterActive = MutableStateFlow(false)
-    val isFilterActive = _isFilterActive.asStateFlow()
+    // State Flow
+    private val _state = MutableStateFlow(HomePageState())
+    val state = _state.asStateFlow()
 
     // Init
     init {
@@ -60,24 +53,28 @@ class HomePageViewModel(
      */
     fun toggleFilterNaturalDisastersByRadius() {
         viewModelScope.launch {
-            _isFilterActive.value = !_isFilterActive.value
-            if (_isFilterActive.value) {
+            val currentState = _state.value
+            val newFilterActive = !currentState.isFilterActive
+            _state.value = currentState.copy(isFilterActive = newFilterActive)
+            if (newFilterActive) {
                 val userCoordinates = LocationServiceProvider.getLocationService()
                     .getCurrentLocation()
                 if (userCoordinates != null) {
                     println("${userCoordinates.latitude}, ${userCoordinates.longitude}")
-                    _naturalDisasters.value = unfilteredDisasters.filter { disaster ->
-                        areCoordinatesWithinRadius(
-                            userCoordinates,
-                            disaster.coordinates,
-                            r
-                        )
-                    }
+                    _state.value = _state.value.copy(
+                        naturalDisasters = unfilteredDisasters.filter { disaster ->
+                            areCoordinatesWithinRadius(
+                                userCoordinates,
+                                disaster.coordinates,
+                                r
+                            )
+                        }
+                    )
                 } else {
-                    _isFilterActive.value = false
+                    _state.value = _state.value.copy(isFilterActive = false)
                 }
             } else {
-                _naturalDisasters.value = unfilteredDisasters
+                _state.value = _state.value.copy(naturalDisasters = unfilteredDisasters)
             }
         }
     }
@@ -104,14 +101,18 @@ class HomePageViewModel(
                                 it.type != "DR"
                     }
                 unfilteredDisasters = filteredDisasters
-                _naturalDisasters.value = filteredDisasters
+                _state.value = _state.value.copy(
+                    naturalDisasters = filteredDisasters,
+                    isLoading = false
+                )
                 naturalDisasterRepository.addAll(filteredDisasters)
             } catch (e: Exception) {
                 println("Error fetching disasters: ${e.message}")
-                _naturalDisasters.value = emptyList()
+                _state.value = _state.value.copy(
+                    naturalDisasters = emptyList(),
+                    isLoading = false
+                )
                 unfilteredDisasters = emptyList()
-            } finally {
-                _isLoading.value = false
             }
         }
     }
@@ -123,41 +124,70 @@ class HomePageViewModel(
         viewModelScope.launch {
             try {
                 userRepository.getById(userId).collect { user ->
-                    _user.value = user
+                    _state.value = _state.value.copy(user = user)
                 }
             } catch (e: Exception) {
-                _user.value = null
+                _state.value = _state.value.copy(user = null)
             }
         }
     }
 
     /**
-     * Registers user as victim or supporter
+     * Registers user as victim, supporter, or admin
      */
-    private fun registerUserAs(userId: String?, userType: UserType, disaster: NaturalDisaster) {
+    private suspend fun registerUserAs(
+        userId: String?,
+        userType: UserType,
+        disaster: NaturalDisaster
+    ) {
         userId?.let { uid ->
-            viewModelScope.launch {
-                try {
-                    val user = userRepository.getById(uid).firstOrNull()
-                    if (user != null) {
-                        val updatedUser = user.copy(type = userType, naturalDisaster = disaster)
-                        userRepository.update(updatedUser)
-                        _user.value = updatedUser
-                    }
-                } catch (e: Exception) {
-                    println("Error registering user: ${e.message}")
+            try {
+                val user = userRepository.getById(uid).firstOrNull()
+                if (user != null) {
+                    val updatedUser = user.copy(type = userType, naturalDisaster = disaster)
+                    userRepository.update(updatedUser)
+                    _state.value = _state.value.copy(user = updatedUser)
                 }
+            } catch (e: Exception) {
+                println("Error registering user: ${e.message}")
             }
         } ?: println("No authenticated user found")
     }
 
+    // Navigation functions with loading state
+    fun navigateToAdminScreen(navigator: Navigator, disaster: NaturalDisaster) {
+        viewModelScope.launch {
+            _state.value = _state.value.copy(isNavigating = true)
+            try {
+                registerUserAs(userId, UserType.Admin, disaster)
+                navigator.push(AdminScreen())
+            } finally {
+                _state.value = _state.value.copy(isNavigating = false)
+            }
+        }
+    }
+
     fun navigateToVictimScreen(navigator: Navigator, disaster: NaturalDisaster) {
-        registerUserAs(userId, UserType.Victim, disaster)
-        navigator.push(VictimScreen())
+        viewModelScope.launch {
+            _state.value = _state.value.copy(isNavigating = true)
+            try {
+                registerUserAs(userId, UserType.Victim, disaster)
+                navigator.push(VictimScreen())
+            } finally {
+                _state.value = _state.value.copy(isNavigating = false)
+            }
+        }
     }
 
     fun navigateToSupporterScreen(navigator: Navigator, disaster: NaturalDisaster) {
-        registerUserAs(userId, UserType.Supporter, disaster)
-        navigator.push(SupporterScreen())
+        viewModelScope.launch {
+            _state.value = _state.value.copy(isNavigating = true)
+            try {
+                registerUserAs(userId, UserType.Supporter, disaster)
+                navigator.push(SupporterScreen())
+            } finally {
+                _state.value = _state.value.copy(isNavigating = false)
+            }
+        }
     }
 }

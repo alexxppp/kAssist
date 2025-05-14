@@ -26,6 +26,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dev.alexpace.kassist.domain.models.enums.UserRole
 import dev.alexpace.kassist.domain.models.enums.UserType
 import dev.alexpace.kassist.domain.models.shared.User
 import dev.alexpace.kassist.domain.models.shared.NaturalDisaster
@@ -36,10 +37,12 @@ fun NaturalDisasterCard(
     disaster: NaturalDisaster,
     user: User?,
     onConfirmVictim: () -> Unit,
-    onConfirmSupporter: () -> Unit
+    onConfirmSupporter: () -> Unit,
+    onConfirmAdmin: () -> Unit
 ) {
     val showVictimDialog = remember { mutableStateOf(false) }
     val showSupporterDialog = remember { mutableStateOf(false) }
+    val showAdminDialog = remember { mutableStateOf(false) }
 
     Card(
         modifier = Modifier
@@ -95,7 +98,7 @@ fun NaturalDisasterCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                if (user?.type == UserType.Neutral) {
+                if (user?.type == UserType.Neutral && user.role != UserRole.Admin) {
                     // Victim Button
                     Box(
                         modifier = Modifier
@@ -150,7 +153,7 @@ fun NaturalDisasterCard(
                             )
                         )
                     }
-                } else if (user?.naturalDisaster?.id == disaster.id) {
+                } else if (user?.naturalDisaster?.id == disaster.id && user.role != UserRole.Admin) {
                     Box(
                         modifier = Modifier
                             .weight(1f)
@@ -170,6 +173,64 @@ fun NaturalDisasterCard(
                                 } else if (user.type == UserType.Victim) {
                                     onConfirmVictim()
                                 }
+                            }
+                            .padding(vertical = 12.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "Enter",
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White
+                            )
+                        )
+                    }
+                } else if (user?.type == UserType.Neutral && user.role == UserRole.Admin) {
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(start = 8.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(
+                                brush = Brush.linearGradient(
+                                    colors = listOf(
+                                        Color(0xFF4A90E2),
+                                        Color(0xFF357ABD)
+                                    )
+                                )
+                            )
+                            .clickable {
+                                showAdminDialog.value = true
+                            }
+                            .padding(vertical = 12.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "Administrate",
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White
+                            )
+                        )
+                    }
+                } else if (user?.naturalDisaster?.id == disaster.id && user.role == UserRole.Admin) {
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(start = 8.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(
+                                brush = Brush.linearGradient(
+                                    colors = listOf(
+                                        Color(0xFF333333),
+                                        Color(0xFF1A1A1A)
+                                    )
+                                )
+                            )
+                            .clickable {
+                                onConfirmAdmin()
                             }
                             .padding(vertical = 12.dp),
                         contentAlignment = Alignment.Center
@@ -239,6 +300,20 @@ fun NaturalDisasterCard(
                 onConfirmSupporter()
             },
             onDismiss = { showSupporterDialog.value = false }
+        )
+    }
+
+    if (showAdminDialog.value) {
+        CustomAlertDialog(
+            title = "Confirm Action",
+            message = "Are you sure you want to administrate for ${disaster.name}?",
+            confirmText = "Yes",
+            dismissText = "No",
+            onConfirm = {
+                showAdminDialog.value = false
+                onConfirmAdmin()
+            },
+            onDismiss = { showAdminDialog.value = false }
         )
     }
 }
