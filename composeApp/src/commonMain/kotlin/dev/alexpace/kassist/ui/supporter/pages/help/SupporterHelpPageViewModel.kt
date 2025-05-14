@@ -40,6 +40,9 @@ class SupporterHelpPageViewModel(
     private val _user = MutableStateFlow<User?>(null)
     val user = _user.asStateFlow()
 
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading = _isLoading.asStateFlow()
+
     // Init
     init {
         fetchUser()
@@ -93,6 +96,7 @@ class SupporterHelpPageViewModel(
      * with the current db state
      */
     private fun fetchHelpRequests(disasterId: Int) {
+        _isLoading.value = true
         viewModelScope.launch {
             try {
                 helpRequestRepository.getAllByDisaster(disasterId)
@@ -102,8 +106,11 @@ class SupporterHelpPageViewModel(
             } catch (e: Exception) {
                 println("Error fetching help requests: ${e.message}")
                 _helpRequests.value = emptyList()
+            } finally {
+                _isLoading.value = false
             }
         }
+        _isLoading.value = false
     }
 
     /**
