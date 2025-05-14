@@ -75,6 +75,8 @@ class SettingsPageViewModel(
 
             } catch (e: Exception) {
                 _error.value = "Failed to load data: ${e.message}"
+            } finally {
+                _isLoading.value = false
             }
         }
         _isLoading.value = false
@@ -99,6 +101,7 @@ class SettingsPageViewModel(
         viewModelScope.launch {
             try {
                 userRepository.update(user.value!!.copy(naturalDisaster = null, type = UserType.Neutral))
+                _user.value = user.value!!.copy(naturalDisaster = null, type = UserType.Neutral)
             } catch (e: Exception) {
                 _error.value = "Failed to log out from current disaster: ${e.message}"
             } finally {

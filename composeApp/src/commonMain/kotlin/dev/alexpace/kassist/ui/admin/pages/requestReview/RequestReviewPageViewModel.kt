@@ -7,6 +7,7 @@ import dev.alexpace.kassist.domain.models.victim.HelpRequest
 import dev.alexpace.kassist.domain.models.enums.NeedLevelTypes
 import dev.alexpace.kassist.domain.repositories.AdminPendingDataRepository
 import dev.alexpace.kassist.domain.repositories.NaturalDisasterRepository
+import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.alexpace.kassist.domain.services.GeoapifyApiService
 import dev.alexpace.kassist.ui.shared.utils.controllers.SnackbarController
 import kotlinx.coroutines.flow.firstOrNull
@@ -17,6 +18,7 @@ import kotlinx.coroutines.launch
 
 class RequestReviewPageViewModel(
     private val adminPendingDataRepository: AdminPendingDataRepository,
+    private val userRepository: UserRepository,
     private val geoapifyApiService: GeoapifyApiService,
     private val naturalDisasterRepository: NaturalDisasterRepository
 ) : ViewModel() {
@@ -33,6 +35,7 @@ class RequestReviewPageViewModel(
                 isAddressValid = null
             )
         }
+        fetchVictim()
     }
 
     fun updateNeedLevel(needLevel: NeedLevelTypes) {
@@ -48,6 +51,7 @@ class RequestReviewPageViewModel(
             try {
                 adminPendingDataRepository.acceptHelpRequest(helpRequest, needLevel)
                 adminPendingDataRepository.rejectOrDeleteHelpRequest(helpRequest.id)
+                modifyScore(200)
                 _state.update { it.copy(isLoading = false) }
                 SnackbarController.showSnackbar("Request accepted!")
             } catch (e: Exception) {
@@ -65,6 +69,7 @@ class RequestReviewPageViewModel(
         viewModelScope.launch {
             try {
                 adminPendingDataRepository.rejectOrDeleteHelpRequest(helpRequest.id)
+                modifyScore(-50)
                 _state.update { it.copy(isLoading = false) }
                 SnackbarController.showSnackbar("Request rejected")
             } catch (e: Exception) {
@@ -122,5 +127,35 @@ class RequestReviewPageViewModel(
     private suspend fun getCountryCode(disasterId: String): String {
         val country = naturalDisasterRepository.getById(disasterId).firstOrNull()?.country
         return countryCodeMap[country?.lowercase()] ?: ""
+    }
+
+    private fun fetchVictim() {
+        viewModelScope.launch {
+            try {
+                val victimId = _state.value.helpRequest?.victimId ?: return@launch
+                val victim = userRepository.getById(victimId).firstOrNull()
+                _state.update { it.copy(victim = victim) }
+            } catch (e: Exception) {
+                _state.update {
+                    it.copy(error = "Failed to fetch victim data: ${e.message}")
+                }
+            }
+        }
+    }
+
+    private fun modifyScore(nToAdd: Int) {
+        viewModelScope.launch {
+            try {
+                val victim = _state.value.victim ?: return@launch
+                val currentScore = victim.score
+                val newScore = currentScore + nToAdd
+                userRepository.update(victim.copy(score = newScore))
+                _state.update { it.copy(victim = it.victim?.copy(score = newScore)) }
+            } catch (e: Exception) {
+                _state.update {
+                    it.copy(error = "Failed to update score: ${e.message}")
+                }
+            }
+        }
     }
 }

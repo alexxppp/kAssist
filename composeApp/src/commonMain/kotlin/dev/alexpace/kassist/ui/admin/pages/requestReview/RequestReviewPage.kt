@@ -24,6 +24,7 @@ import dev.alexpace.kassist.domain.models.enums.NeedLevelTypes
 import dev.alexpace.kassist.domain.models.victim.HelpRequest
 import dev.alexpace.kassist.domain.repositories.AdminPendingDataRepository
 import dev.alexpace.kassist.domain.repositories.NaturalDisasterRepository
+import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.alexpace.kassist.domain.services.GeoapifyApiService
 import org.koin.compose.koinInject
 
@@ -39,11 +40,13 @@ fun RequestReviewPage(
     val adminPendingDataRepository = koinInject<AdminPendingDataRepository>()
     val geoapifyApiService = koinInject<GeoapifyApiService>()
     val naturalDisasterRepository = koinInject<NaturalDisasterRepository>()
+    val userRepository = koinInject<UserRepository>()
 
     // ViewModel
     val viewModel = viewModel {
         RequestReviewPageViewModel(
             adminPendingDataRepository,
+            userRepository,
             geoapifyApiService,
             naturalDisasterRepository
         )

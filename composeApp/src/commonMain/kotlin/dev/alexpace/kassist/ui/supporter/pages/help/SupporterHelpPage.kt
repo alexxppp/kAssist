@@ -17,7 +17,7 @@ import org.koin.compose.koinInject
 
 @Composable
 fun SupporterHelpPage() {
-    // Dependency Injection
+    // DI
     val helpRequestRepository = koinInject<HelpRequestRepository>()
     val helpProposalRepository = koinInject<HelpProposalRepository>()
     val userRepository = koinInject<UserRepository>()
@@ -38,7 +38,6 @@ fun SupporterHelpPage() {
                 .fillMaxSize()
                 .padding(padding)
         ) {
-            // Corrected function passing
             HelpRequestList(helpRequests, viewModel::selectHelpRequest)
             viewModel.selectedHelpRequest.collectAsState().value?.let { request ->
                 HelpProposalForm(

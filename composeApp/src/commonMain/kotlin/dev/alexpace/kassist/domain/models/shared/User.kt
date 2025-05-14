@@ -13,5 +13,6 @@ data class User(
     val phoneNumber: String?,
     val naturalDisaster: NaturalDisaster? = null,
     val type: UserType = UserType.Neutral,
-    val role: UserRole = UserRole.Basic
+    val role: UserRole = UserRole.Basic,
+    val score: Int = 0
 )
