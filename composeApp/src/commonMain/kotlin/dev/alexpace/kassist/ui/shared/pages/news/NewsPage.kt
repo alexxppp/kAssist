@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
@@ -28,12 +29,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.alexpace.kassist.domain.services.LiveNewsApiService
+import dev.alexpace.kassist.ui.shared.navigation.screens.MapScreen
 import org.koin.compose.koinInject
 
 @Composable
 fun NewsPage() {
+    val navigator = LocalNavigator.currentOrThrow
     // DI
     val liveNewsApiService = koinInject<LiveNewsApiService>()
     val userRepository = koinInject<UserRepository>()
@@ -68,6 +73,11 @@ fun NewsPage() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
+            Button(
+                onClick = { navigator.push(MapScreen()) }
+            ) {
+                Text("Button")
+            }
             // News Content
             Box(
                 modifier = Modifier

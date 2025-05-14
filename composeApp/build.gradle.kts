@@ -68,6 +68,8 @@ kotlin {
             implementation(libs.firebase.auth)
             // Location
             implementation(libs.play.services.location)
+            // Maps
+            implementation(libs.maps.compose)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -98,6 +100,8 @@ kotlin {
             implementation(libs.koin.compose.viewmodel.navigation)
             // Date time
             implementation(libs.kotlinx.datetime)
+            // Push notifications
+            api(libs.kmpnotifier)
 
         }
         nativeMain.dependencies {
@@ -108,6 +112,13 @@ kotlin {
             implementation(libs.kotlinx.coroutines.swing)
             // Ktor
             implementation(libs.ktor.client.okhttp)
+            // Map
+            implementation(libs.chart.ui)
+            implementation(libs.chart.cache.api)
+            implementation(libs.chart.cache.impl.lru)
+            implementation(libs.chart.provider.api)
+            implementation(libs.chart.provider.impl.open.street.map)
+
         }
         wasmJsMain.dependencies {
             // Javascript SDK for Firebase
