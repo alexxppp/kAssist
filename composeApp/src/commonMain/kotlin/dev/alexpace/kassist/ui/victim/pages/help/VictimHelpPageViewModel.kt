@@ -2,10 +2,9 @@ package dev.alexpace.kassist.ui.victim.pages.help
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dev.alexpace.kassist.data.repositoriesImpl.HelpRequestRepositoryImpl
-import dev.alexpace.kassist.domain.models.enums.NeedLevelTypes
 import dev.alexpace.kassist.domain.models.shared.User
 import dev.alexpace.kassist.domain.models.victim.HelpRequest
+import dev.alexpace.kassist.domain.repositories.HelpRequestRepository
 import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.alexpace.kassist.ui.shared.utils.controllers.SnackbarController
 import dev.gitlive.firebase.Firebase
@@ -16,7 +15,7 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 class VictimHelpPageViewModel(
-    private val helpRequestRepository: HelpRequestRepositoryImpl,
+    private val helpRequestRepository: HelpRequestRepository,
     private val userRepository: UserRepository
 ) : ViewModel() {
 

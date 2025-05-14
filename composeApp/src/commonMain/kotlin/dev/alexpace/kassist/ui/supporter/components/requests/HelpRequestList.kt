@@ -22,16 +22,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.alexpace.kassist.domain.models.enums.RequestStatusTypes
+import dev.alexpace.kassist.domain.models.victim.HelpRequest
 import dev.alexpace.kassist.ui.supporter.pages.help.SupporterHelpPageViewModel
 import kotlinx.coroutines.flow.map
 
 @Composable
-fun HelpRequestList(viewModel: SupporterHelpPageViewModel) {
-
-    // TODO: Handle in ViewModel
-    val helpRequests by viewModel.helpRequestRepository.getAll()
-        .map { requests -> requests.filter { it.status == RequestStatusTypes.Pending } }
-        .collectAsState(initial = emptyList())
+fun HelpRequestList(helpRequests: List<HelpRequest>, selectHelpRequest : (HelpRequest?) -> Unit) {
 
     Box(
         modifier = Modifier
@@ -76,7 +72,7 @@ fun HelpRequestList(viewModel: SupporterHelpPageViewModel) {
                 items(helpRequests) { helpRequest ->
                     HelpRequestCard(
                         helpRequest = helpRequest,
-                        onClick = { viewModel.selectHelpRequest(helpRequest) }
+                        onClick = { selectHelpRequest(helpRequest) }
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                 }

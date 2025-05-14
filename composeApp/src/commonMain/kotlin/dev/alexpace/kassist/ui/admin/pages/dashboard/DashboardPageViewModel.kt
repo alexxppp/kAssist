@@ -59,7 +59,7 @@ class DashboardPageViewModel(
     private fun fetchHelpRequests() {
         viewModelScope.launch {
             try {
-                adminPendingDataRepository.getAllHelpRequestsByDisaster(
+                adminPendingDataRepository.getAllPendingHelpRequestsByDisaster(
                     _dashboardPageState.value.user!!.naturalDisaster!!.id
                 ).collectLatest { helpRequests ->
                     _dashboardPageState.update {

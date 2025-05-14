@@ -1,5 +1,6 @@
 package dev.alexpace.kassist.data.repositoriesImpl
 
+import dev.alexpace.kassist.domain.models.enums.RequestStatusTypes
 import dev.alexpace.kassist.domain.models.victim.HelpRequest
 import dev.alexpace.kassist.domain.repositories.HelpRequestRepository
 import dev.gitlive.firebase.Firebase
@@ -20,6 +21,7 @@ class HelpRequestRepositoryImpl: HelpRequestRepository {
                     documentSnapshot.data<HelpRequest>()
                 }
                 .sortedBy { it.needLevel }
+            println(helpRequests)
             emit(helpRequests)
         }
     }
@@ -38,9 +40,25 @@ class HelpRequestRepositoryImpl: HelpRequestRepository {
             .where { "victimId" equalTo id }
             .snapshots
             .collect { querySnapshot ->
-                val helpRequests = querySnapshot.documents.map { it.data<HelpRequest>() }
+                val helpRequests = querySnapshot.documents
+                    .map { it.data<HelpRequest>() }
                 emit(helpRequests)
             }
+    }
+
+    override fun getAllByDisaster(disasterId: Int) = flow {
+        helpRequestCollection.snapshots.collect { querySnapshot ->
+            val helpRequests = querySnapshot
+                .documents
+                .map { documentSnapshot ->
+                    documentSnapshot.data<HelpRequest>()
+                }
+                .filter {
+                    it.disasterId == disasterId && it.status == RequestStatusTypes.Pending
+                }
+                .sortedBy { it.needLevel }
+            emit(helpRequests)
+        }
     }
 
     override suspend fun add(helpRequest: HelpRequest) {

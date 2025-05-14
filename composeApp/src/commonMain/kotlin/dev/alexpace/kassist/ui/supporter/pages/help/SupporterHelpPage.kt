@@ -8,41 +8,38 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
-import dev.alexpace.kassist.data.repositoriesImpl.HelpProposalRepositoryImpl
-import dev.alexpace.kassist.data.repositoriesImpl.HelpRequestRepositoryImpl
+import dev.alexpace.kassist.domain.repositories.HelpProposalRepository
+import dev.alexpace.kassist.domain.repositories.HelpRequestRepository
+import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.alexpace.kassist.ui.supporter.components.proposal.HelpProposalForm
 import dev.alexpace.kassist.ui.supporter.components.requests.HelpRequestList
-import dev.gitlive.firebase.Firebase
-import dev.gitlive.firebase.auth.auth
 import org.koin.compose.koinInject
 
 @Composable
 fun SupporterHelpPage() {
-
-    val userId = Firebase.auth.currentUser?.uid
-        // TODO: Handle more nicely
-        ?: throw Exception("User not authenticated")
-
-    // DI
-    val helpRequestRepository = koinInject<HelpRequestRepositoryImpl>()
-    val helpProposalRepository = koinInject<HelpProposalRepositoryImpl>()
+    // Dependency Injection
+    val helpRequestRepository = koinInject<HelpRequestRepository>()
+    val helpProposalRepository = koinInject<HelpProposalRepository>()
+    val userRepository = koinInject<UserRepository>()
 
     // ViewModel
     val viewModel: SupporterHelpPageViewModel = viewModel {
-        SupporterHelpPageViewModel(helpRequestRepository, helpProposalRepository, userId)
+        SupporterHelpPageViewModel(helpRequestRepository, helpProposalRepository, userRepository)
     }
+
+    val helpRequests = viewModel.helpRequests.collectAsState().value
 
     // UI
     Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) { padding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
         ) {
-            HelpRequestList(viewModel)
+            // Corrected function passing
+            HelpRequestList(helpRequests, viewModel::selectHelpRequest)
             viewModel.selectedHelpRequest.collectAsState().value?.let { request ->
                 HelpProposalForm(
                     helpRequest = request,

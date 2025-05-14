@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class NaturalDisasterResponse(
-    val features: List<dev.alexpace.kassist.data.network.responses.Feature>
+    val features: List<Feature>
 )
 
 // Content of the top level response

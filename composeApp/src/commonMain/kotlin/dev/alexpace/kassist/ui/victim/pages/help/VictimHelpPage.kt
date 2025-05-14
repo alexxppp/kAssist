@@ -1,24 +1,16 @@
 package dev.alexpace.kassist.ui.victim.pages.help
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -28,11 +20,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import dev.alexpace.kassist.data.repositoriesImpl.HelpRequestRepositoryImpl
-import dev.alexpace.kassist.data.repositoriesImpl.UserRepositoryImpl
 import dev.alexpace.kassist.domain.models.enums.NeedLevelTypes
 import dev.alexpace.kassist.domain.models.enums.RequestStatusTypes
 import dev.alexpace.kassist.domain.models.victim.HelpRequest
+import dev.alexpace.kassist.domain.repositories.HelpRequestRepository
+import dev.alexpace.kassist.domain.repositories.UserRepository
 import org.koin.compose.koinInject
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -41,8 +33,8 @@ import kotlin.uuid.Uuid
 @Composable
 fun VictimHelpPage() {
     // DI
-    val helpRequestRepository = koinInject<HelpRequestRepositoryImpl>()
-    val userRepository = koinInject<UserRepositoryImpl>()
+    val helpRequestRepository = koinInject<HelpRequestRepository>()
+    val userRepository = koinInject<UserRepository>()
 
     // ViewModel
     val viewModel: VictimHelpPageViewModel =
@@ -54,8 +46,6 @@ fun VictimHelpPage() {
 
     // UI
     if (user != null) {
-        var isDropdownExpanded by remember { mutableStateOf(false) }
-
         Box(
             modifier = Modifier
                 .fillMaxWidth()

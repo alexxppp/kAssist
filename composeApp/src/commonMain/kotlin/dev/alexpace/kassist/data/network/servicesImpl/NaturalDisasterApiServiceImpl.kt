@@ -50,6 +50,32 @@ class NaturalDisasterApiServiceImpl: NaturalDisasterApiService {
                                 severityunit = "M"
                             )
                         )
+                    ),
+                    Feature(
+                        geometry = Geometry(
+                            coordinates = listOf(-16.0113, -43.6369)
+                        ),
+                        properties = NaturalDisaster(
+                            id = 1479774,
+                            type = "EQ",
+                            alertLevel = "Orange",
+                            startDate = "2025-05-01T18:15:05",
+                            endDate = "2025-05-01T18:15:05",
+                            name = "Earthquake somewhere",
+                            description = "Earthquake in ",
+                            htmlDescription = "Green M 4.8 Earthquake off-shore at: 01 May 2025 18:15:05.",
+                            icon = "https://www.gdacs.org/images/gdacs_icons/maps/Green/EQ.png",
+                            country = "Spain",
+                            coordinates = Coordinates(
+                                latitude = 37.785834,
+                                longitude = -122.406417
+                            ),
+                            severityData = SeverityData(
+                                severity = 4.8,
+                                severitytext = "Magnitude 4.8M, Depth:10km",
+                                severityunit = "M"
+                            )
+                        )
                     )
                 )
             )
