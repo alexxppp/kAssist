@@ -2,6 +2,7 @@ package dev.alexpace.kassist.data.repositoriesImpl
 
 import dev.alexpace.kassist.domain.models.enums.RequestStatusTypes
 import dev.alexpace.kassist.domain.models.supporter.HelpProposal
+import dev.alexpace.kassist.domain.models.shared.User
 import dev.alexpace.kassist.domain.repositories.HelpProposalRepository
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.firestore.firestore
@@ -11,15 +12,26 @@ class HelpProposalRepositoryImpl : HelpProposalRepository {
 
     private val firestore = Firebase.firestore
     private val helpProposalCollection = firestore.collection("HelpProposal")
+    private val userCollection = firestore.collection("User")
 
     override fun getAll() = flow {
         helpProposalCollection.snapshots.collect { querySnapshot ->
-            val helpProposals = querySnapshot
-                .documents
-                .map { documentSnapshot ->
-                    documentSnapshot.data<HelpProposal>()
+            val helpProposalsWithScores = querySnapshot.documents.map { documentSnapshot ->
+                val helpProposal = documentSnapshot.data<HelpProposal>()
+                val supporterScore = try {
+                    val userSnapshot = userCollection.document(helpProposal.supporterId).get()
+                    userSnapshot.data<User>().score
+                } catch (e: Exception) {
+                    0
                 }
-            emit(helpProposals)
+                Pair(helpProposal, supporterScore)
+            }
+
+            val sortedHelpProposals = helpProposalsWithScores
+                .sortedByDescending { it.second }
+                .map { it.first }
+
+            emit(sortedHelpProposals)
         }
     }
 
@@ -41,8 +53,22 @@ class HelpProposalRepositoryImpl : HelpProposalRepository {
             .where { "supporterId" equalTo id }
             .snapshots
             .collect { querySnapshot ->
-                val helpProposals = querySnapshot.documents.map { it.data<HelpProposal>() }
-                emit(helpProposals)
+                val helpProposalsWithScores = querySnapshot.documents.map { documentSnapshot ->
+                    val helpProposal = documentSnapshot.data<HelpProposal>()
+                    val supporterScore = try {
+                        val userSnapshot = userCollection.document(helpProposal.supporterId).get()
+                        userSnapshot.data<User>().score
+                    } catch (e: Exception) {
+                        0
+                    }
+                    Pair(helpProposal, supporterScore)
+                }
+
+                val sortedHelpProposals = helpProposalsWithScores
+                    .sortedByDescending { it.second }
+                    .map { it.first }
+
+                emit(sortedHelpProposals)
             }
     }
 
@@ -51,8 +77,22 @@ class HelpProposalRepositoryImpl : HelpProposalRepository {
             .where { "victimId" equalTo id }
             .snapshots
             .collect { querySnapshot ->
-                val helpProposals = querySnapshot.documents.map { it.data<HelpProposal>() }
-                emit(helpProposals)
+                val helpProposalsWithScores = querySnapshot.documents.map { documentSnapshot ->
+                    val helpProposal = documentSnapshot.data<HelpProposal>()
+                    val supporterScore = try {
+                        val userSnapshot = userCollection.document(helpProposal.supporterId).get()
+                        userSnapshot.data<User>().score
+                    } catch (e: Exception) {
+                        0
+                    }
+                    Pair(helpProposal, supporterScore)
+                }
+
+                val sortedHelpProposals = helpProposalsWithScores
+                    .sortedByDescending { it.second }
+                    .map { it.first }
+
+                emit(sortedHelpProposals)
             }
     }
 
@@ -67,8 +107,22 @@ class HelpProposalRepositoryImpl : HelpProposalRepository {
                 .where { "status" inArray statuses.map { it.toString() } }
                 .snapshots
                 .collect { querySnapshot ->
-                    val helpProposals = querySnapshot.documents.map { it.data<HelpProposal>() }
-                    emit(helpProposals)
+                    val helpProposalsWithScores = querySnapshot.documents.map { documentSnapshot ->
+                        val helpProposal = documentSnapshot.data<HelpProposal>()
+                        val supporterScore = try {
+                            val userSnapshot = userCollection.document(helpProposal.supporterId).get()
+                            userSnapshot.data<User>().score
+                        } catch (e: Exception) {
+                            0
+                        }
+                        Pair(helpProposal, supporterScore)
+                    }
+
+                    val sortedHelpProposals = helpProposalsWithScores
+                        .sortedByDescending { it.second }
+                        .map { it.first }
+
+                    emit(sortedHelpProposals)
                 }
         }
 
@@ -82,8 +136,22 @@ class HelpProposalRepositoryImpl : HelpProposalRepository {
             .where { "status" inArray statuses.map { it.toString() } }
             .snapshots
             .collect { querySnapshot ->
-                val helpProposals = querySnapshot.documents.map { it.data<HelpProposal>() }
-                emit(helpProposals)
+                val helpProposalsWithScores = querySnapshot.documents.map { documentSnapshot ->
+                    val helpProposal = documentSnapshot.data<HelpProposal>()
+                    val supporterScore = try {
+                        val userSnapshot = userCollection.document(helpProposal.supporterId).get()
+                        userSnapshot.data<User>().score
+                    } catch (e: Exception) {
+                        0
+                    }
+                    Pair(helpProposal, supporterScore)
+                }
+
+                val sortedHelpProposals = helpProposalsWithScores
+                    .sortedByDescending { it.second }
+                    .map { it.first }
+
+                emit(sortedHelpProposals)
             }
     }
 

@@ -9,14 +9,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -30,7 +35,6 @@ import org.koin.compose.koinInject
 
 @Composable
 fun VictimHomePage() {
-
     // DI
     val helpProposalRepository = koinInject<HelpProposalRepositoryImpl>()
 
@@ -46,6 +50,11 @@ fun VictimHomePage() {
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(Color(0xFFF0F4F8), Color.White)
+                )
+            )
     ) {
         Column(
             modifier = Modifier
@@ -56,18 +65,20 @@ fun VictimHomePage() {
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(top = 64.dp)
+                modifier = Modifier.padding(top = 48.dp)
             ) {
-                Box(
+                Icon(
+                    imageVector = Icons.Default.Home,
+                    contentDescription = "Home Icon",
+                    tint = Color(0xFF4A90E2),
                     modifier = Modifier
-                        .size(100.dp)
-                        .background(Color(0xFF4A90E2), RoundedCornerShape(16.dp))
+                        .padding(bottom = 16.dp)
+                        .clip(RoundedCornerShape(12.dp))
                 )
-                Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     text = "Victim Home",
                     style = TextStyle(
-                        fontSize = 32.sp,
+                        fontSize = 28.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF333333)
                     ),
@@ -77,7 +88,7 @@ fun VictimHomePage() {
                 Text(
                     text = "Your Help Proposals",
                     style = TextStyle(
-                        fontSize = 18.sp,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.Medium,
                         color = Color(0xFF666666)
                     ),
@@ -86,36 +97,77 @@ fun VictimHomePage() {
             }
 
             // List of Proposals
-            if (isLoading) {
-                Text(
-                    text = "Loading...",
-                    style = TextStyle(
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Normal,
-                        color = Color(0xFF666666)
-                    ),
-                    modifier = Modifier.padding(top = 24.dp),
-                    textAlign = TextAlign.Center
-                )
-            } else if (helpProposals.isEmpty()) {
-                Text(
-                    text = "No proposals yet.",
-                    style = TextStyle(
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Normal,
-                        color = Color(0xFF666666)
-                    ),
-                    modifier = Modifier.padding(top = 24.dp),
-                    textAlign = TextAlign.Center
-                )
-            } else {
-                ProposalList(
-                    helpProposals = helpProposals,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .padding(vertical = 16.dp)
-                )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .padding(vertical = 16.dp)
+                    .shadow(4.dp, RoundedCornerShape(16.dp))
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(Color.White)
+                    .padding(16.dp)
+            ) {
+                if (isLoading) {
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Home,
+                            contentDescription = "Loading",
+                            tint = Color(0xFF4A90E2),
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        )
+                        Text(
+                            text = "Loading Proposals...",
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Normal,
+                                color = Color(0xFF666666)
+                            ),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                } else if (helpProposals.isEmpty()) {
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Home,
+                            contentDescription = "No Proposals",
+                            tint = Color(0xFF4A90E2),
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        )
+                        Text(
+                            text = "No proposals yet.",
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Normal,
+                                color = Color(0xFF666666)
+                            ),
+                            textAlign = TextAlign.Center
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "You'll see proposals from supporters here soon!",
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Normal,
+                                color = Color(0xFF666666)
+                            ),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                } else {
+                    ProposalList(
+                        helpProposals = helpProposals,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    )
+                }
             }
         }
     }
