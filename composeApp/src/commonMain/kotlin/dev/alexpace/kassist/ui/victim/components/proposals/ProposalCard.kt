@@ -1,20 +1,24 @@
 package dev.alexpace.kassist.ui.victim.components.proposals
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -33,15 +37,31 @@ fun ProposalCard(helpProposal: HelpProposal) {
         navigator!!.push(HelpProposalInfoScreen(proposal))
     }
 
-    Box(
+    Row(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+            .shadow(2.dp, RoundedCornerShape(12.dp))
             .clip(RoundedCornerShape(12.dp))
-            .background(Color(0xFFF5F5F5))
-            .border(0.1.dp, Color.DarkGray, RoundedCornerShape(12.dp))
-            .padding(16.dp)
+            .background(Color.White)
+            .padding(12.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Column {
+        Icon(
+            imageVector = Icons.Default.Person,
+            contentDescription = "Supporter",
+            tint = Color(0xFF4A90E2),
+            modifier = Modifier
+                .size(40.dp)
+                .clip(CircleShape)
+                .background(Color(0xFFE6F0FA))
+                .padding(8.dp)
+        )
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 12.dp)
+        ) {
             Text(
                 text = helpProposal.content,
                 style = TextStyle(
@@ -50,34 +70,52 @@ fun ProposalCard(helpProposal: HelpProposal) {
                     color = Color(0xFF333333)
                 )
             )
-            Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Status: ${helpProposal.status.name}",
+                text = "Supporter: ${helpProposal.supporterName}", // Replace with supporter name if available
                 style = TextStyle(
                     fontSize = 14.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = Color(0xFF4A90E2)
-                )
+                    fontWeight = FontWeight.Normal,
+                    color = Color(0xFF666666)
+                ),
+                modifier = Modifier.padding(top = 2.dp)
             )
-            Spacer(modifier = Modifier.height(12.dp))
-            Button(
-                onClick = { navToDetails(helpProposal) },
+            Row(
                 modifier = Modifier
-                    .clip(RoundedCornerShape(12.dp)),
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color(0xFF4A90E2),
-                    contentColor = Color.White
-                )
+                    .padding(top = 8.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(Color(0xFFE6F0FA))
+                    .padding(horizontal = 8.dp, vertical = 4.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "View Info",
+                    text = helpProposal.status.name,
                     style = TextStyle(
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = Color(0xFF4A90E2)
                     )
                 )
             }
+        }
+        Button(
+            onClick = { navToDetails(helpProposal) },
+            modifier = Modifier
+                .padding(start = 8.dp)
+                .clip(RoundedCornerShape(12.dp)),
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color(0xFF4A90E2),
+                contentColor = Color.White
+            )
+        ) {
+            Text(
+                text = "View",
+                style = TextStyle(
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = Color.White
+                ),
+                modifier = Modifier.padding(horizontal = 8.dp)
+            )
         }
     }
 }

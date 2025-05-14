@@ -15,9 +15,9 @@ fun ProposalList(
 ) {
     LazyColumn(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(helpProposals) { helpProposal ->
+        items(helpProposals, key = { it?.id ?: "" }) { helpProposal ->
             helpProposal?.let {
                 ProposalCard(it)
             }
