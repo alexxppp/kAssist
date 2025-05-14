@@ -12,5 +12,6 @@ data class HelpProposal(
     val victimName: String,
     val helpRequestId: String,
     val content: String,
-    val status: RequestStatusTypes
+    val status: RequestStatusTypes,
+    val requiredTime: String,
 )

@@ -2,6 +2,9 @@ package dev.alexpace.kassist.ui.victim.pages.proposalInfo
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.Navigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.alexpace.kassist.domain.models.supporter.HelpProposal
 import dev.alexpace.kassist.domain.models.victim.HelpRequest
 import dev.alexpace.kassist.domain.models.enums.RequestStatusTypes
@@ -22,6 +25,7 @@ import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 class ProposalInfoViewModel(
+    private val navigator: Navigator,
     private val helpProposalRepository: HelpProposalRepository,
     private val helpRequestRepository: HelpRequestRepository,
     private val userRepository: UserRepository,
@@ -112,6 +116,8 @@ class ProposalInfoViewModel(
                 SnackbarController.showSnackbar("Proposal accepted!")
             } catch (e: Exception) {
                 SnackbarController.showSnackbar("Failed to accept proposal: ${e.message}")
+            } finally {
+                navigator.pop()
             }
         }
     }
@@ -129,6 +135,8 @@ class ProposalInfoViewModel(
                 SnackbarController.showSnackbar("Proposal declined")
             } catch (e: Exception) {
                 SnackbarController.showSnackbar("Failed to decline proposal: ${e.message}")
+            } finally {
+                navigator.pop()
             }
         }
     }

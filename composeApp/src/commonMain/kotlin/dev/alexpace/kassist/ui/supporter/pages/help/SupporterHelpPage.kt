@@ -61,8 +61,8 @@ fun SupporterHelpPage() {
                 viewModel.selectedHelpRequest.collectAsState().value?.let { request ->
                     HelpProposalForm(
                         helpRequest = request,
-                        onSubmit = { content ->
-                            viewModel.submitHelpProposal(content, request)
+                        onSubmit = { content, estimatedTime ->
+                            viewModel.submitHelpProposal(content, estimatedTime, request)
                         },
                         onCancel = { viewModel.selectHelpRequest(null) }
                     )

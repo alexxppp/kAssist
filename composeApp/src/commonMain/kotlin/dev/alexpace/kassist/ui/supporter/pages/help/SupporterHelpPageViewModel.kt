@@ -27,7 +27,6 @@ class SupporterHelpPageViewModel(
 
     // Values
     private val currentUserId = Firebase.auth.currentUser?.uid
-    // TODO: Handle more nicely
         ?: throw Exception("User not authenticated")
 
     // State Flows
@@ -58,10 +57,10 @@ class SupporterHelpPageViewModel(
      * Submits help proposal by calling the HelpProposalRepository
      * and sets the selected help request to null
      */
-    fun submitHelpProposal(content: String, helpRequest: HelpRequest) {
+    fun submitHelpProposal(content: String, estimatedTime: String?, helpRequest: HelpRequest) {
         viewModelScope.launch {
             try {
-                helpProposalRepository.add(buildHelpProposal(content, helpRequest))
+                helpProposalRepository.add(buildHelpProposal(content, estimatedTime, helpRequest))
                 selectHelpRequest(null)
             } catch (e: Exception) {
                 println("Error submitting proposal: ${e.message}")
@@ -69,9 +68,16 @@ class SupporterHelpPageViewModel(
         }
     }
 
-    // TODO: Implement
-    private fun checkForm() {
-
+    /**
+     * Checks if the form is valid
+     */
+    fun checkForm(content: String, timeAmount: String, timeUnit: String): String? {
+        return when {
+            content.isBlank() -> "Please describe how you can help."
+            timeAmount.isBlank() || timeAmount.toIntOrNull() == null || timeAmount.toInt() < 1 -> "Please enter a valid time amount (1 or more)."
+            timeUnit.isEmpty() -> "Please select a time unit."
+            else -> null
+        }
     }
 
     /**
@@ -118,7 +124,7 @@ class SupporterHelpPageViewModel(
      * Uuid is experimental
      */
     @OptIn(ExperimentalUuidApi::class)
-    private fun buildHelpProposal(content: String, helpRequest: HelpRequest): HelpProposal {
+    private fun buildHelpProposal(content: String, estimatedTime: String?, helpRequest: HelpRequest): HelpProposal {
         return HelpProposal(
             id = Uuid.random().toString(),
             supporterId = currentUserId,
@@ -127,7 +133,8 @@ class SupporterHelpPageViewModel(
             content = content,
             status = RequestStatusTypes.Pending,
             supporterName = user.value!!.name,
-            victimName = helpRequest.victimName
+            victimName = helpRequest.victimName,
+            requiredTime = estimatedTime ?: "Not provided"
         )
     }
 }

@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -29,6 +30,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.alexpace.kassist.domain.models.enums.RequestStatusTypes
 import dev.alexpace.kassist.domain.models.supporter.HelpProposal
 import dev.alexpace.kassist.domain.repositories.HelpProposalRepository
@@ -40,6 +43,9 @@ import org.koin.compose.koinInject
 @Composable
 fun ProposalInfoPage(proposal: HelpProposal) {
 
+    // Values
+    val navigator = LocalNavigator.currentOrThrow
+
     // DI
     val helpProposalRepository = koinInject<HelpProposalRepository>()
     val helpRequestRepository = koinInject<HelpRequestRepository>()
@@ -48,7 +54,14 @@ fun ProposalInfoPage(proposal: HelpProposal) {
 
     // ViewModel
     val viewModel: ProposalInfoViewModel = viewModel {
-        ProposalInfoViewModel(helpProposalRepository, helpRequestRepository, userRepository, liveChatRepository, proposal)
+        ProposalInfoViewModel(
+            navigator,
+            helpProposalRepository,
+            helpRequestRepository,
+            userRepository,
+            liveChatRepository,
+            proposal
+        )
     }
 
     val helpRequest by viewModel.helpRequest.collectAsState()
@@ -113,6 +126,7 @@ fun ProposalInfoPage(proposal: HelpProposal) {
                         textAlign = TextAlign.Center
                     )
                 }
+
                 else -> {
                     Box(
                         modifier = Modifier
@@ -144,6 +158,19 @@ fun ProposalInfoPage(proposal: HelpProposal) {
                             )
                             Spacer(modifier = Modifier.height(12.dp))
                             Text(
+                                text = "Estimated time: ${proposal.requiredTime}",
+                                style = TextStyle(
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Medium,
+                                    color = Color(0xFF333333)
+                                )
+                            )
+                            Divider(
+                                color = Color.Gray,
+                                thickness = 1.dp,
+                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
+                            )
+                            Text(
                                 text = "Status: ${proposal.status.name}",
                                 style = TextStyle(
                                     fontSize = 14.sp,
@@ -160,9 +187,9 @@ fun ProposalInfoPage(proposal: HelpProposal) {
                             Text(
                                 text = "Help Request: ${helpRequest!!.description}",
                                 style = TextStyle(
-                                    fontSize = 16.sp,
+                                    fontSize = 12.sp,
                                     fontWeight = FontWeight.Medium,
-                                    color = Color(0xFF333333)
+                                    color = Color(0xFF666666)
                                 )
                             )
                             Spacer(modifier = Modifier.height(24.dp))

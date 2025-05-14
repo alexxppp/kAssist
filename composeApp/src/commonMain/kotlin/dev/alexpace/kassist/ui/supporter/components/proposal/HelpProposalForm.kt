@@ -11,8 +11,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
@@ -24,10 +27,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.alexpace.kassist.domain.models.victim.HelpRequest
@@ -35,10 +40,21 @@ import dev.alexpace.kassist.domain.models.victim.HelpRequest
 @Composable
 fun HelpProposalForm(
     helpRequest: HelpRequest,
-    onSubmit: (String) -> Unit,
+    onSubmit: (String, String?) -> Unit,
     onCancel: () -> Unit
 ) {
     var content by remember { mutableStateOf("") }
+    var timeAmount by remember { mutableStateOf("") }
+    var timeUnit by remember { mutableStateOf("") }
+    var isDropdownExpanded by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf("") }
+
+    val timeUnits = listOf("minutes", "hours", "days")
+    val formattedTime = if (timeAmount.isNotBlank() && timeUnit.isNotEmpty()) {
+        "$timeAmount $timeUnit"
+    } else {
+        null
+    }
 
     Box(
         modifier = Modifier
@@ -49,7 +65,8 @@ fun HelpProposalForm(
         Column(
             modifier = Modifier
                 .padding(24.dp)
-                .clip(RoundedCornerShape(16.dp))
+                .shadow(2.dp, RoundedCornerShape(12.dp))
+                .clip(RoundedCornerShape(12.dp))
                 .background(Color.White)
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -57,11 +74,11 @@ fun HelpProposalForm(
             Text(
                 text = "Propose Help for ${helpRequest.victimName}",
                 style = TextStyle(
-                    fontSize = 24.sp,
+                    fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFF333333)
                 ),
-                modifier = Modifier.padding(bottom = 16.dp)
+                modifier = Modifier.padding(bottom = 12.dp)
             )
             TextField(
                 value = content,
@@ -70,7 +87,7 @@ fun HelpProposalForm(
                     Text(
                         "How can you help?",
                         style = TextStyle(
-                            fontSize = 16.sp,
+                            fontSize = 14.sp,
                             fontWeight = FontWeight.Medium,
                             color = Color(0xFF666666)
                         )
@@ -78,7 +95,7 @@ fun HelpProposalForm(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(120.dp)
+                    .height(100.dp)
                     .clip(RoundedCornerShape(8.dp)),
                 textStyle = TextStyle(
                     fontSize = 16.sp,
@@ -87,15 +104,108 @@ fun HelpProposalForm(
                 colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = Color(0xFFE6F0FA),
                     focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
+                    unfocusedIndicatorColor = Color.Transparent,
+                    cursorColor = Color(0xFF4A90E2)
                 ),
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Sentences
                 )
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             Row(
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                TextField(
+                    value = timeAmount,
+                    onValueChange = { newValue ->
+                        if (newValue.all { it.isDigit() } || newValue.isEmpty()) {
+                            timeAmount = newValue
+                        }
+                    },
+                    label = {
+                        Text(
+                            "Time Needed",
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Medium,
+                                color = Color(0xFF666666)
+                            )
+                        )
+                    },
+                    modifier = Modifier
+                        .weight(1f)
+                        .clip(RoundedCornerShape(8.dp)),
+                    textStyle = TextStyle(
+                        fontSize = 16.sp,
+                        color = Color(0xFF333333)
+                    ),
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = Color(0xFFE6F0FA),
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        cursorColor = Color(0xFF4A90E2)
+                    ),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number
+                    )
+                )
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(Color(0xFFE6F0FA))
+                        .clickable { isDropdownExpanded = true }
+                        .padding(16.dp),
+                    contentAlignment = Alignment.CenterStart
+                ) {
+                    Text(
+                        text = timeUnit.ifEmpty { "Select Unit" },
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            color = if (timeUnit.isEmpty()) Color(0xFF666666) else Color(0xFF333333)
+                        )
+                    )
+                    DropdownMenu(
+                        expanded = isDropdownExpanded,
+                        onDismissRequest = { isDropdownExpanded = false },
+                        modifier = Modifier
+                            .width(140.dp)
+                            .background(Color.White)
+                    ) {
+                        timeUnits.forEach { unit ->
+                            DropdownMenuItem(
+                                onClick = {
+                                    timeUnit = unit
+                                    isDropdownExpanded = false
+                                }
+                            ) {
+                                Text(
+                                    text = unit,
+                                    style = TextStyle(
+                                        fontSize = 14.sp,
+                                        color = Color(0xFF333333)
+                                    )
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+            if (errorMessage.isNotEmpty()) {
+                Text(
+                    text = errorMessage,
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                        color = Color(0xFFD32F2F),
+                        fontWeight = FontWeight.Medium
+                    ),
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+            }
+            Spacer(modifier = Modifier.height(12.dp))
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Box(
                     modifier = Modifier
@@ -103,9 +213,15 @@ fun HelpProposalForm(
                         .clip(RoundedCornerShape(12.dp))
                         .background(Color(0xFF4A90E2))
                         .clickable {
-                            if (content.isNotBlank()) {
-                                onSubmit(content)
-                                content = "" // Reset after submit
+                            val validationError = checkForm(content, timeAmount, timeUnit)
+                            if (validationError == null) {
+                                onSubmit(content, formattedTime)
+                                content = ""
+                                timeAmount = ""
+                                timeUnit = ""
+                                errorMessage = ""
+                            } else {
+                                errorMessage = validationError
                             }
                         }
                         .padding(horizontal = 16.dp, vertical = 12.dp),
@@ -115,7 +231,7 @@ fun HelpProposalForm(
                         text = "Submit",
                         style = TextStyle(
                             fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold,
+                            fontWeight = FontWeight.Medium,
                             color = Color.White
                         )
                     )
@@ -124,7 +240,7 @@ fun HelpProposalForm(
                     modifier = Modifier
                         .weight(1f)
                         .clip(RoundedCornerShape(12.dp))
-                        .background(Color(0xFF333333))
+                        .background(Color(0xFF666666))
                         .clickable { onCancel() }
                         .padding(horizontal = 16.dp, vertical = 12.dp),
                     contentAlignment = Alignment.Center
@@ -133,12 +249,21 @@ fun HelpProposalForm(
                         text = "Cancel",
                         style = TextStyle(
                             fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold,
+                            fontWeight = FontWeight.Medium,
                             color = Color.White
                         )
                     )
                 }
             }
         }
+    }
+}
+
+fun checkForm(content: String, timeAmount: String, timeUnit: String): String? {
+    return when {
+        content.isBlank() -> "Please describe how you can help."
+        timeAmount.isBlank() || timeAmount.toIntOrNull() == null || timeAmount.toInt() < 1 -> "Please enter a valid time amount (1 or more)."
+        timeUnit.isEmpty() -> "Please select a time unit."
+        else -> null
     }
 }

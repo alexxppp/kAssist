@@ -71,7 +71,7 @@ fun ProposalCard(helpProposal: HelpProposal) {
                 )
             )
             Text(
-                text = "Supporter: ${helpProposal.supporterName}", // Replace with supporter name if available
+                text = "Supporter: ${helpProposal.supporterName}",
                 style = TextStyle(
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Normal,
