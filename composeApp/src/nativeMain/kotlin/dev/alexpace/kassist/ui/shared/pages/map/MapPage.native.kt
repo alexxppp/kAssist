@@ -11,7 +11,7 @@ import platform.MapKit.MKPointAnnotation
 
 @OptIn(ExperimentalForeignApi::class)
 @Composable
-actual fun MapView(markerTitle: String?, lat: Double?, lon: Double?) {
+actual fun MapPage(markerTitle: String?, lat: Double?, lon: Double?) {
     val coord = CLLocationCoordinate2DMake(lat!!, lon!!)
     UIKitView(
         modifier = Modifier.fillMaxSize(),

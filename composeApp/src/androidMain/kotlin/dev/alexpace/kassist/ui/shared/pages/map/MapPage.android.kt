@@ -11,7 +11,7 @@ import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberMarkerState
 
 @Composable
-actual fun MapView(markerTitle: String?, lat: Double?, lon: Double?) {
+actual fun MapPage(markerTitle: String?, lat: Double?, lon: Double?) {
     val location = LatLng(lat!!, lon!!)
     val cameraState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(location, 10f)

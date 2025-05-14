@@ -10,7 +10,7 @@ import com.mmoczkowski.chart.provider.api.TileCoords
 import com.mmoczkowski.chart.provider.impl.osm.rememberOpenStreetMapTileProvider
 
 @Composable
-actual fun MapView(markerTitle: String?, lat: Double?, lon: Double?) {
+actual fun MapPage(markerTitle: String?, lat: Double?, lon: Double?) {
     val cache = rememberLruCache<Pair<Int, TileCoords>, ImageBitmap>(maxSize = 150)
     val provider = rememberOpenStreetMapTileProvider()
     Chart(
