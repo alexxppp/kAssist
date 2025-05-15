@@ -59,6 +59,7 @@ class HomePageViewModel(
             if (newFilterActive) {
                 val userCoordinates = LocationServiceProvider.getLocationService()
                     .getCurrentLocation()
+
                 if (userCoordinates != null) {
                     println("${userCoordinates.latitude}, ${userCoordinates.longitude}")
                     _state.value = _state.value.copy(

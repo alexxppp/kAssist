@@ -8,5 +8,5 @@ interface UserRepository {
     fun getById(id: String): Flow<User?>
     suspend fun add(user: User)
     suspend fun update(user: User)
-    suspend fun delete(user: User)
+    suspend fun delete(id: String)
 }

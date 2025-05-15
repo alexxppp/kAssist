@@ -43,9 +43,9 @@ class UserRepositoryImpl: UserRepository {
             .set(user)
     }
 
-    override suspend fun delete(user: User) {
+    override suspend fun delete(id: String) {
         usersCollection
-            .document(user.id)
+            .document(id)
             .delete()
     }
 }

@@ -68,6 +68,7 @@ kotlin {
             implementation(libs.firebase.auth)
             // Location
             implementation(libs.play.services.location)
+            implementation(libs.kotlinx.coroutines.play.services)
             // Maps
             implementation(libs.maps.compose)
         }

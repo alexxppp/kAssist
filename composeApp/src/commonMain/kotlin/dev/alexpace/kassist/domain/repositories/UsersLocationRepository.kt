@@ -1,0 +1,14 @@
+package dev.alexpace.kassist.domain.repositories
+
+import dev.alexpace.kassist.domain.models.shared.UserLocation
+import kotlinx.coroutines.flow.Flow
+
+interface UsersLocationRepository {
+
+    fun getAll(): Flow<List<UserLocation>>
+    fun getById(id: String): Flow<UserLocation>
+    suspend fun add(userLocation: UserLocation)
+    suspend fun update(userLocation: UserLocation)
+    suspend fun delete(id: String)
+
+}

@@ -1,4 +1,4 @@
-package dev.alexpace.kassist.ui.shared.pages.map
+package dev.alexpace.kassist.ui.shared.components.map
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -8,9 +8,15 @@ import com.mmoczkowski.chart.Chart
 import com.mmoczkowski.chart.cache.impl.lru.rememberLruCache
 import com.mmoczkowski.chart.provider.api.TileCoords
 import com.mmoczkowski.chart.provider.impl.osm.rememberOpenStreetMapTileProvider
+import dev.alexpace.kassist.domain.models.shared.MapMarker
 
 @Composable
-actual fun MapPage(markerTitle: String?, lat: Double?, lon: Double?) {
+actual fun MapView(
+    markers: List<MapMarker>,
+    initialLat: Double?,
+    initialLon: Double?,
+    zoomLevel: Float
+) {
     val cache = rememberLruCache<Pair<Int, TileCoords>, ImageBitmap>(maxSize = 150)
     val provider = rememberOpenStreetMapTileProvider()
     Chart(

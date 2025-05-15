@@ -20,6 +20,7 @@ koinComposeViewmodel = "4.0.3"
 koinComposeViewmodelNavigation = "4.0.3"
 kotlin = "2.1.10"
 kotlinx-coroutines = "1.10.1"
+kotlinxCoroutinesPlayServices = "1.10.1"
 kotlinxDatetime = "0.6.1"
 ktor = "3.1.2"
 lifecycleViewmodelCompose = "2.8.3"
@@ -61,6 +62,7 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlinxCoroutinesPlayServices" }
 kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 ktor-ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }

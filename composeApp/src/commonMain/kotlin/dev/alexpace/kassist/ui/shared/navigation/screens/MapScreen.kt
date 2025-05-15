@@ -7,6 +7,6 @@ import dev.alexpace.kassist.ui.shared.pages.map.MapPage
 class MapScreen: Screen {
     @Composable
     override fun Content() {
-        MapPage("lala", 1.54, 12.1)
+        MapPage()
     }
 }
