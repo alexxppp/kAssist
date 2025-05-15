@@ -4,16 +4,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cafe.adriel.voyager.navigator.Navigator
 import dev.alexpace.kassist.domain.services.FirebaseAuthService
+import dev.alexpace.kassist.domain.services.TrackUserService
 import dev.alexpace.kassist.ui.shared.navigation.screens.HomeScreen
 import dev.alexpace.kassist.ui.shared.utils.controllers.SnackbarController
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 class LoginPageViewModel(
     private val authService: FirebaseAuthService,
     private val navigator: Navigator
-) : ViewModel() {
+) : ViewModel(), KoinComponent {
 
     private val _state = MutableStateFlow(LoginPageState())
     val state = _state.asStateFlow()
@@ -58,6 +61,8 @@ class LoginPageViewModel(
             } finally {
                 _state.value = _state.value.copy(isLoading = false)
                 SnackbarController.showSnackbar("Logged in successfully!")
+                val trackUserService by inject<TrackUserService>()
+                trackUserService.launchTrackingUser()
             }
         }
     }
