@@ -19,6 +19,7 @@ import dev.alexpace.kassist.ui.supporter.navigation.tabs.SupporterHelpTab
 import dev.alexpace.kassist.ui.supporter.navigation.tabs.SupporterHomeTab
 import dev.alexpace.kassist.ui.shared.utils.theme.Colors
 import dev.alexpace.kassist.ui.supporter.navigation.tabs.SupporterContactTab
+import dev.alexpace.kassist.ui.supporter.navigation.tabs.SupporterInfoTab
 
 class SupporterScreen : Screen {
     @Composable
@@ -31,7 +32,7 @@ class SupporterScreen : Screen {
             tabDisposable = {
                 TabDisposable(
                     it,
-                    listOf(SupporterHomeTab, SupporterContactTab, SupporterHelpTab)
+                    listOf(SupporterHomeTab, SupporterContactTab, SupporterHelpTab, SupporterInfoTab)
                 )
             }
         ) {
@@ -48,7 +49,7 @@ class SupporterScreen : Screen {
                 bottomBar = {
                     BottomBar(
                         LocalTabNavigator.current,
-                        listOf(SupporterHomeTab, SupporterContactTab, SupporterHelpTab)
+                        listOf(SupporterHomeTab, SupporterContactTab, SupporterHelpTab, SupporterInfoTab)
                     )
                 },
                 floatingActionButton = {

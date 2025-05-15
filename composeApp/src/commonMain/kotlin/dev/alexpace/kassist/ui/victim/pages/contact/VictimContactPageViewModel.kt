@@ -46,8 +46,7 @@ class VictimContactPageViewModel(
      * IDs to the name of the receiver
      */
     private fun updateUserNames(chats: List<LiveChat>) {
-        val receiverIds =
-            chats.map { if (it.victimId == victimId) it.victimId else it.supporterId }.toSet()
+        val receiverIds = chats.map { if (it.victimId == victimId) it.supporterId else it.victimId }.toSet()
         val currentNames = _userNames.value
         for (id in receiverIds) {
             if (!currentNames.containsKey(id)) {

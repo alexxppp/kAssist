@@ -43,6 +43,13 @@ class MapPageViewModel(
             val currentUser = userRepository.getById(currentUserId).firstOrNull()
             if (currentUser != null) {
                 currentUser.naturalDisaster?.id?.let { disasterId ->
+                    // Set initial coordinates once
+                    if (_initialLat.value == null) {
+                        _initialLat.value = currentUser.naturalDisaster.coordinates.latitude
+                        _initialLon.value = currentUser.naturalDisaster.coordinates.longitude
+
+                        println("" + _initialLat.value + " HEREEE " + _initialLon.value)
+                    }
                     usersLocationRepository.getAllByDisaster(disasterId)
                         .collectLatest { userLocations ->
                             val mapMarkers = userLocations.mapIndexed { index, userLocation ->
@@ -59,9 +66,10 @@ class MapPageViewModel(
                                 )
                             }
                             _markers.value = mapMarkers
-                            _initialLat.value = currentUser.naturalDisaster.coordinates.latitude
-                            _initialLon.value = currentUser.naturalDisaster.coordinates.longitude
                         }
+                } ?: run {
+                    _initialLat.value = 0.0
+                    _initialLon.value = 0.0
                 }
             }
         }

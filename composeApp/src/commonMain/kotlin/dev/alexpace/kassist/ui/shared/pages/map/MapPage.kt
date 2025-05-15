@@ -10,7 +10,6 @@ import org.koin.compose.koinInject
 
 @Composable
 fun MapPage() {
-
     // DI
     val usersLocationRepository = koinInject<UsersLocationRepository>()
     val userRepository = koinInject<UserRepository>()
@@ -28,10 +27,12 @@ fun MapPage() {
     val initialLon = viewModel.initialLon.collectAsState().value
 
     // UI
-    MapView(
-        markers = markers,
-        initialLat = initialLat,
-        initialLon = initialLon,
-        zoomLevel = 12f
-    )
+    if (initialLat != null && initialLon != null) {
+        MapView(
+            markers = markers,
+            initialLat = initialLat,
+            initialLon = initialLon,
+            zoomLevel = 12f
+        )
+    }
 }

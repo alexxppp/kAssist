@@ -16,6 +16,7 @@ import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabDisposable
 import cafe.adriel.voyager.navigator.tab.TabNavigator
+import dev.alexpace.kassist.data.utils.helpers.PLATFORM
 import dev.alexpace.kassist.ui.admin.navigation.tabs.AdminModeratorTab
 import dev.alexpace.kassist.ui.shared.navigation.screens.MapScreen
 import dev.alexpace.kassist.ui.shared.navigation.utils.BottomBar
@@ -53,12 +54,14 @@ class AdminScreen : Screen {
                     )
                 },
                 floatingActionButton = {
-                    FloatingActionButton(
-                        onClick = {
-                            navigator.push(MapScreen())
-                        },
-                    ) {
-                        Text("Map")
+                    if (PLATFORM != "Desktop") {
+                        FloatingActionButton(
+                            onClick = {
+                                navigator.push(MapScreen())
+                            },
+                        ) {
+                            Text("Map")
+                        }
                     }
                 }
             )

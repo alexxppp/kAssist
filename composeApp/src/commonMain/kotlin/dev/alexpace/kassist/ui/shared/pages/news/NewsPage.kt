@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
@@ -33,7 +32,6 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.alexpace.kassist.domain.services.LiveNewsApiService
-import dev.alexpace.kassist.ui.shared.navigation.screens.MapScreen
 import org.koin.compose.koinInject
 
 @Composable
@@ -57,14 +55,7 @@ fun NewsPage() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color(0xFFE6F0FA),
-                        Color(0xFFFFFFFF)
-                    )
-                )
-            )
+            .padding(bottom = 60.dp)
     ) {
         Column(
             modifier = Modifier
@@ -73,11 +64,6 @@ fun NewsPage() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Button(
-                onClick = { navigator.push(MapScreen()) }
-            ) {
-                Text("Button")
-            }
             // News Content
             Box(
                 modifier = Modifier
@@ -181,7 +167,6 @@ fun NewsPage() {
             // Fetch News Button
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
                     .clip(RoundedCornerShape(10.dp))
                     .background(
                         brush = Brush.linearGradient(
@@ -192,7 +177,7 @@ fun NewsPage() {
                         )
                     )
                     .clickable { viewModel.fetchLiveNews() }
-                    .padding(vertical = 12.dp),
+                    .padding(vertical = 12.dp, horizontal = 20.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Text(

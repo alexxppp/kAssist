@@ -36,6 +36,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import dev.alexpace.kassist.data.utils.helpers.PLATFORM
+import dev.alexpace.kassist.domain.models.enums.UserRole
 import dev.alexpace.kassist.domain.repositories.NaturalDisasterRepository
 import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.alexpace.kassist.domain.services.NaturalDisasterApiService
@@ -138,30 +140,33 @@ fun HomePage() {
                             .clickable { navigator.push(SettingsScreen()) }
                     )
                 }
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Start
-                ) {
-                    Checkbox(
-                        checked = state.isFilterActive,
-                        onCheckedChange = { viewModel.toggleFilterNaturalDisastersByRadius() },
-                        colors = CheckboxDefaults.colors(
-                            checkedColor = Color(0xFF4A90E2),
-                            uncheckedColor = Color(0xFF666666)
+
+                if (PLATFORM != "Desktop" || state.user?.role != UserRole.Admin) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Start
+                    ) {
+                        Checkbox(
+                            checked = state.isFilterActive,
+                            onCheckedChange = { viewModel.toggleFilterNaturalDisastersByRadius() },
+                            colors = CheckboxDefaults.colors(
+                                checkedColor = Color(0xFF4A90E2),
+                                uncheckedColor = Color(0xFF666666)
+                            )
                         )
-                    )
-                    Text(
-                        text = "Show disasters within 500km",
-                        style = TextStyle(
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Medium,
-                            color = Color(0xFF333333)
-                        ),
-                        modifier = Modifier.padding(start = 8.dp)
-                    )
+                        Text(
+                            text = "Show disasters within 500km",
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Medium,
+                                color = Color(0xFF333333)
+                            ),
+                            modifier = Modifier.padding(start = 8.dp)
+                        )
+                    }
                 }
 
                 if (state.naturalDisasters.isNotEmpty()) {

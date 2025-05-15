@@ -3,6 +3,7 @@ package dev.alexpace.kassist.ui.shared.navigation.utils
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
@@ -34,9 +35,20 @@ fun contactTabOptions(): TabOptions {
 @Composable
 fun helpTabOptions(): TabOptions {
     val title = "Help"
-    val icon = rememberVectorPainter(Icons.Default.Person) // TODO: Change Icon
+    val icon = rememberVectorPainter(Icons.Default.Person)
     return TabOptions(
         index = 2u,
+        title = title,
+        icon = icon
+    )
+}
+
+@Composable
+fun infoTabOptions(): TabOptions {
+    val title = "Info"
+    val icon = rememberVectorPainter(Icons.Default.Info)
+    return TabOptions(
+        index = 3u,
         title = title,
         icon = icon
     )
