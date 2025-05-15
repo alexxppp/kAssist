@@ -33,6 +33,13 @@ class UsersLocationRepositoryImpl : UsersLocationRepository {
             }
     }
 
+    override suspend fun exists(userLocationId: String): Boolean {
+        return firestore.collection("user_locations")
+            .document(userLocationId)
+            .get()
+            .exists
+    }
+
     override suspend fun add(userLocation: UserLocation) {
         usersLocationCollection
             .document(userLocation.user.id)

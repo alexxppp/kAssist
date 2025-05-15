@@ -5,6 +5,7 @@ import dev.alexpace.kassist.data.repositoriesImpl.HelpRequestRepositoryImpl
 import dev.alexpace.kassist.data.repositoriesImpl.UserRepositoryImpl
 import dev.alexpace.kassist.data.repositoriesImpl.HelpProposalRepositoryImpl
 import dev.alexpace.kassist.data.repositoriesImpl.LiveChatRepositoryImpl
+import dev.alexpace.kassist.data.repositoriesImpl.UsersLocationRepositoryImpl
 import dev.alexpace.kassist.data.network.servicesImpl.FirebaseAuthServiceImpl
 import dev.alexpace.kassist.data.repositoriesImpl.AdminPendingDataRepositoryImpl
 import dev.alexpace.kassist.data.network.servicesImpl.LiveNewsApiServiceImpl
@@ -20,6 +21,9 @@ import dev.alexpace.kassist.domain.services.FirebaseAuthService
 import dev.alexpace.kassist.domain.services.GeoapifyApiService
 import dev.alexpace.kassist.domain.services.LiveNewsApiService
 import dev.alexpace.kassist.domain.services.NaturalDisasterApiService
+import dev.alexpace.kassist.domain.services.TrackUserService
+import dev.alexpace.kassist.data.background.TrackUserServiceImpl
+import dev.alexpace.kassist.domain.repositories.UsersLocationRepository
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -35,4 +39,6 @@ val sharedModule = module {
     singleOf(::LiveNewsApiServiceImpl).bind<LiveNewsApiService>()
     singleOf(::AdminPendingDataRepositoryImpl).bind<AdminPendingDataRepository>()
     singleOf(::GeoapifyApiServiceImpl).bind<GeoapifyApiService>()
+    singleOf(::TrackUserServiceImpl).bind<TrackUserService>()
+    singleOf(::UsersLocationRepositoryImpl).bind<UsersLocationRepository>()
 }

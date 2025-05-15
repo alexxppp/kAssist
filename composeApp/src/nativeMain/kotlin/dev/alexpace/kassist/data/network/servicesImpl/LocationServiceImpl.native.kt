@@ -33,8 +33,9 @@ actual class LocationServiceImpl {
         }
 
         locationManager.delegate = delegate
-        locationManager.desiredAccuracy = 100.0 // Accuracy in meters
+        locationManager.desiredAccuracy = 100.0
         locationManager.requestWhenInUseAuthorization()
+
         if (CLLocationManager.locationServicesEnabled()) {
             locationManager.startUpdatingLocation()
         } else {
