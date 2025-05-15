@@ -24,6 +24,22 @@ class UsersLocationRepositoryImpl : UsersLocationRepository {
             }
     }
 
+    override fun getAllByDisaster(ndId: Int) = flow {
+        usersLocationCollection
+            .snapshots
+            .collect { querySnapshot ->
+                val usersLocations = querySnapshot
+                    .documents
+                    .map { documentSnapshot ->
+                        documentSnapshot.data<UserLocation>()
+                    }
+                    .filter {
+                        it.user.naturalDisaster!!.id == ndId
+                    }
+                emit(usersLocations)
+            }
+    }
+
     override fun getById(id: String) = flow {
         usersLocationCollection
             .document(id)
