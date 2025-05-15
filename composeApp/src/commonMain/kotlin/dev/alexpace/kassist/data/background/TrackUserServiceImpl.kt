@@ -18,15 +18,13 @@ import kotlinx.datetime.Clock
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class TrackUserServiceImpl() : TrackUserService, KoinComponent {
+class TrackUserServiceImpl : TrackUserService, KoinComponent {
 
     private val scope = CoroutineScope(Dispatchers.Default)
     private val usersLocationRepository by inject<UsersLocationRepository>()
     private val userRepository by inject<UserRepository>()
 
     private val currentUserId = Firebase.auth.currentUser?.uid
-        // TODO: Handle more nicely
-        ?: throw Exception("User not authenticated")
 
     private lateinit var user: User
 
@@ -36,6 +34,10 @@ class TrackUserServiceImpl() : TrackUserService, KoinComponent {
 
     private fun fetchUser() {
         scope.launch {
+            if (currentUserId == null) {
+                delay(10000)
+                return@launch
+            }
             userRepository.getById(currentUserId).collect { user ->
                 this@TrackUserServiceImpl.user = user!!
             }
@@ -44,34 +46,38 @@ class TrackUserServiceImpl() : TrackUserService, KoinComponent {
 
     fun launchTrackingUser() {
 
-        fetchUser()
-
         scope.launch {
-            while (true) {
+            try {
+                fetchUser()
 
-                val userCoordinates =
-                    LocationServiceProvider.getLocationService().getCurrentLocation()
+                while (true) {
 
-                println(userCoordinates)
+                    val userCoordinates =
+                        LocationServiceProvider.getLocationService().getCurrentLocation()
 
-                if (userCoordinates == null) continue
+                    println(userCoordinates)
 
-                val userLocation = UserLocation(
-                    id = user.id,
-                    user = user,
-                    latitude = userCoordinates.latitude,
-                    longitude = userCoordinates.longitude,
-                    timestamp = Clock.System.now().toEpochMilliseconds(),
-                    isActive = true
-                )
+                    if (userCoordinates == null) continue
 
-                if (usersLocationRepository.exists(userLocation.id)) {
-                    usersLocationRepository.update(userLocation)
-                } else {
-                    usersLocationRepository.add(userLocation)
+                    val userLocation = UserLocation(
+                        id = user.id,
+                        user = user,
+                        latitude = userCoordinates.latitude,
+                        longitude = userCoordinates.longitude,
+                        timestamp = Clock.System.now().toEpochMilliseconds(),
+                        isActive = true
+                    )
+
+                    if (usersLocationRepository.exists(userLocation.id)) {
+                        usersLocationRepository.update(userLocation)
+                    } else {
+                        usersLocationRepository.add(userLocation)
+                    }
+
+                    delay(DELAY_TRACK_LOCATION)
                 }
-
-                delay(DELAY_TRACK_LOCATION)
+            } catch (e: Exception) {
+                return@launch
             }
         }
     }

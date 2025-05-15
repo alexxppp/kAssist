@@ -6,6 +6,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Place
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import cafe.adriel.voyager.core.screen.Screen
@@ -16,9 +17,9 @@ import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabDisposable
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import dev.alexpace.kassist.ui.admin.navigation.tabs.AdminModeratorTab
+import dev.alexpace.kassist.ui.shared.navigation.screens.MapScreen
 import dev.alexpace.kassist.ui.shared.navigation.utils.BottomBar
 import dev.alexpace.kassist.ui.shared.utils.theme.Colors
-
 
 class AdminScreen : Screen {
 
@@ -54,14 +55,13 @@ class AdminScreen : Screen {
                 floatingActionButton = {
                     FloatingActionButton(
                         onClick = {
-                            navigator.push(AdminInfoScreen())
+                            navigator.push(MapScreen())
                         },
                     ) {
-                        Icons.Default.Info
+                        Text("Map")
                     }
                 }
             )
         }
     }
-
 }
