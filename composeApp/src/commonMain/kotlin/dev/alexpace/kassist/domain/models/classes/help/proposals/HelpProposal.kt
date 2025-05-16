@@ -15,5 +15,5 @@ data class HelpProposal(
     val content: String,
     val status: RequestStatusTypes,
     val requiredTime: String,
-    val fulfilledItems: List<HelpItem>? = null
+    val fulfilledItems: List<HelpItem?>? = null
 )

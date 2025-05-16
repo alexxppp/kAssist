@@ -79,6 +79,15 @@ fun ProposalCard(helpProposal: HelpProposal) {
                 ),
                 modifier = Modifier.padding(top = 2.dp)
             )
+            Text(
+                text = "Can fulfill: ${helpProposal.fulfilledItems?.size ?: 0} items",
+                style = TextStyle(
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Normal,
+                    color = Color(0xFF666666)
+                ),
+                modifier = Modifier.padding(top = 2.dp)
+            )
             Row(
                 modifier = Modifier
                     .padding(top = 8.dp)

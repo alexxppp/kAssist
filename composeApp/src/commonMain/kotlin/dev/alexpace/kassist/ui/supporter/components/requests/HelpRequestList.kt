@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.sp
 import dev.alexpace.kassist.domain.models.classes.help.requests.HelpRequest
 
 @Composable
-fun HelpRequestList(helpRequests: List<HelpRequest>, selectHelpRequest: (HelpRequest?) -> Unit) {
+fun HelpRequestList(helpRequests: List<HelpRequest>) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -110,8 +110,7 @@ fun HelpRequestList(helpRequests: List<HelpRequest>, selectHelpRequest: (HelpReq
                             ) + fadeOut(animationSpec = tween(300))
                         ) {
                             HelpRequestCard(
-                                helpRequest = helpRequest,
-                                onClick = { selectHelpRequest(helpRequest) }
+                                helpRequest = helpRequest
                             )
                             Spacer(modifier = Modifier.height(8.dp))
                         }

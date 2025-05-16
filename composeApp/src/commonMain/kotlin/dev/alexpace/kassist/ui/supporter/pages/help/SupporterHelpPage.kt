@@ -16,7 +16,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.alexpace.kassist.domain.repositories.HelpProposalRepository
 import dev.alexpace.kassist.domain.repositories.HelpRequestRepository
 import dev.alexpace.kassist.domain.repositories.UserRepository
-import dev.alexpace.kassist.ui.supporter.components.proposal.HelpProposalForm
 import dev.alexpace.kassist.ui.supporter.components.requests.HelpRequestList
 import org.koin.compose.koinInject
 
@@ -29,7 +28,7 @@ fun SupporterHelpPage() {
 
     // ViewModel
     val viewModel: SupporterHelpPageViewModel = viewModel {
-        SupporterHelpPageViewModel(helpRequestRepository, helpProposalRepository, userRepository)
+        SupporterHelpPageViewModel(helpRequestRepository, userRepository)
     }
 
     val helpRequests = viewModel.helpRequests.collectAsState().value
@@ -57,16 +56,7 @@ fun SupporterHelpPage() {
                     .fillMaxSize()
                     .padding(padding)
             ) {
-                HelpRequestList(helpRequests, viewModel::selectHelpRequest)
-                viewModel.selectedHelpRequest.collectAsState().value?.let { request ->
-                    HelpProposalForm(
-                        helpRequest = request,
-                        onSubmit = { content, estimatedTime ->
-                            viewModel.submitHelpProposal(content, estimatedTime, request)
-                        },
-                        onCancel = { viewModel.selectHelpRequest(null) }
-                    )
-                }
+                HelpRequestList(helpRequests)
             }
         }
     }

@@ -23,11 +23,14 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.alexpace.kassist.domain.models.enums.help.NeedLevelTypes
 import dev.alexpace.kassist.domain.models.classes.help.requests.HelpRequest
+import dev.alexpace.kassist.ui.supporter.navigation.screens.SupporterHelpRequestInfoScreen
 
 @Composable
-fun HelpRequestCard(helpRequest: HelpRequest, onClick: () -> Unit) {
+fun HelpRequestCard(helpRequest: HelpRequest) {
     val (borderColor, badgeColor) = when (helpRequest.needLevel) {
         NeedLevelTypes.NotAssigned -> Color(0xFF999999) to Color(0xFFF5F5F5)
         NeedLevelTypes.Low -> Color(0xFF4CAF50) to Color(0xFFE8F5E9)
@@ -35,6 +38,9 @@ fun HelpRequestCard(helpRequest: HelpRequest, onClick: () -> Unit) {
         NeedLevelTypes.High -> Color(0xFFFF5722) to Color(0xFFFDECEA)
         NeedLevelTypes.VeryHigh -> Color(0xFFD32F2F) to Color(0xFFFCE4EC)
     }
+
+    val navigator = LocalNavigator.currentOrThrow.parent
+        ?: throw Exception("Navigator not found")
 
     Box(
         modifier = Modifier
@@ -44,7 +50,7 @@ fun HelpRequestCard(helpRequest: HelpRequest, onClick: () -> Unit) {
             .clip(RoundedCornerShape(16.dp))
             .background(Color.White)
             .border(2.dp, borderColor, RoundedCornerShape(16.dp))
-            .clickable(onClick = onClick)
+            .clickable(onClick = { navigator.push(SupporterHelpRequestInfoScreen(helpRequest)) })
             .padding(16.dp)
     ) {
         Column {
