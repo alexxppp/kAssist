@@ -1,9 +1,12 @@
 package dev.alexpace.kassist.ui.supporter.navigation.screens
 
 import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Place
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import cafe.adriel.voyager.core.screen.Screen
@@ -13,6 +16,7 @@ import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.TabDisposable
 import cafe.adriel.voyager.navigator.tab.TabNavigator
+import dev.alexpace.kassist.ui.shared.navigation.screens.MapScreen
 import dev.alexpace.kassist.ui.shared.navigation.screens.NewsScreen
 import dev.alexpace.kassist.ui.shared.navigation.utils.BottomBar
 import dev.alexpace.kassist.ui.supporter.navigation.tabs.SupporterHelpTab
@@ -55,10 +59,10 @@ class SupporterScreen : Screen {
                 floatingActionButton = {
                     FloatingActionButton(
                         onClick = {
-                            navigator.push(NewsScreen()) // TODO: Change
+                            navigator.push(MapScreen())
                         },
                     ) {
-                        Text("Map") // TODO: Replace with map icon
+                        Icon(Icons.Default.Place, "Map")
                     }
                 }
             )

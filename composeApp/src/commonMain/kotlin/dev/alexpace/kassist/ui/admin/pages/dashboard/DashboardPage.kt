@@ -38,7 +38,7 @@ fun DashboardPage() {
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFF5F5F5))
-            .padding(16.dp)
+            .padding(16.dp, bottom = 55.dp, end = 16.dp)
     ) {
         when {
             state.user == null -> {

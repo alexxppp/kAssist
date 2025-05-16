@@ -32,7 +32,7 @@ fun MapPage() {
             markers = markers,
             initialLat = initialLat,
             initialLon = initialLon,
-            zoomLevel = 12f
+            zoomLevel = 10f
         )
     }
 }
