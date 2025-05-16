@@ -1,7 +1,7 @@
 package dev.alexpace.kassist.data.network.servicesImpl
 
 import dev.alexpace.kassist.data.network.http.createHttpClient
-import dev.alexpace.kassist.data.network.http.getHttpClient
+import dev.alexpace.kassist.data.network.http.getHttpEngine
 import dev.alexpace.kassist.data.network.responses.Feature
 import dev.alexpace.kassist.data.utils.constants.BASE_URL_DISASTERS
 import dev.alexpace.kassist.data.network.responses.Geometry
@@ -16,7 +16,7 @@ import io.ktor.http.isSuccess
 
 class NaturalDisasterApiServiceImpl: NaturalDisasterApiService {
 
-    private val http = createHttpClient(getHttpClient())
+    private val http = createHttpClient(getHttpEngine())
     private var count = 0;
 
     override suspend fun getNaturalDisasters(): NaturalDisasterResponse {

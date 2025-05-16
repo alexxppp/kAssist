@@ -1,7 +1,7 @@
 package dev.alexpace.kassist.data.utils.helpers
 
 import dev.alexpace.kassist.data.network.http.createHttpClient
-import dev.alexpace.kassist.data.network.http.getHttpClient
+import dev.alexpace.kassist.data.network.http.getHttpEngine
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.auth
 import io.ktor.client.request.post
@@ -15,7 +15,7 @@ import kotlinx.serialization.json.Json
 
 actual suspend fun registerWithFirebase(email: String, password: String) {
     val apiKey = "AIzaSyDXO57XUvfdnNmWjUaTNuF3k2x9DfhCq2Y"
-    val client = createHttpClient(getHttpClient())
+    val client = createHttpClient(getHttpEngine())
     val json = Json { ignoreUnknownKeys = true }
     try {
         val response: HttpResponse = client.post("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=$apiKey") {

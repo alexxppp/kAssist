@@ -1,6 +1,7 @@
 package dev.alexpace.kassist.ui.admin.navigation.screens
 
 import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -60,7 +61,7 @@ class AdminScreen : Screen {
                                 navigator.push(MapScreen())
                             },
                         ) {
-                            Text("Map")
+                            Icon(Icons.Default.Place, "Map")
                         }
                     }
                 }

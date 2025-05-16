@@ -1,7 +1,7 @@
 package dev.alexpace.kassist.domain.models.classes.help.requests
 
 import dev.alexpace.kassist.domain.models.classes.help.HelpItem
-import dev.alexpace.kassist.domain.models.enums.nds.NeedLevelTypes
+import dev.alexpace.kassist.domain.models.enums.help.NeedLevelTypes
 import dev.alexpace.kassist.domain.models.enums.help.RequestStatusTypes
 import kotlinx.serialization.Serializable
 

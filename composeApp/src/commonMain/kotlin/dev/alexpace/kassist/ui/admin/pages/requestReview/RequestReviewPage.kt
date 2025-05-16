@@ -30,11 +30,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.alexpace.kassist.domain.models.classes.help.requests.HelpRequest
-import dev.alexpace.kassist.domain.models.enums.nds.NeedLevelTypes
+import dev.alexpace.kassist.domain.models.enums.help.NeedLevelTypes
 import dev.alexpace.kassist.domain.repositories.AdminPendingDataRepository
 import dev.alexpace.kassist.domain.repositories.NaturalDisasterRepository
 import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.alexpace.kassist.domain.services.GeoapifyApiService
+import dev.alexpace.kassist.domain.services.NeedLevelSuggestionService
 import dev.alexpace.kassist.ui.admin.components.HelpItemDisplay
 import org.koin.compose.koinInject
 
@@ -51,6 +52,7 @@ fun RequestReviewPage(
     val geoapifyApiService = koinInject<GeoapifyApiService>()
     val naturalDisasterRepository = koinInject<NaturalDisasterRepository>()
     val userRepository = koinInject<UserRepository>()
+    val needLevelSuggestionService = koinInject<NeedLevelSuggestionService>()
 
     // ViewModel
     val viewModel = viewModel {
@@ -58,7 +60,8 @@ fun RequestReviewPage(
             adminPendingDataRepository,
             userRepository,
             geoapifyApiService,
-            naturalDisasterRepository
+            naturalDisasterRepository,
+            needLevelSuggestionService
         )
     }
     val state by viewModel.state.collectAsState()
@@ -328,7 +331,7 @@ fun RequestReviewPage(
                         }
                     }
                     Button(
-                        onClick = { },
+                        onClick = { viewModel.suggestNeedLevel() },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(48.dp)
@@ -341,6 +344,13 @@ fun RequestReviewPage(
                             color = Color.White,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Medium
+                        )
+                    }
+                    state.suggestedNeedLevel?.let { needLevel ->
+                        Text(
+                            text = "Suggested Need Level: $needLevel",
+                            fontSize = 16.sp,
+                            color = Color(0xFF666666)
                         )
                     }
                 }

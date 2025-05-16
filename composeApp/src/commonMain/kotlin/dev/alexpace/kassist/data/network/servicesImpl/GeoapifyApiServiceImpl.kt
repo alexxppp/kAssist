@@ -1,7 +1,7 @@
 package dev.alexpace.kassist.data.network.servicesImpl
 
 import dev.alexpace.kassist.data.network.http.createHttpClient
-import dev.alexpace.kassist.data.network.http.getHttpClient
+import dev.alexpace.kassist.data.network.http.getHttpEngine
 import dev.alexpace.kassist.data.network.responses.geo.GeoapifyApiResponse
 import dev.alexpace.kassist.data.utils.helpers.GeoapifyUrlBuilder
 import dev.alexpace.kassist.domain.services.GeoapifyApiService
@@ -11,7 +11,7 @@ import io.ktor.http.isSuccess
 
 class GeoapifyApiServiceImpl : GeoapifyApiService {
 
-    private val http = createHttpClient(getHttpClient())
+    private val http = createHttpClient(getHttpEngine())
     private var count = 0
 
     override suspend fun getConfidenceScoreForAddress(

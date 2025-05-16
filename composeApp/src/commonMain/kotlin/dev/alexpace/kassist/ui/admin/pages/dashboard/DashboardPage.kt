@@ -54,7 +54,9 @@ fun DashboardPage() {
             }
             else -> {
                 Column(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     // Header

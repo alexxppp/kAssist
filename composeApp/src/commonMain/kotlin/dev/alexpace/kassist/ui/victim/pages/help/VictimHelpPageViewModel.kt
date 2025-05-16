@@ -7,7 +7,7 @@ import dev.alexpace.kassist.domain.models.classes.help.requests.HelpRequest
 import dev.alexpace.kassist.domain.models.classes.help.HelpItem
 import dev.alexpace.kassist.domain.models.enums.app.UnitType
 import dev.alexpace.kassist.domain.models.enums.help.HelpItemType
-import dev.alexpace.kassist.domain.models.enums.nds.NeedLevelTypes
+import dev.alexpace.kassist.domain.models.enums.help.NeedLevelTypes
 import dev.alexpace.kassist.domain.models.enums.help.RequestStatusTypes
 import dev.alexpace.kassist.domain.repositories.HelpRequestRepository
 import dev.alexpace.kassist.domain.repositories.UserRepository

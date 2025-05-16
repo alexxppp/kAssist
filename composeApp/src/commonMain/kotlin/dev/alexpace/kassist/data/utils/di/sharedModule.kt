@@ -11,6 +11,7 @@ import dev.alexpace.kassist.data.repositoriesImpl.AdminPendingDataRepositoryImpl
 import dev.alexpace.kassist.data.network.servicesImpl.LiveNewsApiServiceImpl
 import dev.alexpace.kassist.data.network.servicesImpl.GeoapifyApiServiceImpl
 import dev.alexpace.kassist.data.network.servicesImpl.NaturalDisasterApiServiceImpl
+import dev.alexpace.kassist.data.network.servicesImpl.NeedLevelSuggestionServiceImpl
 import dev.alexpace.kassist.domain.repositories.AdminPendingDataRepository
 import dev.alexpace.kassist.domain.repositories.NaturalDisasterRepository
 import dev.alexpace.kassist.domain.repositories.HelpProposalRepository
@@ -24,6 +25,7 @@ import dev.alexpace.kassist.domain.services.NaturalDisasterApiService
 import dev.alexpace.kassist.domain.services.TrackUserService
 import dev.alexpace.kassist.data.background.TrackUserServiceImpl
 import dev.alexpace.kassist.domain.repositories.UsersLocationRepository
+import dev.alexpace.kassist.domain.services.NeedLevelSuggestionService
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -41,4 +43,5 @@ val sharedModule = module {
     singleOf(::GeoapifyApiServiceImpl).bind<GeoapifyApiService>()
     singleOf(::TrackUserServiceImpl).bind<TrackUserService>()
     singleOf(::UsersLocationRepositoryImpl).bind<UsersLocationRepository>()
+    singleOf(::NeedLevelSuggestionServiceImpl).bind<NeedLevelSuggestionService>()
 }

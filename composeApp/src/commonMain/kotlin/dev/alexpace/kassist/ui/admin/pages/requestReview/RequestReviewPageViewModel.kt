@@ -4,11 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.alexpace.kassist.data.utils.helpers.Codes.countryCodeMap
 import dev.alexpace.kassist.domain.models.classes.help.requests.HelpRequest
-import dev.alexpace.kassist.domain.models.enums.nds.NeedLevelTypes
+import dev.alexpace.kassist.domain.models.enums.help.NeedLevelTypes
 import dev.alexpace.kassist.domain.repositories.AdminPendingDataRepository
 import dev.alexpace.kassist.domain.repositories.NaturalDisasterRepository
 import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.alexpace.kassist.domain.services.GeoapifyApiService
+import dev.alexpace.kassist.domain.services.NeedLevelSuggestionService
 import dev.alexpace.kassist.ui.shared.utils.controllers.SnackbarController
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +21,8 @@ class RequestReviewPageViewModel(
     private val adminPendingDataRepository: AdminPendingDataRepository,
     private val userRepository: UserRepository,
     private val geoapifyApiService: GeoapifyApiService,
-    private val naturalDisasterRepository: NaturalDisasterRepository
+    private val naturalDisasterRepository: NaturalDisasterRepository,
+    private val needLevelSuggestionService: NeedLevelSuggestionService
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(RequestReviewPageState())
@@ -118,6 +120,32 @@ class RequestReviewPageViewModel(
                         isLoading = false,
                         error = "Failed to validate address: ${e.message}",
                         isAddressValid = null
+                    )
+                }
+            }
+        }
+    }
+
+    fun suggestNeedLevel() {
+        val helpRequest = _state.value.helpRequest ?: return
+
+        _state.update { it.copy(isLoading = true, error = null, suggestedNeedLevel = null) }
+
+        viewModelScope.launch {
+            try {
+                val suggestion = helpRequest.description?.let {
+                    needLevelSuggestionService.getSuggestion(
+                        it
+                    )
+                }
+
+                _state.update { it.copy(isLoading = false, suggestedNeedLevel = suggestion?.suggestedNeedLevel) }
+            } catch (e: Exception) {
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        error = "Failed to suggest need level: ${e.message}",
+                        suggestedNeedLevel = null
                     )
                 }
             }

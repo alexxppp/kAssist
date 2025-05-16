@@ -1,6 +1,6 @@
 package dev.alexpace.kassist.data.repositoriesImpl
 
-import dev.alexpace.kassist.domain.models.enums.nds.NeedLevelTypes
+import dev.alexpace.kassist.domain.models.enums.help.NeedLevelTypes
 import dev.alexpace.kassist.domain.models.enums.help.RequestStatusTypes
 import dev.alexpace.kassist.domain.models.classes.help.requests.HelpRequest
 import dev.alexpace.kassist.domain.repositories.AdminPendingDataRepository
