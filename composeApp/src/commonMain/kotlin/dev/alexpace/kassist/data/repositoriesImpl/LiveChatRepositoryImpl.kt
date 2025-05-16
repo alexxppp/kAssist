@@ -6,6 +6,7 @@ import dev.alexpace.kassist.domain.repositories.LiveChatRepository
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.firestore.FieldValue
 import dev.gitlive.firebase.firestore.firestore
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
@@ -34,10 +35,12 @@ class LiveChatRepositoryImpl : LiveChatRepository {
                 }
             }
 
-        merge(victimChatsFlow, supporterChatsFlow)
-            .collect { liveChats ->
-                emit(liveChats.distinctBy { it.id })
-            }
+        // Combine the flows to emit a single list of distinct chats
+        combine(victimChatsFlow, supporterChatsFlow) { victimChats, supporterChats ->
+            (victimChats + supporterChats).distinctBy { it.id }
+        }.collect { liveChats ->
+            emit(liveChats)
+        }
     }
 
     override fun getById(liveChatId: String) = flow {
@@ -71,7 +74,7 @@ class LiveChatRepositoryImpl : LiveChatRepository {
         // Convert ChatMessage to a Map for Firestore compatibility
         val messageMap = mapOf(
             "senderId" to message.senderId,
-            "content" to message.content,
+            "content" to message.content.trim(),
             "timestamp" to message.timestamp
         )
         liveChatCollection
