@@ -1,9 +1,14 @@
 package dev.alexpace.kassist.ui.victim.pages.help
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -11,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -20,19 +26,14 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import dev.alexpace.kassist.domain.models.enums.nds.NeedLevelTypes
-import dev.alexpace.kassist.domain.models.enums.help.RequestStatusTypes
-import dev.alexpace.kassist.domain.models.classes.help.requests.HelpRequest
 import dev.alexpace.kassist.domain.repositories.HelpRequestRepository
 import dev.alexpace.kassist.domain.repositories.UserRepository
+import dev.alexpace.kassist.ui.victim.components.requests.HelpRequestItem
 import org.koin.compose.koinInject
-import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
 
-@OptIn(ExperimentalUuidApi::class)
 @Composable
 fun VictimHelpPage() {
-    // DI
+    // Dependency Injection
     val helpRequestRepository = koinInject<HelpRequestRepository>()
     val userRepository = koinInject<UserRepository>()
 
@@ -43,31 +44,47 @@ fun VictimHelpPage() {
     val user by viewModel.user.collectAsState()
     val address by viewModel.address.collectAsState()
     val description by viewModel.description.collectAsState()
+    val helpItems by viewModel.helpItems.collectAsState()
 
     // UI
     if (user != null) {
         Box(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(Color(0xFFF0F4F8), Color.White)
+                    )
+                )
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                    .fillMaxSize()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 // Header
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.padding(top = 48.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Person,
+                        contentDescription = "Request Help",
+                        tint = Color(0xFF4A90E2),
+                        modifier = Modifier
+                            .padding(bottom = 16.dp)
+                            .clip(MaterialTheme.shapes.medium)
+                    )
                     Text(
                         text = "Request Help",
                         style = TextStyle(
-                            fontSize = 32.sp,
+                            fontSize = 28.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color(0xFF333333)
                         )
                     )
-                    Spacer(modifier = Modifier.height(4.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = "Enter details to request assistance",
                         style = TextStyle(
@@ -78,90 +95,110 @@ fun VictimHelpPage() {
                     )
                 }
 
-                // Form Card
-                Card(
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Form Container
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .shadow(4.dp, RoundedCornerShape(12.dp)),
-                    shape = RoundedCornerShape(12.dp),
-                    backgroundColor = Color.White
+                        .weight(1f)
+                        .shadow(4.dp, RoundedCornerShape(16.dp))
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(Color.White)
+                        .padding(24.dp, bottom = 55.dp, top = 20.dp, end = 24.dp)
                 ) {
                     Column(
-                        modifier = Modifier.padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .verticalScroll(rememberScrollState()),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        // Address
+                        // Address Field
                         OutlinedTextField(
                             value = address,
                             onValueChange = { viewModel.updateAddress(it) },
                             label = { Text("Address") },
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(RoundedCornerShape(8.dp)),
+                                .fillMaxWidth(),
                             textStyle = TextStyle(
                                 fontSize = 16.sp,
                                 color = Color(0xFF333333)
                             ),
                             colors = TextFieldDefaults.outlinedTextFieldColors(
+                                backgroundColor = Color(0xFFF5F7FA),
                                 focusedBorderColor = Color(0xFF4A90E2),
-                                unfocusedBorderColor = Color(0xFF666666),
+                                unfocusedBorderColor = Color(0xFFCCCCCC),
                                 cursorColor = Color(0xFF4A90E2)
                             ),
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
                         )
 
-                        // Description
+                        // Description Field
                         OutlinedTextField(
                             value = description,
                             onValueChange = { viewModel.updateDescription(it) },
                             label = { Text("Description") },
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(RoundedCornerShape(8.dp)),
+                                .fillMaxWidth(),
                             textStyle = TextStyle(
                                 fontSize = 16.sp,
                                 color = Color(0xFF333333)
                             ),
                             colors = TextFieldDefaults.outlinedTextFieldColors(
+                                backgroundColor = Color(0xFFF5F7FA),
                                 focusedBorderColor = Color(0xFF4A90E2),
-                                unfocusedBorderColor = Color(0xFF666666),
+                                unfocusedBorderColor = Color(0xFFCCCCCC),
                                 cursorColor = Color(0xFF4A90E2)
                             ),
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
                         )
 
-                        // Submit button
+                        // Add Item Button
                         Button(
-                            onClick = {
-                                val newHelpRequest = HelpRequest(
-                                    id = Uuid.random().toString(),
-                                    victimId = user!!.id,
-                                    victimName = user!!.name,
-                                    disasterId = user!!.naturalDisaster!!.id,
-                                    address = address,
-                                    description = description,
-                                    needLevel = NeedLevelTypes.NotAssigned,
-                                    status = RequestStatusTypes.NotAssigned
-                                )
-                                viewModel.submitHelpRequest(newHelpRequest)
-                            },
+                            onClick = { viewModel.addHelpItem() },
+                            enabled = helpItems.size < 5,
+                            modifier = Modifier
+                                .size(48.dp)
+                                .semantics { contentDescription = "Add item to request" },
+                            shape = RoundedCornerShape(12.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = Color(0xFF4A90E2),
+                                contentColor = Color.White
+                            )
+                        ) {
+                            Text("+", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+                        }
+
+                        // Help Items
+                        helpItems.forEachIndexed { index, helpItem ->
+                            HelpRequestItem(
+                                helpItem = helpItem,
+                                onUpdate = { updatedItem ->
+                                    viewModel.updateHelpItem(index, updatedItem)
+                                },
+                                onRemove = { viewModel.removeHelpItem(index) }
+                            )
+                        }
+
+                        // Submit Button
+                        Button(
+                            onClick = { viewModel.submitHelpRequest() },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(48.dp)
-                                .shadow(2.dp, RoundedCornerShape(8.dp))
-                                .semantics { contentDescription = "Submit help request" },
-                            shape = RoundedCornerShape(8.dp),
+                                .height(56.dp)
+                                .semantics { contentDescription = "Submit help request" }
+                                .padding(end = if (helpItems.isEmpty()) 0.dp else 50.dp)
+                                .clip(RoundedCornerShape(12.dp)),
                             colors = ButtonDefaults.buttonColors(
                                 backgroundColor = Color(0xFF4A90E2),
                                 contentColor = Color.White
                             )
                         ) {
                             Text(
-                                text = "Submit",
+                                text = "Submit Request",
                                 style = TextStyle(
-                                    fontSize = 16.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = Color.White
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.Bold
                                 )
                             )
                         }
