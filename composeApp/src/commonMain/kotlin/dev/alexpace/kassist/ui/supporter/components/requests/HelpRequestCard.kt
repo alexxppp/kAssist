@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,8 +23,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dev.alexpace.kassist.domain.models.enums.NeedLevelTypes
-import dev.alexpace.kassist.domain.models.victim.HelpRequest
+import dev.alexpace.kassist.domain.models.enums.nds.NeedLevelTypes
+import dev.alexpace.kassist.domain.models.classes.help.requests.HelpRequest
 
 @Composable
 fun HelpRequestCard(helpRequest: HelpRequest, onClick: () -> Unit) {

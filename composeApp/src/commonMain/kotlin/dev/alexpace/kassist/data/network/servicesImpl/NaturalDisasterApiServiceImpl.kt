@@ -5,10 +5,10 @@ import dev.alexpace.kassist.data.network.http.getHttpClient
 import dev.alexpace.kassist.data.network.responses.Feature
 import dev.alexpace.kassist.data.utils.constants.BASE_URL_DISASTERS
 import dev.alexpace.kassist.data.network.responses.Geometry
-import dev.alexpace.kassist.domain.models.shared.NaturalDisaster
+import dev.alexpace.kassist.domain.models.classes.app.NaturalDisaster
 import dev.alexpace.kassist.data.network.responses.NaturalDisasterResponse
 import dev.alexpace.kassist.data.network.responses.SeverityData
-import dev.alexpace.kassist.domain.models.shared.Coordinates
+import dev.alexpace.kassist.domain.models.classes.map.Coordinates
 import dev.alexpace.kassist.domain.services.NaturalDisasterApiService
 import io.ktor.client.request.get
 import io.ktor.client.statement.HttpResponse

@@ -1,6 +1,6 @@
 package dev.alexpace.kassist.domain.repositories
 
-import dev.alexpace.kassist.domain.models.shared.UserLocation
+import dev.alexpace.kassist.domain.models.classes.map.UserLocation
 import kotlinx.coroutines.flow.Flow
 
 interface UsersLocationRepository {

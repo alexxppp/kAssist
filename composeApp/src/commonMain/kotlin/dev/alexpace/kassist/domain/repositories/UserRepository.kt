@@ -1,6 +1,6 @@
 package dev.alexpace.kassist.domain.repositories
 
-import dev.alexpace.kassist.domain.models.shared.User
+import dev.alexpace.kassist.domain.models.classes.user.User
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {

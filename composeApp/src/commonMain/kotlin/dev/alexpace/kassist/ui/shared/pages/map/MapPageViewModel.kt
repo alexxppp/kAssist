@@ -2,8 +2,8 @@ package dev.alexpace.kassist.ui.shared.pages.map
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dev.alexpace.kassist.domain.models.enums.UserType
-import dev.alexpace.kassist.domain.models.shared.MapMarker
+import dev.alexpace.kassist.domain.models.enums.user.UserType
+import dev.alexpace.kassist.domain.models.classes.map.MapMarker
 import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.alexpace.kassist.domain.repositories.UsersLocationRepository
 import dev.gitlive.firebase.Firebase

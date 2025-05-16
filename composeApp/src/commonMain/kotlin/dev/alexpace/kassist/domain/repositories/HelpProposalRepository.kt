@@ -1,7 +1,7 @@
 package dev.alexpace.kassist.domain.repositories
 
-import dev.alexpace.kassist.domain.models.enums.RequestStatusTypes
-import dev.alexpace.kassist.domain.models.supporter.HelpProposal
+import dev.alexpace.kassist.domain.models.enums.help.RequestStatusTypes
+import dev.alexpace.kassist.domain.models.classes.help.proposals.HelpProposal
 import kotlinx.coroutines.flow.Flow
 
 interface HelpProposalRepository {

@@ -3,7 +3,7 @@ package dev.alexpace.kassist.ui.shared.pages.news
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.alexpace.kassist.data.network.responses.LiveNewsResponse
-import dev.alexpace.kassist.domain.models.shared.User
+import dev.alexpace.kassist.domain.models.classes.user.User
 import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.alexpace.kassist.domain.services.LiveNewsApiService
 import dev.gitlive.firebase.Firebase

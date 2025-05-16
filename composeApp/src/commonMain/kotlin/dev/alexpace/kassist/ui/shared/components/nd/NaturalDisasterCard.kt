@@ -26,10 +26,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dev.alexpace.kassist.domain.models.enums.UserRole
-import dev.alexpace.kassist.domain.models.enums.UserType
-import dev.alexpace.kassist.domain.models.shared.User
-import dev.alexpace.kassist.domain.models.shared.NaturalDisaster
+import dev.alexpace.kassist.domain.models.enums.user.UserRole
+import dev.alexpace.kassist.domain.models.enums.user.UserType
+import dev.alexpace.kassist.domain.models.classes.user.User
+import dev.alexpace.kassist.domain.models.classes.app.NaturalDisaster
 import dev.alexpace.kassist.ui.shared.components.app.CustomAlertDialog
 
 @Composable

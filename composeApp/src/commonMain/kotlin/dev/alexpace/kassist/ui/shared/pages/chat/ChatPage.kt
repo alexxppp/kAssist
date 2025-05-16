@@ -32,7 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import dev.alexpace.kassist.domain.models.shared.liveChat.LiveChat
+import dev.alexpace.kassist.domain.models.classes.chat.LiveChat
 import dev.alexpace.kassist.domain.repositories.LiveChatRepository
 import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.alexpace.kassist.ui.shared.components.chat.MessageCard

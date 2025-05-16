@@ -1,6 +1,6 @@
 package dev.alexpace.kassist.data.utils.helpers
 
-import dev.alexpace.kassist.domain.models.shared.Coordinates
+import dev.alexpace.kassist.domain.models.classes.map.Coordinates
 import kotlin.math.PI
 import kotlin.math.atan2
 import kotlin.math.cos

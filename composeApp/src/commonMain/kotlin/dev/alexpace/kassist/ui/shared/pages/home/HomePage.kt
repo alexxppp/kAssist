@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Button
 import androidx.compose.material.Checkbox
 import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.CircularProgressIndicator
@@ -37,11 +36,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.alexpace.kassist.data.utils.helpers.PLATFORM
-import dev.alexpace.kassist.domain.models.enums.UserRole
+import dev.alexpace.kassist.domain.models.enums.user.UserRole
 import dev.alexpace.kassist.domain.repositories.NaturalDisasterRepository
 import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.alexpace.kassist.domain.services.NaturalDisasterApiService
-import dev.alexpace.kassist.ui.admin.navigation.screens.AdminScreen
 import dev.alexpace.kassist.ui.shared.components.nd.NaturalDisasterCard
 import dev.alexpace.kassist.ui.shared.navigation.screens.SettingsScreen
 import org.koin.compose.koinInject

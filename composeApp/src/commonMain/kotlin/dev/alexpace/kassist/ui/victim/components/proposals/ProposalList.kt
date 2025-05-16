@@ -6,7 +6,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.alexpace.kassist.domain.models.supporter.HelpProposal
+import dev.alexpace.kassist.domain.models.classes.help.proposals.HelpProposal
 
 @Composable
 fun ProposalList(

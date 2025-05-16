@@ -1,6 +1,6 @@
 package dev.alexpace.kassist.data.repositoriesImpl
 
-import dev.alexpace.kassist.domain.models.shared.User
+import dev.alexpace.kassist.domain.models.classes.user.User
 import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.firestore.firestore

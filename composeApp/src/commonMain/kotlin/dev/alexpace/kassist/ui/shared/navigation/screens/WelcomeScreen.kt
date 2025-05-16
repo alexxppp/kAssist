@@ -9,7 +9,7 @@ import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import dev.alexpace.kassist.domain.models.shared.User
+import dev.alexpace.kassist.domain.models.classes.user.User
 import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.alexpace.kassist.ui.shared.pages.welcome.WelcomePage
 import dev.gitlive.firebase.Firebase

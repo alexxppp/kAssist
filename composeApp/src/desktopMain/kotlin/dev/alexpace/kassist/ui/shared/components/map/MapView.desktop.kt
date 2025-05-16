@@ -8,7 +8,7 @@ import com.mmoczkowski.chart.Chart
 import com.mmoczkowski.chart.cache.impl.lru.rememberLruCache
 import com.mmoczkowski.chart.provider.api.TileCoords
 import com.mmoczkowski.chart.provider.impl.osm.rememberOpenStreetMapTileProvider
-import dev.alexpace.kassist.domain.models.shared.MapMarker
+import dev.alexpace.kassist.domain.models.classes.map.MapMarker
 
 @Composable
 actual fun MapView(

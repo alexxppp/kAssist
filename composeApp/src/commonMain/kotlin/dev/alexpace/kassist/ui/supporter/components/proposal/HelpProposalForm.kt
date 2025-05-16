@@ -35,7 +35,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dev.alexpace.kassist.domain.models.victim.HelpRequest
+import dev.alexpace.kassist.domain.models.classes.help.requests.HelpRequest
 
 @Composable
 fun HelpProposalForm(

@@ -1,6 +1,6 @@
 package dev.alexpace.kassist.data.repositoriesImpl
 
-import dev.alexpace.kassist.domain.models.shared.NaturalDisaster
+import dev.alexpace.kassist.domain.models.classes.app.NaturalDisaster
 import dev.alexpace.kassist.domain.repositories.NaturalDisasterRepository
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.firestore.firestore

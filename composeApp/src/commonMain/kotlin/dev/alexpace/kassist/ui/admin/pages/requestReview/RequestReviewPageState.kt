@@ -1,9 +1,9 @@
 package dev.alexpace.kassist.ui.admin.pages.requestReview
 
-import dev.alexpace.kassist.domain.models.enums.NeedLevelTypes
-import dev.alexpace.kassist.domain.models.enums.RequestStatusTypes
-import dev.alexpace.kassist.domain.models.shared.User
-import dev.alexpace.kassist.domain.models.victim.HelpRequest
+import dev.alexpace.kassist.domain.models.enums.nds.NeedLevelTypes
+import dev.alexpace.kassist.domain.models.enums.help.RequestStatusTypes
+import dev.alexpace.kassist.domain.models.classes.user.User
+import dev.alexpace.kassist.domain.models.classes.help.requests.HelpRequest
 
 data class RequestReviewPageState(
     val helpRequest: HelpRequest? = null,

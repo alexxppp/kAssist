@@ -1,8 +1,8 @@
-package dev.alexpace.kassist.domain.models.shared.liveChat
+package dev.alexpace.kassist.domain.models.classes.chat
 
-import dev.alexpace.kassist.domain.models.shared.NaturalDisaster
-import dev.alexpace.kassist.domain.models.supporter.HelpProposal
-import dev.alexpace.kassist.domain.models.victim.HelpRequest
+import dev.alexpace.kassist.domain.models.classes.app.NaturalDisaster
+import dev.alexpace.kassist.domain.models.classes.help.proposals.HelpProposal
+import dev.alexpace.kassist.domain.models.classes.help.requests.HelpRequest
 import kotlinx.serialization.Serializable
 
 @Serializable

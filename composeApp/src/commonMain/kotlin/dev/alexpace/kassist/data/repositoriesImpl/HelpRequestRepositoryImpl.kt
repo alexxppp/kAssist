@@ -1,8 +1,8 @@
 package dev.alexpace.kassist.data.repositoriesImpl
 
-import dev.alexpace.kassist.domain.models.enums.RequestStatusTypes
-import dev.alexpace.kassist.domain.models.victim.HelpRequest
-import dev.alexpace.kassist.domain.models.shared.User
+import dev.alexpace.kassist.domain.models.enums.help.RequestStatusTypes
+import dev.alexpace.kassist.domain.models.classes.help.requests.HelpRequest
+import dev.alexpace.kassist.domain.models.classes.user.User
 import dev.alexpace.kassist.domain.repositories.HelpRequestRepository
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.firestore.firestore
@@ -28,16 +28,17 @@ class HelpRequestRepositoryImpl : HelpRequestRepository {
                 Pair(helpRequest, victimScore)
             }
 
-            val sortedHelpRequests = helpRequestsWithScores.sortedWith { (request1, score1), (request2, score2) ->
-                // Compare needLevel first (descending)
-                val needLevelCompare = (request2.needLevel.ordinal)
-                    .compareTo(request1.needLevel.ordinal)
-                if (needLevelCompare != 0) {
-                    needLevelCompare
-                } else {
-                    score2.compareTo(score1)
-                }
-            }.map { it.first }
+            val sortedHelpRequests =
+                helpRequestsWithScores.sortedWith { (request1, score1), (request2, score2) ->
+                    // Compare needLevel first (descending)
+                    val needLevelCompare = (request2.needLevel.ordinal)
+                        .compareTo(request1.needLevel.ordinal)
+                    if (needLevelCompare != 0) {
+                        needLevelCompare
+                    } else {
+                        score2.compareTo(score1)
+                    }
+                }.map { it.first }
 
             emit(sortedHelpRequests)
         }
@@ -63,7 +64,7 @@ class HelpRequestRepositoryImpl : HelpRequestRepository {
             }
     }
 
-    override fun getAllByDisaster(disasterId: Int) = flow {
+    override fun getAllByDisaster(disasterId: Int, requesterId: String) = flow {
         helpRequestCollection.snapshots.collect { querySnapshot ->
             val helpRequestsWithScores = querySnapshot.documents
                 .map { documentSnapshot ->
@@ -76,18 +77,24 @@ class HelpRequestRepositoryImpl : HelpRequestRepository {
                     }
                     Pair(helpRequest, victimScore)
                 }
-                .filter { it.first.disasterId == disasterId && it.first.status == RequestStatusTypes.Pending }
-
-            val sortedHelpRequests = helpRequestsWithScores.sortedWith { (request1, score1), (request2, score2) ->
-                // Compare needLevel first (descending)
-                val needLevelCompare = (request2.needLevel.ordinal)
-                    .compareTo(request1.needLevel.ordinal)
-                if (needLevelCompare != 0) {
-                    needLevelCompare
-                } else {
-                    score2.compareTo(score1)
+                .filter {
+                    // TODO: Filter out requests that are from the same victim and requester
+                    it.first.disasterId == disasterId
+                            && it.first.status == RequestStatusTypes.Pending
+                            && it.first.victimId != requesterId
                 }
-            }.map { it.first }
+
+            val sortedHelpRequests =
+                helpRequestsWithScores.sortedWith { (request1, score1), (request2, score2) ->
+                    // Compare needLevel first (descending)
+                    val needLevelCompare = (request2.needLevel.ordinal)
+                        .compareTo(request1.needLevel.ordinal)
+                    if (needLevelCompare != 0) {
+                        needLevelCompare
+                    } else {
+                        score2.compareTo(score1)
+                    }
+                }.map { it.first }
 
             emit(sortedHelpRequests)
         }

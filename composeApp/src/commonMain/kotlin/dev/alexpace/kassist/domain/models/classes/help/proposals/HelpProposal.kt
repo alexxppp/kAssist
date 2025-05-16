@@ -1,6 +1,7 @@
-package dev.alexpace.kassist.domain.models.supporter
+package dev.alexpace.kassist.domain.models.classes.help.proposals
 
-import dev.alexpace.kassist.domain.models.enums.RequestStatusTypes
+import dev.alexpace.kassist.domain.models.classes.help.HelpItem
+import dev.alexpace.kassist.domain.models.enums.help.RequestStatusTypes
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -14,4 +15,5 @@ data class HelpProposal(
     val content: String,
     val status: RequestStatusTypes,
     val requiredTime: String,
+    val fulfilledItems: List<HelpItem>
 )

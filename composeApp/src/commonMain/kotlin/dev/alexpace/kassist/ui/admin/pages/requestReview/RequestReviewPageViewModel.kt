@@ -3,8 +3,8 @@ package dev.alexpace.kassist.ui.admin.pages.requestReview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.alexpace.kassist.data.utils.helpers.Codes.countryCodeMap
-import dev.alexpace.kassist.domain.models.victim.HelpRequest
-import dev.alexpace.kassist.domain.models.enums.NeedLevelTypes
+import dev.alexpace.kassist.domain.models.classes.help.requests.HelpRequest
+import dev.alexpace.kassist.domain.models.enums.nds.NeedLevelTypes
 import dev.alexpace.kassist.domain.repositories.AdminPendingDataRepository
 import dev.alexpace.kassist.domain.repositories.NaturalDisasterRepository
 import dev.alexpace.kassist.domain.repositories.UserRepository

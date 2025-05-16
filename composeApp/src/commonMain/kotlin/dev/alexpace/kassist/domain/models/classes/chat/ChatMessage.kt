@@ -1,4 +1,4 @@
-package dev.alexpace.kassist.domain.models.shared.liveChat
+package dev.alexpace.kassist.domain.models.classes.chat
 
 import kotlinx.serialization.Serializable
 

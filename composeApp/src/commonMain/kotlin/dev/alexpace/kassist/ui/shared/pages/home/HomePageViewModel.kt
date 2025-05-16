@@ -5,11 +5,9 @@ import androidx.lifecycle.viewModelScope
 import cafe.adriel.voyager.navigator.Navigator
 import dev.alexpace.kassist.data.utils.helpers.LocationServiceProvider
 import dev.alexpace.kassist.data.utils.helpers.areCoordinatesWithinRadius
-import dev.alexpace.kassist.domain.models.enums.UserRole
-import dev.alexpace.kassist.domain.models.enums.UserType
-import dev.alexpace.kassist.domain.models.shared.Coordinates
-import dev.alexpace.kassist.domain.models.shared.User
-import dev.alexpace.kassist.domain.models.shared.NaturalDisaster
+import dev.alexpace.kassist.domain.models.enums.user.UserType
+import dev.alexpace.kassist.domain.models.classes.map.Coordinates
+import dev.alexpace.kassist.domain.models.classes.app.NaturalDisaster
 import dev.alexpace.kassist.domain.repositories.NaturalDisasterRepository
 import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.alexpace.kassist.domain.services.NaturalDisasterApiService

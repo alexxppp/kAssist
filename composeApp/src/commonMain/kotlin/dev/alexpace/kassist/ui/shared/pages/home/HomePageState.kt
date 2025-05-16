@@ -1,7 +1,7 @@
 package dev.alexpace.kassist.ui.shared.pages.home
 
-import dev.alexpace.kassist.domain.models.shared.NaturalDisaster
-import dev.alexpace.kassist.domain.models.shared.User
+import dev.alexpace.kassist.domain.models.classes.app.NaturalDisaster
+import dev.alexpace.kassist.domain.models.classes.user.User
 
 data class HomePageState(
     val naturalDisasters: List<NaturalDisaster> = emptyList(),

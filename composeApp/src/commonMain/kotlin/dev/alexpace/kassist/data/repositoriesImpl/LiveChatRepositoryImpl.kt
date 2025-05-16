@@ -1,7 +1,7 @@
 package dev.alexpace.kassist.data.repositoriesImpl
 
-import dev.alexpace.kassist.domain.models.shared.liveChat.ChatMessage
-import dev.alexpace.kassist.domain.models.shared.liveChat.LiveChat
+import dev.alexpace.kassist.domain.models.classes.chat.ChatMessage
+import dev.alexpace.kassist.domain.models.classes.chat.LiveChat
 import dev.alexpace.kassist.domain.repositories.LiveChatRepository
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.firestore.FieldValue

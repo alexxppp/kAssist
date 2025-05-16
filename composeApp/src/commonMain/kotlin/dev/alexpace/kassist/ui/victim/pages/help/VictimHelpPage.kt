@@ -20,9 +20,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import dev.alexpace.kassist.domain.models.enums.NeedLevelTypes
-import dev.alexpace.kassist.domain.models.enums.RequestStatusTypes
-import dev.alexpace.kassist.domain.models.victim.HelpRequest
+import dev.alexpace.kassist.domain.models.enums.nds.NeedLevelTypes
+import dev.alexpace.kassist.domain.models.enums.help.RequestStatusTypes
+import dev.alexpace.kassist.domain.models.classes.help.requests.HelpRequest
 import dev.alexpace.kassist.domain.repositories.HelpRequestRepository
 import dev.alexpace.kassist.domain.repositories.UserRepository
 import org.koin.compose.koinInject

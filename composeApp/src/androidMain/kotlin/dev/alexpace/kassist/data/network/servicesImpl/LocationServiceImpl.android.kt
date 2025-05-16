@@ -10,7 +10,7 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
-import dev.alexpace.kassist.domain.models.shared.Coordinates
+import dev.alexpace.kassist.domain.models.classes.map.Coordinates
 import kotlinx.coroutines.tasks.await
 
 actual class LocationServiceImpl(private val context: Context) {

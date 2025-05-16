@@ -20,8 +20,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import dev.alexpace.kassist.domain.models.enums.NeedLevelTypes
-import dev.alexpace.kassist.domain.models.victim.HelpRequest
+import dev.alexpace.kassist.domain.models.enums.nds.NeedLevelTypes
+import dev.alexpace.kassist.domain.models.classes.help.requests.HelpRequest
 import dev.alexpace.kassist.domain.repositories.AdminPendingDataRepository
 import dev.alexpace.kassist.domain.repositories.NaturalDisasterRepository
 import dev.alexpace.kassist.domain.repositories.UserRepository

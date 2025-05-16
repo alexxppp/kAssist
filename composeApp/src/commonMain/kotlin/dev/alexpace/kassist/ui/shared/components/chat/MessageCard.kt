@@ -23,7 +23,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dev.alexpace.kassist.domain.models.shared.liveChat.ChatMessage
+import dev.alexpace.kassist.domain.models.classes.chat.ChatMessage
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.auth
 import kotlinx.datetime.Instant

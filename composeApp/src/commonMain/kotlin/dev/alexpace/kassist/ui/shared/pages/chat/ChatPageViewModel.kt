@@ -2,8 +2,8 @@ package dev.alexpace.kassist.ui.shared.pages.chat
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dev.alexpace.kassist.domain.models.shared.liveChat.ChatMessage
-import dev.alexpace.kassist.domain.models.shared.liveChat.LiveChat
+import dev.alexpace.kassist.domain.models.classes.chat.ChatMessage
+import dev.alexpace.kassist.domain.models.classes.chat.LiveChat
 import dev.alexpace.kassist.domain.repositories.LiveChatRepository
 import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.gitlive.firebase.Firebase

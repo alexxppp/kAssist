@@ -1,6 +1,7 @@
-package dev.alexpace.kassist.domain.models.shared
+package dev.alexpace.kassist.domain.models.classes.app
 
 import dev.alexpace.kassist.data.network.responses.SeverityData
+import dev.alexpace.kassist.domain.models.classes.map.Coordinates
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

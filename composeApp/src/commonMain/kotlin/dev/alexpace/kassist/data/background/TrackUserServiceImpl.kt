@@ -2,8 +2,8 @@ package dev.alexpace.kassist.data.background
 
 import dev.alexpace.kassist.data.utils.constants.DELAY_TRACK_LOCATION
 import dev.alexpace.kassist.data.utils.helpers.LocationServiceProvider
-import dev.alexpace.kassist.domain.models.shared.User
-import dev.alexpace.kassist.domain.models.shared.UserLocation
+import dev.alexpace.kassist.domain.models.classes.user.User
+import dev.alexpace.kassist.domain.models.classes.map.UserLocation
 import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.alexpace.kassist.domain.repositories.UsersLocationRepository
 import dev.alexpace.kassist.domain.services.TrackUserService
@@ -12,7 +12,6 @@ import dev.gitlive.firebase.auth.auth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

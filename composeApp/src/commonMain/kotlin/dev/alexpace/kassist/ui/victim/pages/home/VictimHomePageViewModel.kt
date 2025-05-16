@@ -2,8 +2,8 @@ package dev.alexpace.kassist.ui.victim.pages.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dev.alexpace.kassist.domain.models.enums.RequestStatusTypes
-import dev.alexpace.kassist.domain.models.supporter.HelpProposal
+import dev.alexpace.kassist.domain.models.enums.help.RequestStatusTypes
+import dev.alexpace.kassist.domain.models.classes.help.proposals.HelpProposal
 import dev.alexpace.kassist.domain.repositories.HelpProposalRepository
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.auth

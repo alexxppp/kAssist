@@ -1,6 +1,6 @@
 package dev.alexpace.kassist.data.network.servicesImpl
 
-import dev.alexpace.kassist.domain.models.shared.User
+import dev.alexpace.kassist.domain.models.classes.user.User
 import dev.alexpace.kassist.domain.services.FirebaseAuthService
 import dev.alexpace.kassist.data.utils.helpers.registerWithFirebase
 import dev.gitlive.firebase.Firebase

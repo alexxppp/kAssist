@@ -1,5 +1,6 @@
-package dev.alexpace.kassist.domain.models.shared
+package dev.alexpace.kassist.domain.models.classes.map
 
+import dev.alexpace.kassist.domain.models.classes.user.User
 import kotlinx.serialization.Serializable
 
 @Serializable

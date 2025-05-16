@@ -1,6 +1,6 @@
 package dev.alexpace.kassist.data.network.servicesImpl
 
-import dev.alexpace.kassist.domain.models.shared.Coordinates
+import dev.alexpace.kassist.domain.models.classes.map.Coordinates
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.useContents
 import kotlinx.coroutines.suspendCancellableCoroutine

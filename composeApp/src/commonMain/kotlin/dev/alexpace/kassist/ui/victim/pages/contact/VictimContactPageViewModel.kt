@@ -2,7 +2,7 @@ package dev.alexpace.kassist.ui.victim.pages.contact
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dev.alexpace.kassist.domain.models.shared.liveChat.LiveChat
+import dev.alexpace.kassist.domain.models.classes.chat.LiveChat
 import dev.alexpace.kassist.domain.repositories.LiveChatRepository
 import dev.alexpace.kassist.domain.repositories.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.UIKitView
-import dev.alexpace.kassist.domain.models.shared.MapMarker
+import dev.alexpace.kassist.domain.models.classes.map.MapMarker
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.CoreLocation.CLLocationCoordinate2DMake
 import platform.MapKit.MKMapView

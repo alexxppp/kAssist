@@ -1,7 +1,8 @@
-package dev.alexpace.kassist.domain.models.shared
+package dev.alexpace.kassist.domain.models.classes.user
 
-import dev.alexpace.kassist.domain.models.enums.UserRole
-import dev.alexpace.kassist.domain.models.enums.UserType
+import dev.alexpace.kassist.domain.models.enums.user.UserRole
+import dev.alexpace.kassist.domain.models.enums.user.UserType
+import dev.alexpace.kassist.domain.models.classes.app.NaturalDisaster
 import kotlinx.serialization.Serializable
 
 @Serializable

@@ -10,7 +10,7 @@ import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberMarkerState
-import dev.alexpace.kassist.domain.models.shared.MapMarker
+import dev.alexpace.kassist.domain.models.classes.map.MapMarker
 
 @Composable
 actual fun MapView(

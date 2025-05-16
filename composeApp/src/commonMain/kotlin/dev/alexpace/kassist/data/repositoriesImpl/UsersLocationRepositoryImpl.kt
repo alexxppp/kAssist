@@ -1,6 +1,6 @@
 package dev.alexpace.kassist.data.repositoriesImpl
 
-import dev.alexpace.kassist.domain.models.shared.UserLocation
+import dev.alexpace.kassist.domain.models.classes.map.UserLocation
 import dev.alexpace.kassist.domain.repositories.UsersLocationRepository
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.firestore.firestore

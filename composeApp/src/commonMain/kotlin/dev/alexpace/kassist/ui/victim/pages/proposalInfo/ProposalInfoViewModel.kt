@@ -2,14 +2,12 @@ package dev.alexpace.kassist.ui.victim.pages.proposalInfo
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
-import cafe.adriel.voyager.navigator.currentOrThrow
-import dev.alexpace.kassist.domain.models.supporter.HelpProposal
-import dev.alexpace.kassist.domain.models.victim.HelpRequest
-import dev.alexpace.kassist.domain.models.enums.RequestStatusTypes
-import dev.alexpace.kassist.domain.models.shared.User
-import dev.alexpace.kassist.domain.models.shared.liveChat.LiveChat
+import dev.alexpace.kassist.domain.models.classes.help.proposals.HelpProposal
+import dev.alexpace.kassist.domain.models.classes.help.requests.HelpRequest
+import dev.alexpace.kassist.domain.models.enums.help.RequestStatusTypes
+import dev.alexpace.kassist.domain.models.classes.user.User
+import dev.alexpace.kassist.domain.models.classes.chat.LiveChat
 import dev.alexpace.kassist.domain.repositories.HelpProposalRepository
 import dev.alexpace.kassist.domain.repositories.HelpRequestRepository
 import dev.alexpace.kassist.domain.repositories.LiveChatRepository

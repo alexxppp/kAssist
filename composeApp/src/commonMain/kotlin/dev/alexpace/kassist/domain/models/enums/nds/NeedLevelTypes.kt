@@ -1,4 +1,4 @@
-package dev.alexpace.kassist.domain.models.enums
+package dev.alexpace.kassist.domain.models.enums.nds
 
 import kotlinx.serialization.Serializable
 

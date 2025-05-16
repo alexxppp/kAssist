@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import dev.alexpace.kassist.domain.models.supporter.HelpProposal
+import dev.alexpace.kassist.domain.models.classes.help.proposals.HelpProposal
 import dev.alexpace.kassist.ui.victim.navigation.screens.HelpProposalInfoScreen
 
 @Composable

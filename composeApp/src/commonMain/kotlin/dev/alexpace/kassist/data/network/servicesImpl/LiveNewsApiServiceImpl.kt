@@ -4,7 +4,7 @@ import dev.alexpace.kassist.data.network.http.createHttpClient
 import dev.alexpace.kassist.data.network.http.getHttpClient
 import dev.alexpace.kassist.data.network.responses.LiveNewsResponse
 import dev.alexpace.kassist.data.utils.constants.BASE_URL_TIPS
-import dev.alexpace.kassist.domain.models.enums.UserType
+import dev.alexpace.kassist.domain.models.enums.user.UserType
 import dev.alexpace.kassist.domain.services.LiveNewsApiService
 import io.ktor.client.call.body
 import io.ktor.client.plugins.timeout

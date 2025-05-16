@@ -1,7 +1,7 @@
 package dev.alexpace.kassist.domain.services
 
 import dev.alexpace.kassist.data.network.responses.LiveNewsResponse
-import dev.alexpace.kassist.domain.models.enums.UserType
+import dev.alexpace.kassist.domain.models.enums.user.UserType
 
 interface LiveNewsApiService {
 

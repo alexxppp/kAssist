@@ -1,7 +1,7 @@
 package dev.alexpace.kassist.domain.repositories
 
-import dev.alexpace.kassist.domain.models.enums.NeedLevelTypes
-import dev.alexpace.kassist.domain.models.victim.HelpRequest
+import dev.alexpace.kassist.domain.models.enums.nds.NeedLevelTypes
+import dev.alexpace.kassist.domain.models.classes.help.requests.HelpRequest
 import kotlinx.coroutines.flow.Flow
 
 interface AdminPendingDataRepository {

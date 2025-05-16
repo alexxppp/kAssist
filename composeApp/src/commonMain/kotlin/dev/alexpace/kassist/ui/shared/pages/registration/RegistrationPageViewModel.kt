@@ -3,8 +3,8 @@ package dev.alexpace.kassist.ui.shared.pages.registration
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cafe.adriel.voyager.navigator.Navigator
-import dev.alexpace.kassist.domain.models.enums.UserRole
-import dev.alexpace.kassist.domain.models.shared.User
+import dev.alexpace.kassist.domain.models.enums.user.UserRole
+import dev.alexpace.kassist.domain.models.classes.user.User
 import dev.alexpace.kassist.domain.repositories.UserRepository
 import dev.alexpace.kassist.domain.services.FirebaseAuthService
 import dev.alexpace.kassist.ui.shared.navigation.screens.LoginScreen
