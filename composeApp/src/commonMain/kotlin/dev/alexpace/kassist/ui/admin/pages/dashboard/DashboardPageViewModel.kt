@@ -37,6 +37,9 @@ class DashboardPageViewModel(
      * Fetches user and triggers fetchHelpRequests if user and disaster are available
      */
     private fun fetchUser() {
+        _dashboardPageState.update {
+            it.copy(isLoading = true)
+        }
         viewModelScope.launch {
             try {
                 val user = userRepository.getById(currentUserId).firstOrNull()
@@ -50,6 +53,9 @@ class DashboardPageViewModel(
                 println("Error fetching user: ${e.message}")
             }
         }
+        _dashboardPageState.update {
+            it.copy(isLoading = false)
+        }
     }
 
     /**
@@ -57,6 +63,9 @@ class DashboardPageViewModel(
      * with the current db state
      */
     private fun fetchHelpRequests() {
+        _dashboardPageState.update {
+            it.copy(helpRequests = emptyList())
+        }
         viewModelScope.launch {
             try {
                 adminPendingDataRepository.getAllPendingHelpRequestsByDisaster(
@@ -73,5 +82,9 @@ class DashboardPageViewModel(
                 }
             }
         }
+        _dashboardPageState.update {
+            it.copy(isLoading = false)
+        }
+
     }
 }

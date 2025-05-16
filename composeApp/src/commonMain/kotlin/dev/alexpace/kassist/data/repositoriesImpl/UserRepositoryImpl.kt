@@ -22,6 +22,24 @@ class UserRepositoryImpl: UserRepository {
         }
     }
 
+    override fun getAllWithNegativeScore() = flow {
+        usersCollection
+            .where { "score" lessThan 0 }
+            .snapshots
+            .collect { querySnapshot ->
+                val users = querySnapshot
+                    .documents
+                    .mapNotNull { documentSnapshot ->
+                        try {
+                            documentSnapshot.data<User>()
+                        } catch (e: Exception) {
+                            null
+                        }
+                    }
+                emit(users)
+            }
+    }
+
     override fun getById(id: String) = flow {
         usersCollection
             .document(id)

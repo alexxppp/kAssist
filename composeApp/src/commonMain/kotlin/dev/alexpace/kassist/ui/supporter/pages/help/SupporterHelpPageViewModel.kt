@@ -45,6 +45,7 @@ class SupporterHelpPageViewModel(
      * Fetches user and triggers fetchHelpRequests if user and disaster are available
      */
     private fun fetchUser() {
+        _isLoading.value = true
         viewModelScope.launch {
             try {
                 val currentUser = userRepository.getById(currentUserId).firstOrNull()
@@ -56,6 +57,7 @@ class SupporterHelpPageViewModel(
                 println("Error fetching user: ${e.message}")
             }
         }
+        _isLoading.value = false
     }
 
     /**
@@ -73,8 +75,6 @@ class SupporterHelpPageViewModel(
             } catch (e: Exception) {
                 println("Error fetching help requests: ${e.message}")
                 _helpRequests.value = emptyList()
-            } finally {
-                _isLoading.value = false
             }
         }
         _isLoading.value = false

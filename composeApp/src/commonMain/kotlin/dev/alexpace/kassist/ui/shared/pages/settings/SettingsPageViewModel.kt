@@ -56,23 +56,34 @@ class SettingsPageViewModel(
      * Fetches user, help requests, and help proposals from the repositories
      */
     private fun fetchAllData() {
+        _isLoading.value = true
         viewModelScope.launch {
             try {
                 // Fetch user data
                 userRepository.getById(userId).collect { user ->
                     _user.value = user
+                    // Fetch data based on user type
+                    if (user != null) {
+                        when (user.type) {
+                            UserType.Victim -> {
+                                helpRequestRepository.getByVictimId(userId).collect { helpRequests ->
+                                    _helpRequests.value = helpRequests
+                                }
+                                _helpProposals.value = emptyList()
+                            }
+                            UserType.Supporter -> {
+                                helpProposalRepository.getBySupporterId(userId).collect { helpProposals ->
+                                    _helpProposals.value = helpProposals
+                                }
+                                _helpRequests.value = emptyList()
+                            }
+                            else -> {
+                                _helpRequests.value = emptyList()
+                                _helpProposals.value = emptyList()
+                            }
+                        }
+                    }
                 }
-
-                // Fetch help requests for the current user (as victim)
-                helpRequestRepository.getByVictimId(userId).collect { helpRequests ->
-                    _helpRequests.value = helpRequests
-                }
-
-                // Fetch help proposals for the current user (as supporter)
-                helpProposalRepository.getBySupporterId(userId).collect { helpProposals ->
-                    _helpProposals.value = helpProposals
-                }
-
             } catch (e: Exception) {
                 _error.value = "Failed to load data: ${e.message}"
             } finally {

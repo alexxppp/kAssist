@@ -65,168 +65,186 @@ fun HomePage() {
     val state = viewModel.state.collectAsState().value
 
     // UI
-    if (state.isLoading) {
+    if (state.user?.role == UserRole.Banned) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp),
             contentAlignment = Alignment.Center
         ) {
-            CircularProgressIndicator(
-                modifier = Modifier.size(48.dp),
-                color = Color(0xFF4A90E2),
-                strokeWidth = 4.dp
+            Text(
+                text = "Your account has been banned. Contact us if you think it was a mistake",
+                style = TextStyle(
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = Color(0xFF666666)
+                )
             )
         }
     } else {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(
-                            Color(0xFFE6F0FA),
-                            Color(0xFFFFFFFF)
-                        )
-                    )
-                )
-        ) {
-            Column(
+        if (state.isLoading) {
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceBetween
+                contentAlignment = Alignment.Center
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 32.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = "kAssist Home",
-                            style = TextStyle(
-                                fontSize = 28.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color(0xFF333333)
-                            ),
-                            textAlign = TextAlign.Center
+                CircularProgressIndicator(
+                    modifier = Modifier.size(48.dp),
+                    color = Color(0xFF4A90E2),
+                    strokeWidth = 4.dp
+                )
+            }
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(
+                                Color(0xFFE6F0FA),
+                                Color(0xFFFFFFFF)
+                            )
                         )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = "Current active disasters",
-                            style = TextStyle(
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Medium,
-                                color = Color(0xFF666666)
-                            ),
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(horizontal = 16.dp)
-                        )
-                    }
-                    Icon(
-                        imageVector = Icons.Default.Settings,
-                        contentDescription = "Settings",
-                        tint = Color(0xFF333333),
-                        modifier = Modifier
-                            .size(32.dp)
-                            .clickable { navigator.push(SettingsScreen()) }
                     )
-                }
-
-                if (PLATFORM != "Desktop" || state.user?.role != UserRole.Admin) {
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.SpaceBetween
+                ) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Start
+                            .padding(top = 32.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Checkbox(
-                            checked = state.isFilterActive,
-                            onCheckedChange = { viewModel.toggleFilterNaturalDisastersByRadius() },
-                            colors = CheckboxDefaults.colors(
-                                checkedColor = Color(0xFF4A90E2),
-                                uncheckedColor = Color(0xFF666666)
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "kAssist Home",
+                                style = TextStyle(
+                                    fontSize = 28.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color(0xFF333333)
+                                ),
+                                textAlign = TextAlign.Center
                             )
-                        )
-                        Text(
-                            text = "Show disasters within 500km",
-                            style = TextStyle(
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Medium,
-                                color = Color(0xFF333333)
-                            ),
-                            modifier = Modifier.padding(start = 8.dp)
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = "Current active disasters",
+                                style = TextStyle(
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Medium,
+                                    color = Color(0xFF666666)
+                                ),
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.padding(horizontal = 16.dp)
+                            )
+                        }
+                        Icon(
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = "Settings",
+                            tint = Color(0xFF333333),
+                            modifier = Modifier
+                                .size(32.dp)
+                                .clickable { navigator.push(SettingsScreen()) }
                         )
                     }
-                }
 
-                if (state.naturalDisasters.isNotEmpty()) {
-                    LazyColumn(
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(vertical = 16.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        items(state.naturalDisasters) { disaster ->
-                            NaturalDisasterCard(
-                                disaster = disaster,
-                                user = state.user,
-                                onConfirmVictim = {
-                                    viewModel.navigateToVictimScreen(
-                                        navigator,
-                                        disaster
-                                    )
-                                },
-                                onConfirmSupporter = {
-                                    viewModel.navigateToSupporterScreen(
-                                        navigator,
-                                        disaster
-                                    )
-                                },
-                                onConfirmAdmin = {
-                                    viewModel.navigateToAdminScreen(
-                                        navigator,
-                                        disaster
-                                    )
-                                }
+                    if (PLATFORM != "Desktop" || state.user?.role != UserRole.Admin) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Start
+                        ) {
+                            Checkbox(
+                                checked = state.isFilterActive,
+                                onCheckedChange = { viewModel.toggleFilterNaturalDisastersByRadius() },
+                                colors = CheckboxDefaults.colors(
+                                    checkedColor = Color(0xFF4A90E2),
+                                    uncheckedColor = Color(0xFF666666)
+                                )
+                            )
+                            Text(
+                                text = "Show disasters within 500km",
+                                style = TextStyle(
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Medium,
+                                    color = Color(0xFF333333)
+                                ),
+                                modifier = Modifier.padding(start = 8.dp)
                             )
                         }
                     }
-                } else {
-                    Text(
-                        text = "No active disasters reported",
-                        style = TextStyle(
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Normal,
-                            color = Color(0xFF666666)
-                        ),
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(16.dp),
-                        textAlign = TextAlign.Center
-                    )
-                }
-            }
 
-            // Navigation loading overlay
-            if (state.isNavigating) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(48.dp),
-                        color = Color(0xFF4A90E2),
-                        strokeWidth = 4.dp
-                    )
+                    if (state.naturalDisasters.isNotEmpty()) {
+                        LazyColumn(
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(vertical = 16.dp),
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            items(state.naturalDisasters) { disaster ->
+                                NaturalDisasterCard(
+                                    disaster = disaster,
+                                    user = state.user,
+                                    onConfirmVictim = {
+                                        viewModel.navigateToVictimScreen(
+                                            navigator,
+                                            disaster
+                                        )
+                                    },
+                                    onConfirmSupporter = {
+                                        viewModel.navigateToSupporterScreen(
+                                            navigator,
+                                            disaster
+                                        )
+                                    },
+                                    onConfirmAdmin = {
+                                        viewModel.navigateToAdminScreen(
+                                            navigator,
+                                            disaster
+                                        )
+                                    }
+                                )
+                            }
+                        }
+                    } else {
+                        Text(
+                            text = "No active disasters reported",
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Normal,
+                                color = Color(0xFF666666)
+                            ),
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(16.dp),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
+
+                // Navigation loading overlay
+                if (state.isNavigating) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(48.dp),
+                            color = Color(0xFF4A90E2),
+                            strokeWidth = 4.dp
+                        )
+                    }
                 }
             }
         }

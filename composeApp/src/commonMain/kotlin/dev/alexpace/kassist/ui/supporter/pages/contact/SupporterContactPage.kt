@@ -9,9 +9,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -61,121 +63,137 @@ fun SupporterContactPage() {
     }
     val liveChats by supporterViewModel.liveChats.collectAsState()
     val userNames by supporterViewModel.userNames.collectAsState()
+    val isLoading by supporterViewModel.isLoading.collectAsState()
 
     // UI
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(Color(0xFFF0F4F8), Color.White)
-                )
-            )
-    ) {
-        Column(
+    if (isLoading) {
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator(
+                modifier = Modifier.size(48.dp),
+                color = Color(0xFF4A90E2),
+                strokeWidth = 4.dp
+            )
+        }
+    } else {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(Color(0xFFF0F4F8), Color.White)
+                    )
+                )
         ) {
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(top = 48.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Email,
-                    contentDescription = "Messages Icon",
-                    tint = Color(0xFF4A90E2),
-                    modifier = Modifier
-                        .padding(bottom = 16.dp)
-                        .clip(MaterialTheme.shapes.medium)
-                )
-                Text(
-                    text = "Messages",
-                    style = TextStyle(
-                        fontSize = 28.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF333333)
-                    ),
-                    textAlign = TextAlign.Center
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "Your Chats with Victims",
-                    style = TextStyle(
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = Color(0xFF666666)
-                    ),
-                    textAlign = TextAlign.Center
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .shadow(4.dp, RoundedCornerShape(16.dp))
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(Color.White)
-                    .padding(16.dp)
+                    .fillMaxSize()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                if (liveChats.isEmpty()) {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Email,
-                            contentDescription = "No Chats",
-                            tint = Color(0xFF4A90E2),
-                            modifier = Modifier.padding(bottom = 8.dp)
-                        )
-                        Text(
-                            text = "No Chats Yet",
-                            style = TextStyle(
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Medium,
-                                color = Color(0xFF666666)
-                            ),
-                            textAlign = TextAlign.Center
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = "Chats will appear once a victim approves your help proposal.",
-                            style = TextStyle(
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Normal,
-                                color = Color(0xFF666666),
-                                textAlign = TextAlign.Center
-                            ),
-                            modifier = Modifier.padding(horizontal = 16.dp)
-                        )
-                    }
-                } else {
-                    LazyColumn(
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.padding(top = 48.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Email,
+                        contentDescription = "Messages Icon",
+                        tint = Color(0xFF4A90E2),
                         modifier = Modifier
-                            .fillMaxSize()
-                            .padding(bottom = 45.dp)
-                    ) {
-                        items(liveChats, key = { it.id }) { chat ->
-                            val receiverId =
-                                if (chat.victimId == currentUserId) chat.supporterId else chat.victimId
-                            val receiverName = userNames[receiverId] ?: "Loading..."
-                            ChatCard(
-                                liveChat = chat,
-                                receiverName = receiverName,
-                                onChatClick = { _ ->
-                                    navigator.push(
-                                        ChatScreen(
-                                            liveChat = chat
-                                        )
-                                    )
-                                }
+                            .padding(bottom = 16.dp)
+                            .clip(MaterialTheme.shapes.medium)
+                    )
+                    Text(
+                        text = "Messages",
+                        style = TextStyle(
+                            fontSize = 28.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF333333)
+                        ),
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "Your Chats with Victims",
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = Color(0xFF666666)
+                        ),
+                        textAlign = TextAlign.Center
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .shadow(4.dp, RoundedCornerShape(16.dp))
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(Color.White)
+                        .padding(16.dp)
+                ) {
+                    if (liveChats.isEmpty()) {
+                        Column(
+                            modifier = Modifier.fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Email,
+                                contentDescription = "No Chats",
+                                tint = Color(0xFF4A90E2),
+                                modifier = Modifier.padding(bottom = 8.dp)
                             )
+                            Text(
+                                text = "No Chats Yet",
+                                style = TextStyle(
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Medium,
+                                    color = Color(0xFF666666)
+                                ),
+                                textAlign = TextAlign.Center
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = "Chats will appear once a victim approves your help proposal.",
+                                style = TextStyle(
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Normal,
+                                    color = Color(0xFF666666),
+                                    textAlign = TextAlign.Center
+                                ),
+                                modifier = Modifier.padding(horizontal = 16.dp)
+                            )
+                        }
+                    } else {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(bottom = 45.dp)
+                        ) {
+                            items(liveChats, key = { it.id }) { chat ->
+                                val receiverId =
+                                    if (chat.victimId == currentUserId) chat.supporterId else chat.victimId
+                                val receiverName = userNames[receiverId] ?: "Loading..."
+                                ChatCard(
+                                    liveChat = chat,
+                                    receiverName = receiverName,
+                                    onChatClick = { _ ->
+                                        navigator.push(
+                                            ChatScreen(
+                                                liveChat = chat
+                                            )
+                                        )
+                                    }
+                                )
+                            }
                         }
                     }
                 }

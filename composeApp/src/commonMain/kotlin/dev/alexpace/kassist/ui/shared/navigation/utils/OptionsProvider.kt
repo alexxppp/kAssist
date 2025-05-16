@@ -59,9 +59,20 @@ fun infoTabOptions(): TabOptions {
 @Composable
 fun adminModeratorTabOptions(): TabOptions {
     val title = "Moderate"
-    val icon = rememberVectorPainter(Icons.Default.Person)
+    val icon = rememberVectorPainter(Icons.Default.Home)
     return TabOptions(
         index = 0u,
+        title = title,
+        icon = icon
+    )
+}
+
+@Composable
+fun adminUserTabOptions(): TabOptions {
+    val title = "Users"
+    val icon = rememberVectorPainter(Icons.Default.Person)
+    return TabOptions(
+        index = 1u,
         title = title,
         icon = icon
     )

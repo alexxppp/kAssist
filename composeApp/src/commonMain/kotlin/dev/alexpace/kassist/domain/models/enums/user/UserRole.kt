@@ -6,5 +6,6 @@ import kotlinx.serialization.Serializable
 enum class UserRole {
     Basic,
     Admin,
-    SuperAdmin
+    SuperAdmin,
+    Banned
 }

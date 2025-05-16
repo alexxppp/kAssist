@@ -22,6 +22,9 @@ class SupporterContactPageViewModel(
     private val _userNames = MutableStateFlow<Map<String, String>>(emptyMap())
     val userNames = _userNames.asStateFlow()
 
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading = _isLoading.asStateFlow()
+
     // Init
     init {
         fetchLiveChats()
@@ -33,12 +36,14 @@ class SupporterContactPageViewModel(
      * Fetches all chats of the current supporter from the LiveChatRepository
      */
     private fun fetchLiveChats() {
+        _isLoading.value = true
         viewModelScope.launch {
             liveChatRepository.getAllById(supporterId).collect { chats ->
                 _liveChats.value = chats
                 updateUserNames(chats)
             }
         }
+        _isLoading.value = false
     }
 
     /**
@@ -46,6 +51,7 @@ class SupporterContactPageViewModel(
      * replacing the IDs
      */
     private fun updateUserNames(chats: List<LiveChat>) {
+        _isLoading.value = true
         val receiverIds =
             chats.map { if (it.victimId == supporterId) it.supporterId else it.victimId }.toSet()
         val currentNames = _userNames.value
@@ -60,5 +66,6 @@ class SupporterContactPageViewModel(
                 }
             }
         }
+        _isLoading.value = false
     }
 }

@@ -5,5 +5,7 @@ import dev.alexpace.kassist.domain.models.classes.help.requests.HelpRequest
 
 data class DashboardPageState (
     val helpRequests: List<HelpRequest> = emptyList(),
-    val user: User? = null
+    val user: User? = null,
+    val isLoading: Boolean = true,
+    val usersWithNegativeScore: List<User> = emptyList()
 )
