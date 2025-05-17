@@ -33,6 +33,6 @@ dependencies {
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.okhttp)
 
-    // SQLite TODO: Failed
-    // implementation(libs.sqlite.jdbc)
+    // Push notifications
+    implementation(libs.firebase.admin)
 }

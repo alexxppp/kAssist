@@ -1,6 +1,8 @@
 package dev.alexpace.kassist
 
 import android.app.Application
+import com.mmk.kmpnotifier.notification.NotifierManager
+import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfiguration
 import dev.alexpace.kassist.data.background.TrackUserServiceImpl
 import dev.alexpace.kassist.data.utils.di.sharedModule
 import dev.alexpace.kassist.data.utils.helpers.LocationServiceProvider
@@ -16,6 +18,12 @@ class kAssistApplication: Application(), KoinComponent {
         startKoin {
             modules(sharedModule)
         }
+        NotifierManager.initialize(
+            configuration = NotificationPlatformConfiguration.Android(
+                notificationIconResId = R.drawable.ic_launcher_foreground,
+                showPushNotification = true,
+            )
+        )
         LocationServiceProvider.initialize(applicationContext)
         val trackUserService by inject<TrackUserService>()
         trackUserService.launchTrackingUser()

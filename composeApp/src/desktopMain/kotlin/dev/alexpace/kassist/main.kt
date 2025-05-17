@@ -4,10 +4,14 @@ import android.app.Application
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import com.google.firebase.FirebasePlatform
+import com.mmk.kmpnotifier.extensions.composeDesktopResourcesPath
+import com.mmk.kmpnotifier.notification.NotifierManager
+import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfiguration
 import dev.alexpace.kassist.data.utils.di.initKoin
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.FirebaseOptions
 import dev.gitlive.firebase.initialize
+import java.io.File
 
 
 // TO RUN: ./gradlew run -Dorg.gradle.jvmargs=-Xmx4g to allocate 4g of heap
@@ -37,6 +41,13 @@ fun main() = application {
     )
 
     Firebase.initialize(Application(), options)
+
+    NotifierManager.initialize(
+        NotificationPlatformConfiguration.Desktop(
+            showPushNotification = true,
+            notificationIconPath = composeDesktopResourcesPath() + File.separator + "ic_notification.png"
+        )
+    )
 
     Window(
         onCloseRequest = ::exitApplication,

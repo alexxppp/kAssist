@@ -9,6 +9,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.mmk.kmpnotifier.permission.permissionUtil
 
 class MainActivity : ComponentActivity() {
 
@@ -20,6 +21,9 @@ class MainActivity : ComponentActivity() {
         FirebaseApp.initializeApp(this)
 
         auth = Firebase.auth
+
+        val permissionUtil by permissionUtil()
+        permissionUtil.askNotificationPermission()
 
         setContent {
             App()

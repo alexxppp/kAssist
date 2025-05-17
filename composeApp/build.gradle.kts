@@ -28,6 +28,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
+            export("io.github.mirzemehdi:kmpnotifier:1.5.1")
             baseName = "ComposeApp"
             isStatic = true
         }
