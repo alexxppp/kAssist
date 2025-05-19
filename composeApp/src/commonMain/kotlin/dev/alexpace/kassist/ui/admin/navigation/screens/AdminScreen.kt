@@ -19,6 +19,7 @@ import cafe.adriel.voyager.navigator.tab.TabDisposable
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import dev.alexpace.kassist.data.utils.helpers.PLATFORM
 import dev.alexpace.kassist.ui.admin.navigation.tabs.AdminModeratorTab
+import dev.alexpace.kassist.ui.admin.navigation.tabs.AdminUserActivityTab
 import dev.alexpace.kassist.ui.admin.navigation.tabs.AdminUserTab
 import dev.alexpace.kassist.ui.shared.navigation.screens.MapScreen
 import dev.alexpace.kassist.ui.shared.navigation.utils.BottomBar
@@ -35,7 +36,7 @@ class AdminScreen : Screen {
             tabDisposable = {
                 TabDisposable(
                     it,
-                    listOf(AdminModeratorTab, AdminUserTab)
+                    listOf(AdminModeratorTab, AdminUserTab, AdminUserActivityTab)
                 )
             }
         ) {
@@ -52,7 +53,7 @@ class AdminScreen : Screen {
                 bottomBar = {
                     BottomBar(
                         LocalTabNavigator.current,
-                        listOf(AdminModeratorTab, AdminUserTab)
+                        listOf(AdminModeratorTab, AdminUserTab, AdminUserActivityTab)
                     )
                 },
                 floatingActionButton = {

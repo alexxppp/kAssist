@@ -92,6 +92,7 @@ kotlin {
             // Firebase
             implementation(libs.gitlive.firebase.firestore)
             implementation(libs.gitlive.firebase.auth)
+            implementation(libs.gitlive.firebase.messaging)
             // Coroutines for Desktop Firebase
             implementation(libs.kotlinx.coroutines.core)
             // Viewmodel

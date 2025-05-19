@@ -91,8 +91,8 @@ class ProposalInfoViewModel(
     @OptIn(ExperimentalUuidApi::class)
     fun acceptProposal() {
         val updatedProposal = proposal.copy(status = RequestStatusTypes.Accepted)
-        val currentRequest = _helpRequest.value ?: return
-        val updatedRequest = currentRequest.copy(status = RequestStatusTypes.Accepted)
+        val currentRequest = _helpRequest.value
+        val updatedRequest = currentRequest!!.copy(status = RequestStatusTypes.Accepted)
 
         val newChat = LiveChat(
             id = Uuid.random().toString(),

@@ -2,6 +2,7 @@ package dev.alexpace.kassist.data.repositoriesImpl
 
 import dev.alexpace.kassist.domain.models.enums.help.RequestStatusTypes
 import dev.alexpace.kassist.domain.models.classes.help.proposals.HelpProposal
+import dev.alexpace.kassist.domain.models.classes.help.requests.HelpRequest
 import dev.alexpace.kassist.domain.models.classes.user.User
 import dev.alexpace.kassist.domain.repositories.HelpProposalRepository
 import dev.gitlive.firebase.Firebase
@@ -14,25 +15,20 @@ class HelpProposalRepositoryImpl : HelpProposalRepository {
     private val helpProposalCollection = firestore.collection("HelpProposal")
     private val userCollection = firestore.collection("User")
 
-    override fun getAll() = flow {
-        helpProposalCollection.snapshots.collect { querySnapshot ->
-            val helpProposalsWithScores = querySnapshot.documents.map { documentSnapshot ->
-                val helpProposal = documentSnapshot.data<HelpProposal>()
-                val supporterScore = try {
-                    val userSnapshot = userCollection.document(helpProposal.supporterId).get()
-                    userSnapshot.data<User>().score
-                } catch (e: Exception) {
-                    0
-                }
-                Pair(helpProposal, supporterScore)
+    override fun getAllByDisaster(disasterId: Int) = flow {
+        helpProposalCollection
+            .snapshots
+            .collect { querySnapshot ->
+                val helpProposals = querySnapshot
+                    .documents
+                    .map { documentSnapshot ->
+                        documentSnapshot.data<HelpProposal>()
+                    }
+                    .filter {
+                        it.disasterId == disasterId
+                    }
+                emit(helpProposals)
             }
-
-            val sortedHelpProposals = helpProposalsWithScores
-                .sortedByDescending { it.second }
-                .map { it.first }
-
-            emit(sortedHelpProposals)
-        }
     }
 
     override fun getById(id: String) = flow {
@@ -110,7 +106,8 @@ class HelpProposalRepositoryImpl : HelpProposalRepository {
                     val helpProposalsWithScores = querySnapshot.documents.map { documentSnapshot ->
                         val helpProposal = documentSnapshot.data<HelpProposal>()
                         val supporterScore = try {
-                            val userSnapshot = userCollection.document(helpProposal.supporterId).get()
+                            val userSnapshot =
+                                userCollection.document(helpProposal.supporterId).get()
                             userSnapshot.data<User>().score
                         } catch (e: Exception) {
                             0

@@ -49,8 +49,6 @@ fun NewsPage() {
     val isLoading by viewModel.isLoadingNews.collectAsState()
     val error by viewModel.error.collectAsState()
 
-    val state = viewModel.state.collectAsState().value
-
     // UI
     Box(
         modifier = Modifier
@@ -109,7 +107,7 @@ fun NewsPage() {
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "Press 'Fetch News' to get updates about your current disaster",
+                            text = "Press 'Get tips' to get tips on how to act in your current situation",
                             style = TextStyle(
                                 fontSize = 14.sp,
                                 fontWeight = FontWeight.Normal,
@@ -132,7 +130,7 @@ fun NewsPage() {
                                 verticalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
                                 Text(
-                                    text = "Latest News",
+                                    text = "Tips",
                                     style = TextStyle(
                                         fontSize = 18.sp,
                                         fontWeight = FontWeight.Bold,
@@ -141,7 +139,7 @@ fun NewsPage() {
                                 )
                                 if (newsResponse.summary.isBlank()) {
                                     Text(
-                                        text = "No news available",
+                                        text = "No tips available",
                                         style = TextStyle(
                                             fontSize = 14.sp,
                                             fontWeight = FontWeight.Normal,
@@ -164,7 +162,7 @@ fun NewsPage() {
                 }
             }
 
-            // Fetch News Button
+            // Tips Button
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(10.dp))
@@ -181,7 +179,7 @@ fun NewsPage() {
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "Fetch News",
+                    text = "Get tips",
                     style = TextStyle(
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,

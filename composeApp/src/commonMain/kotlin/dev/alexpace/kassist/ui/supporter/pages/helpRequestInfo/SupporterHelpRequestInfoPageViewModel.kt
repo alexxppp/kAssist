@@ -172,6 +172,7 @@ class SupporterHelpRequestInfoPageViewModel(
             supporterId = currentUserId,
             helpRequestId = helpRequest.id,
             victimId = helpRequest.victimId,
+            disasterId = user.value!!.naturalDisaster!!.id,
             content = content,
             status = RequestStatusTypes.Pending,
             supporterName = user.value!!.name,

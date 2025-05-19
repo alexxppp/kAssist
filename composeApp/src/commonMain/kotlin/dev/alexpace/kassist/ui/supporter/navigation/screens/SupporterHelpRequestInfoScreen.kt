@@ -9,6 +9,8 @@ class SupporterHelpRequestInfoScreen(
     val helpRequest: HelpRequest
 ) : Screen {
 
+    override val key = helpRequest.id
+
     @Composable
     override fun Content() {
         SupporterHelpRequestInfoPage(helpRequest)

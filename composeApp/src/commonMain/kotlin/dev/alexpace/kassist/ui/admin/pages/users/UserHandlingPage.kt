@@ -88,7 +88,7 @@ fun UserHandlingPage() {
                                 color = Color(0xFF1E88E5)
                             )
                             Text(
-                                text = "Users with Negative Scores",
+                                text = "Manage users",
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Medium,
                                 color = Color(0xFF666666)
@@ -99,17 +99,29 @@ fun UserHandlingPage() {
                     if (usersWithNegativeScore.isEmpty()) {
                         Card(
                             modifier = Modifier
+                                .fillMaxWidth()
                                 .padding(16.dp)
                                 .shadow(8.dp, RoundedCornerShape(16.dp)),
                             backgroundColor = Color.White
                         ) {
-                            Text(
-                                text = "No users with negative score",
-                                modifier = Modifier.padding(24.dp),
-                                fontSize = 18.sp,
-                                color = Color(0xFF666666),
-                                fontWeight = FontWeight.Medium
-                            )
+                            Column {
+                                Text(
+                                    text = "Users with negative score",
+                                    modifier = Modifier.padding(24.dp),
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = Color(0xFF333333)
+                                )
+                                Text(
+                                    text = "No users with negative score",
+                                    fontSize = 16.sp,
+                                    color = Color(0xFF666666),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                    textAlign = TextAlign.Center
+                                )
+                            }
                         }
                     } else {
 
@@ -126,7 +138,7 @@ fun UserHandlingPage() {
                                             .padding(16.dp),
                                         contentAlignment = Alignment.Center
                                     ) {
-                                        Text("Not users found")
+                                        Text("No users found")
                                     }
                                 } else {
                                     Card(

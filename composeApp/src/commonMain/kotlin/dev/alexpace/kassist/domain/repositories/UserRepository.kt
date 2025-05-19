@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 interface UserRepository {
     fun getAll(): Flow<List<User>>
     fun getAllWithNegativeScore(): Flow<List<User>>
+    fun getAllByDisaster(disasterId: Int): Flow<List<User>>
     fun getById(id: String): Flow<User?>
     suspend fun add(user: User)
     suspend fun update(user: User)

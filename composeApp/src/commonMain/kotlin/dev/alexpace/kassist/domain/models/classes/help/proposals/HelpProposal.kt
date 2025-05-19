@@ -9,6 +9,7 @@ data class HelpProposal(
     val id: String,
     val supporterId: String,
     val supporterName: String,
+    val disasterId: Int,
     val victimId: String,
     val victimName: String,
     val helpRequestId: String,

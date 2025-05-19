@@ -6,7 +6,7 @@ import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.firestore.firestore
 import kotlinx.coroutines.flow.flow
 
-class UserRepositoryImpl: UserRepository {
+class UserRepositoryImpl : UserRepository {
 
     private val firestore = Firebase.firestore
     private val usersCollection = firestore.collection("User")
@@ -25,6 +25,24 @@ class UserRepositoryImpl: UserRepository {
     override fun getAllWithNegativeScore() = flow {
         usersCollection
             .where { "score" lessThan 0 }
+            .snapshots
+            .collect { querySnapshot ->
+                val users = querySnapshot
+                    .documents
+                    .mapNotNull { documentSnapshot ->
+                        try {
+                            documentSnapshot.data<User>()
+                        } catch (e: Exception) {
+                            null
+                        }
+                    }
+                emit(users)
+            }
+    }
+
+    override fun getAllByDisaster(disasterId: Int) = flow {
+        usersCollection
+            .where { "disasterId" equalTo disasterId }
             .snapshots
             .collect { querySnapshot ->
                 val users = querySnapshot

@@ -15,5 +15,6 @@ data class User(
     val naturalDisaster: NaturalDisaster? = null,
     val type: UserType = UserType.Neutral,
     val role: UserRole = UserRole.Basic,
-    val score: Int = 0
+    val score: Int = 0,
+    val fcmToken: String? = null
 )

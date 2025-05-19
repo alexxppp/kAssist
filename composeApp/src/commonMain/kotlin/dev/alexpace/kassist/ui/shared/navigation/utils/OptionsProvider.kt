@@ -4,7 +4,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import cafe.adriel.voyager.navigator.tab.TabOptions
@@ -73,6 +75,17 @@ fun adminUserTabOptions(): TabOptions {
     val icon = rememberVectorPainter(Icons.Default.Person)
     return TabOptions(
         index = 1u,
+        title = title,
+        icon = icon
+    )
+}
+
+@Composable
+fun adminUsersActivityTabOptions(): TabOptions {
+    val title = "Activity"
+    val icon = rememberVectorPainter(Icons.Default.Search)
+    return TabOptions(
+        index = 2u,
         title = title,
         icon = icon
     )

@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,6 +38,10 @@ import org.koin.compose.koinInject
 fun SupporterHelpRequestInfoPage(
     helpRequest: HelpRequest
 ) {
+    LaunchedEffect(Unit) {
+        println("SupporterHelpRequestInfoPage composed with helpRequest.id: ${helpRequest.id}")
+    }
+
     // Dependency Injection
     val userRepository = koinInject<UserRepository>()
     val helpProposalRepository = koinInject<HelpProposalRepository>()
