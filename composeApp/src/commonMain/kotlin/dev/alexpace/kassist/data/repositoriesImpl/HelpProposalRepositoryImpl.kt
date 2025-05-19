@@ -15,7 +15,7 @@ class HelpProposalRepositoryImpl : HelpProposalRepository {
     private val helpProposalCollection = firestore.collection("HelpProposal")
     private val userCollection = firestore.collection("User")
 
-    override fun getAllByDisaster(disasterId: Int) = flow {
+    override fun getAllByDisaster(disasterId: String) = flow {
         helpProposalCollection
             .snapshots
             .collect { querySnapshot ->
@@ -27,6 +27,7 @@ class HelpProposalRepositoryImpl : HelpProposalRepository {
                     .filter {
                         it.disasterId == disasterId
                     }
+                println(helpProposals + "HEREE")
                 emit(helpProposals)
             }
     }

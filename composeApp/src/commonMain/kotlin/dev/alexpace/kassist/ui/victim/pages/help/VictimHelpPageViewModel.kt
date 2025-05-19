@@ -96,7 +96,7 @@ class VictimHelpPageViewModel(
                 id = Uuid.random().toString(),
                 victimId = user.value!!.id,
                 victimName = user.value!!.name,
-                disasterId = user.value!!.naturalDisaster?.id,
+                disasterId = user.value!!.naturalDisaster?.id!!,
                 address = address.value,
                 description = description.value,
                 items = _helpItems.value,

@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 interface UsersLocationRepository {
 
     fun getAll(): Flow<List<UserLocation>>
-    fun getAllByDisaster(ndId: Int): Flow<List<UserLocation>>
+    fun getAllByDisaster(ndId: String): Flow<List<UserLocation>>
     fun getById(id: String): Flow<UserLocation>
     suspend fun exists(userLocationId: String): Boolean
     suspend fun add(userLocation: UserLocation)

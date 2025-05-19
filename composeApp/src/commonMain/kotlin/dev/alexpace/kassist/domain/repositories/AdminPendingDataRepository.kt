@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface AdminPendingDataRepository {
 
-    fun getAllPendingHelpRequestsByDisaster(disasterId: Int): Flow<List<HelpRequest>>
+    fun getAllPendingHelpRequestsByDisaster(disasterId: String): Flow<List<HelpRequest>>
     suspend fun acceptHelpRequest(helpRequest: HelpRequest, needLevel: NeedLevelTypes)
     suspend fun rejectOrDeleteHelpRequest(helpRequestId: String)
 

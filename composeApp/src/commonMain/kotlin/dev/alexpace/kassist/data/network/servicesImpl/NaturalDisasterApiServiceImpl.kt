@@ -30,7 +30,7 @@ class NaturalDisasterApiServiceImpl: NaturalDisasterApiService {
                             coordinates = listOf(-16.2654, 28.0847) // Near Tenerife, Canary Islands, Spain
                         ),
                         properties = NaturalDisaster(
-                            id = 1479773,
+                            id = "1479773",
                             type = "EQ",
                             alertLevel = "Orange",
                             startDate = "2025-05-01T18:15:05Z",
@@ -56,7 +56,7 @@ class NaturalDisasterApiServiceImpl: NaturalDisasterApiService {
                             coordinates = listOf(-16.5123, 27.9231) // Near Gran Canaria, Canary Islands, Spain
                         ),
                         properties = NaturalDisaster(
-                            id = 1479774,
+                            id = "1479774",
                             type = "EQ",
                             alertLevel = "Orange",
                             startDate = "2025-05-01T18:20:12Z",

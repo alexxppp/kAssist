@@ -64,7 +64,7 @@ class HelpRequestRepositoryImpl : HelpRequestRepository {
             }
     }
 
-    override fun getAllByDisaster(disasterId: Int, requesterId: String) = flow {
+    override fun getAllByDisaster(disasterId: String, requesterId: String) = flow {
         helpRequestCollection.snapshots.collect { querySnapshot ->
             val helpRequestsWithScores = querySnapshot.documents
                 .map { documentSnapshot ->

@@ -15,7 +15,7 @@ class AdminPendingDataRepositoryImpl : AdminPendingDataRepository {
     private val pendingHelpRequestsCollection = firestore.collection("pendingRequests")
     private val helpRequestsCollection = firestore.collection("HelpRequest")
 
-    override fun getAllPendingHelpRequestsByDisaster(disasterId: Int) = flow {
+    override fun getAllPendingHelpRequestsByDisaster(disasterId: String) = flow {
         pendingHelpRequestsCollection.snapshots.collect { querySnapshot ->
             val helpRequests = querySnapshot
                 .documents

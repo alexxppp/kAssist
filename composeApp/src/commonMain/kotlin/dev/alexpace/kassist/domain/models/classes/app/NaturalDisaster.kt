@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class NaturalDisaster(
-    @SerialName("eventid") val id: Int,
+    @SerialName("eventid") val id: String,
     @SerialName("eventtype") val type: String,
     @SerialName("alertlevel") val alertLevel: String,
     @SerialName("fromdate") val startDate: String,

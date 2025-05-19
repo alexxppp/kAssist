@@ -40,7 +40,7 @@ class UserRepositoryImpl : UserRepository {
             }
     }
 
-    override fun getAllByDisaster(disasterId: Int) = flow {
+    override fun getAllByDisaster(disasterId: String) = flow {
         usersCollection
             .where { "disasterId" equalTo disasterId }
             .snapshots

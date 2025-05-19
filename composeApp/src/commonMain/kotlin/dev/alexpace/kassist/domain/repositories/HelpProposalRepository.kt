@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface HelpProposalRepository {
 
-    fun getAllByDisaster(disasterId: Int): Flow<List<HelpProposal>>
+    fun getAllByDisaster(disasterId: String): Flow<List<HelpProposal>>
     fun getById(id: String): Flow<HelpProposal?>
     fun getBySupporterId(id: String): Flow<List<HelpProposal>>
     fun getByVictimId(id: String): Flow<List<HelpProposal?>>

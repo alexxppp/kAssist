@@ -24,7 +24,7 @@ class UsersLocationRepositoryImpl : UsersLocationRepository {
             }
     }
 
-    override fun getAllByDisaster(ndId: Int) = flow {
+    override fun getAllByDisaster(ndId: String) = flow {
         usersLocationCollection
             .snapshots
             .collect { querySnapshot ->

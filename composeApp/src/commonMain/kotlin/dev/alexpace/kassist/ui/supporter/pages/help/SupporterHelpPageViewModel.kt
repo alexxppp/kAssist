@@ -64,7 +64,7 @@ class SupporterHelpPageViewModel(
      * Fetches all help requests by disasterId and keeps them updated
      * with the current db state
      */
-    private fun fetchHelpRequests(disasterId: Int) {
+    private fun fetchHelpRequests(disasterId: String) {
         _isLoading.value = true
         viewModelScope.launch {
             try {

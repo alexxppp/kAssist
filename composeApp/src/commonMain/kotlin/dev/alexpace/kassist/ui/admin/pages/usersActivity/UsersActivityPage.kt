@@ -40,23 +40,21 @@ fun UsersActivityPage() {
     }
 
     val state by viewModel.state.collectAsState()
-    val sortedProposals = state.helpProposals.filterNotNull().sortedByDescending { it.id }
-
 
     // UI
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(bottom = 50.dp, start = 16.dp, end = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        items(sortedProposals) { proposal ->
+        items(state.helpProposals) { proposal ->
             val relatedRequest = state.helpRequests
                 .filterNotNull()
-                .find { it.id == proposal.helpRequestId }
+                .find { it.id == proposal!!.helpRequestId }
 
             HelpProposalRequestItem(
-                proposal = proposal,
+                proposal = proposal!!,
                 request = relatedRequest
             )
         }
