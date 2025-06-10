@@ -12,5 +12,5 @@ interface UsersLocationRepository {
     suspend fun add(userLocation: UserLocation)
     suspend fun update(userLocation: UserLocation)
     suspend fun delete(id: String)
-
+    suspend fun populateUserLocations()
 }

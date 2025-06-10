@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Button
 import androidx.compose.material.Checkbox
 import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.CircularProgressIndicator
@@ -39,6 +40,7 @@ import dev.alexpace.kassist.data.utils.helpers.PLATFORM
 import dev.alexpace.kassist.domain.models.enums.user.UserRole
 import dev.alexpace.kassist.domain.repositories.NaturalDisasterRepository
 import dev.alexpace.kassist.domain.repositories.UserRepository
+import dev.alexpace.kassist.domain.repositories.UsersLocationRepository
 import dev.alexpace.kassist.domain.services.NaturalDisasterApiService
 import dev.alexpace.kassist.ui.shared.components.nd.NaturalDisasterCard
 import dev.alexpace.kassist.ui.shared.navigation.screens.SettingsScreen
@@ -52,6 +54,7 @@ fun HomePage() {
     val naturalDisasterApiService = koinInject<NaturalDisasterApiService>()
     val naturalDisasterRepository = koinInject<NaturalDisasterRepository>()
     val userRepository = koinInject<UserRepository>()
+    val usersLocationRepository = koinInject<UsersLocationRepository>()
 
     // ViewModel
     val viewModel: HomePageViewModel =
@@ -59,7 +62,8 @@ fun HomePage() {
             HomePageViewModel(
                 naturalDisasterApiService,
                 naturalDisasterRepository,
-                userRepository
+                userRepository,
+                usersLocationRepository
             )
         }
     val state = viewModel.state.collectAsState().value
@@ -115,6 +119,24 @@ fun HomePage() {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
+                    Row {
+                        Button(
+                            onClick = { viewModel.populateUserDb() },
+                            modifier = Modifier
+                                .weight(1f)
+                        ) {
+                            Text("Populate user Db")
+                        }
+                    }
+                    Row {
+                        Button(
+                            onClick = { viewModel.populateDb() },
+                            modifier = Modifier
+                                .weight(1f)
+                        ) {
+                            Text("Populate userLocation Db")
+                        }
+                    }
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()

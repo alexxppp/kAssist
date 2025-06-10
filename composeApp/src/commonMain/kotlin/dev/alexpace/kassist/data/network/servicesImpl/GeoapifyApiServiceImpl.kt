@@ -27,7 +27,7 @@ class GeoapifyApiServiceImpl : GeoapifyApiService {
             count = 0
             val apiResponse: GeoapifyApiResponse = response.body()
             apiResponse.features.firstOrNull()?.properties?.rank?.confidence?.let { confidence ->
-                confidence >= 0.9f
+                confidence >= 0.7f
             } ?: false // Return false if no features or confidence is missing
         } else {
             if (count >= 5) {

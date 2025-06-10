@@ -14,6 +14,7 @@ import io.ktor.client.request.get
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.isSuccess
 
+
 class NaturalDisasterApiServiceImpl: NaturalDisasterApiService {
 
     private val http = createHttpClient(getHttpEngine())
@@ -53,7 +54,7 @@ class NaturalDisasterApiServiceImpl: NaturalDisasterApiService {
                     ),
                     Feature(
                         geometry = Geometry(
-                            coordinates = listOf(-16.5123, 27.9231) // Near Gran Canaria, Canary Islands, Spain
+                            coordinates = listOf(-15.627312, 27.938431) // Near Gran Canaria, Canary Islands, Spain
                         ),
                         properties = NaturalDisaster(
                             id = "1479774",
@@ -67,13 +68,39 @@ class NaturalDisasterApiServiceImpl: NaturalDisasterApiService {
                             icon = "https://www.gdacs.org/images/gdacs_icons/maps/Orange/EQ.png",
                             country = "Spain",
                             coordinates = Coordinates(
-                                latitude = 28.233600,
-                                longitude = -16.532602
+                                latitude = 27.938431,
+                                longitude = -15.627312
                             ),
                             severityData = SeverityData(
                                 severity = 5.0,
                                 severitytext = "Magnitude 5.0M, Depth: 12km",
                                 severityunit = "M"
+                            )
+                        )
+                    ),
+                    Feature(
+                        geometry = Geometry(
+                            coordinates = listOf(-0.3763, 39.4699) // Valencia, Spain
+                        ),
+                        properties = NaturalDisaster(
+                            id = "DANA2024VALENCIA",
+                            type = "Flood",
+                            alertLevel = "Red",
+                            startDate = "2024-10-28T00:00:00Z",
+                            endDate = "2024-11-05T23:59:59Z",
+                            name = "DANA Valencia 2024",
+                            description = "Severe flooding caused by a DANA event in Valencia, Spain, October 2024.",
+                            htmlDescription = "<p>Severe flooding caused by a DANA event in Valencia, Spain, October 2024.</p>",
+                            icon = "https://www.gdacs.org/images/gdacs_icons/maps/Red/Flood.png",
+                            country = "Spain",
+                            coordinates = Coordinates(
+                                latitude = 39.4699,
+                                longitude = -0.3763
+                            ),
+                            severityData = SeverityData(
+                                severity = 8.5,
+                                severitytext = "Severe",
+                                severityunit = "Richter equivalent"
                             )
                         )
                     )

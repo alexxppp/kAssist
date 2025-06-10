@@ -144,17 +144,6 @@ fun RegistrationPage() {
                     keyboardType = KeyboardType.Password,
                     isPassword = true
                 )
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(vertical = 8.dp)
-                ) {
-                    Switch(
-                        checked = state.isAdmin,
-                        onCheckedChange = { viewModel.updateIsAdmin(it) }
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("Register as Admin")
-                }
                 AnimatedVisibility(
                     visible = state.errorMessage != null,
                     enter = slideInVertically() + fadeIn(),
@@ -207,18 +196,6 @@ fun RegistrationPage() {
                         )
                     }
                 }
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = "Forgot Password?",
-                    style = TextStyle(
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = Color(0xFF4A90E2)
-                    ),
-                    modifier = Modifier
-                        .clickable { /* TODO: Handle forgot password */ }
-                        .padding(vertical = 8.dp)
-                )
             }
         }
     }

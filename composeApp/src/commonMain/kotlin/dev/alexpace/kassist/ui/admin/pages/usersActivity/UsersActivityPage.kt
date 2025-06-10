@@ -84,7 +84,7 @@ fun HelpProposalRequestItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = proposal.supporterName,
+                text = proposal.supporterName + ": " + proposal.supporterId,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF0D47A1) // Dark blue text
             )
@@ -115,7 +115,7 @@ fun HelpProposalRequestItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = it.victimName,
+                    text = it.victimName + ": " + it.victimId,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFFB71C1C) // Dark red text
                 )

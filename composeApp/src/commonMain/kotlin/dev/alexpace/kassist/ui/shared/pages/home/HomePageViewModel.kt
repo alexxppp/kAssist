@@ -10,6 +10,7 @@ import dev.alexpace.kassist.domain.models.classes.map.Coordinates
 import dev.alexpace.kassist.domain.models.classes.app.NaturalDisaster
 import dev.alexpace.kassist.domain.repositories.NaturalDisasterRepository
 import dev.alexpace.kassist.domain.repositories.UserRepository
+import dev.alexpace.kassist.domain.repositories.UsersLocationRepository
 import dev.alexpace.kassist.domain.services.NaturalDisasterApiService
 import dev.alexpace.kassist.ui.admin.navigation.screens.AdminScreen
 import dev.alexpace.kassist.ui.supporter.navigation.screens.SupporterScreen
@@ -24,7 +25,8 @@ import kotlinx.coroutines.launch
 class HomePageViewModel(
     private val naturalDisasterApiService: NaturalDisasterApiService,
     private val naturalDisasterRepository: NaturalDisasterRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val userLocationRepository: UsersLocationRepository
 ) : ViewModel() {
 
     // Values
@@ -187,6 +189,18 @@ class HomePageViewModel(
             } finally {
                 _state.value = _state.value.copy(isNavigating = false)
             }
+        }
+    }
+
+    fun populateDb() {
+        viewModelScope.launch {
+            userLocationRepository.populateUserLocations()
+        }
+    }
+
+    fun populateUserDb() {
+        viewModelScope.launch {
+            userRepository.populateUsers()
         }
     }
 }

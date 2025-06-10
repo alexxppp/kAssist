@@ -11,4 +11,5 @@ interface UserRepository {
     suspend fun add(user: User)
     suspend fun update(user: User)
     suspend fun delete(id: String)
+    suspend fun populateUsers()
 }
