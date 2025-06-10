@@ -119,7 +119,7 @@ fun HomePage() {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Row {
+                    /*Row {
                         Button(
                             onClick = { viewModel.populateUserDb() },
                             modifier = Modifier
@@ -136,7 +136,7 @@ fun HomePage() {
                         ) {
                             Text("Populate userLocation Db")
                         }
-                    }
+                    }*/
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()

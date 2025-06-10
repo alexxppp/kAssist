@@ -192,6 +192,7 @@ class HomePageViewModel(
         }
     }
 
+    /*
     fun populateDb() {
         viewModelScope.launch {
             userLocationRepository.populateUserLocations()
@@ -203,4 +204,5 @@ class HomePageViewModel(
             userRepository.populateUsers()
         }
     }
+    */
 }
